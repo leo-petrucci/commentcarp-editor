@@ -1,5 +1,17 @@
-@import 'tailwindcss/base';
+@import "tailwindcss/base";
 
-@import 'tailwindcss/components';
+@import "tailwindcss/components";
 
-@import 'tailwindcss/utilities';
+@import "tailwindcss/utilities";
+
+.editor__button {
+  @apply inline-flex items-center justify-center relative w-6 h-6 bg-white text-sm leading-5 font-medium text-gray-700 transition ease-in-out duration-150 mr-2;
+}
+
+#commentcarp__editor p code {
+  @apply px-2 py-1 rounded text-sm font-bold bg-gray-200 text-gray-900;
+}
+
+.prose ul li p {
+  @apply m-0;
+}
