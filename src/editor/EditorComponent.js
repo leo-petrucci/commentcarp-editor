@@ -2,8 +2,8 @@ import { DOMParser, Schema } from "prosemirror-model";
 import { EditorState } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { baseKeymap } from "prosemirror-commands";
-import { exampleSetup } from "prosemirror-example-setup";
 import { keymap } from "prosemirror-keymap";
+import { exampleSetup } from "prosemirror-example-setup";
 import initMenuPlugin from "./Menu/MenuPlugin";
 import ActionsManager from "./Managers/ActionsManager";
 import CommandsManager from "./Managers/CommandsManager";
@@ -47,7 +47,6 @@ export default class EditorComponent extends HTMLElement {
   initRootNode() {
     let el = this.querySelector('div[data-type="editor"]');
     this.editorNode = el;
-    console.log(this.value);
     this.editorNode.innerHTML = this.value;
   }
 
@@ -67,7 +66,7 @@ export default class EditorComponent extends HTMLElement {
   generateEditorState() {
     this.state = EditorState.create({
       doc: DOMParser.fromSchema(this.schema).parse(this.editorNode),
-      plugins: exampleSetup({ schema: this.schema }),
+      plugins: this.getPluginsList(this.menuNode),
     });
 
     this.editorNode.innerText = "";
@@ -106,5 +105,10 @@ export default class EditorComponent extends HTMLElement {
 
   initTools() {
     initNodes(this);
+  }
+
+  getPluginsList() {
+    console.log(exampleSetup({ schema: this.schema }));
+    return [...exampleSetup({ schema: this.schema }), initMenuPlugin(this)];
   }
 }

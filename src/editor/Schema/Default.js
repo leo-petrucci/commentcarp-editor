@@ -3,9 +3,12 @@ import { schema } from "prosemirror-schema-basic";
 import { addListNodes } from "prosemirror-schema-list";
 
 export default function generateBaseSchema(editor) {
-  console.log(schema.spec.nodes);
   return new Schema({
-    nodes: addListNodes(schema.spec.nodes, "paragraph block*", "block"),
+    nodes: addListNodes(
+      schema.spec.nodes.subtract({ heading: "heading" }),
+      "paragraph block*",
+      "block"
+    ),
     marks: schema.spec.marks,
   });
 }
