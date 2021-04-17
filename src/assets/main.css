@@ -4,8 +4,21 @@
 
 @import "tailwindcss/utilities";
 
-.editor__button {
-  @apply inline-flex items-center justify-center relative w-6 h-6 bg-white text-sm leading-5 font-medium text-gray-700 transition ease-in-out duration-150 mr-2;
+.commentcarp__button {
+  @apply inline-flex items-center justify-center relative w-8 h-8 rounded bg-white text-sm leading-5 font-medium text-gray-700 transition ease-in-out duration-150 mr-2;
+}
+
+.commentcarp__button svg {
+  height: 14px;
+  width: 14px;
+}
+
+.commentcarp__button:hover {
+  @apply bg-gray-100;
+}
+
+.commentcarp__button:focus {
+  @apply outline-none;
 }
 
 #commentcarp__editor p code {

@@ -8,9 +8,18 @@
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.4.0",
+    "@tiptap/core": "^2.0.0-beta.32",
+    "@tiptap/extension-blockquote": "^2.0.0-beta.3",
+    "@tiptap/extension-bold": "^2.0.0-beta.3",
+    "@tiptap/extension-bullet-list": "^2.0.0-beta.3",
+    "@tiptap/extension-code": "^2.0.0-beta.3",
+    "@tiptap/extension-code-block": "^2.0.0-beta.5",
+    "@tiptap/extension-document": "^2.0.0-beta.3",
+    "@tiptap/extension-list-item": "^2.0.0-beta.3",
+    "@tiptap/extension-paragraph": "^2.0.0-beta.4",
+    "@tiptap/extension-text": "^2.0.0-beta.3",
+    "@tiptap/starter-kit": "^2.0.0-beta.28",
     "alpinejs": "^2.8.2",
-    "prosemirror-example-setup": "^1.1.2",
-    "prosemirror-schema-basic": "^1.1.2",
     "turndown": "^7.0.0"
   },
   "devDependencies": {
@@ -19,12 +28,6 @@
     "cross-env": "^7.0.3",
     "lodash-es": "^4.17.15",
     "postcss": "^8.2.10",
-    "prosemirror-commands": "^1.1.4",
-    "prosemirror-keymap": "^1.1.4",
-    "prosemirror-model": "^1.11.2",
-    "prosemirror-schema-list": "^1.1.4",
-    "prosemirror-state": "^1.3.3",
-    "prosemirror-view": "^1.16.0",
     "tailwindcss": "^2.1.1",
     "typescript": "^4.2.4",
     "vite": "^2.1.5"

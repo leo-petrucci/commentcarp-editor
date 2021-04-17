@@ -13,6 +13,11 @@ module.exports = {
       // etc.
     ],
   },
+  variants: {
+    extend: {
+      opacity: ["disabled"],
+    },
+  },
   theme: {
     extend: {
       fontWeight: ["hover", "focus"],

@@ -8,217 +8,131 @@
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
   </head>
   <body>
+    <div x-data="comment()" />
     <div id="app" class="flex flex-col items-center">
       <div class="max-w-lg w-full flex flex-col justify-end">
         <div
-          x-data="{
-          content: `<h2>Hi there,</h2><p>this is a very <em>basic</em> example of tiptap.</p><pre><code>body { display: none; }</code></pre><ul><li><p>A regular list</p></li><li><p>With regular items</p></li></ul><p><code>Test</code></p><blockquote><p>It's amazing 👏 <br>– mom</p></blockquote>`
-      }"
-          class=""
+          x-data="setupEditor(`<p>This is a simple example using <code>tiptap</code> and <code>alpinejs</code>.</p>`)"
+          x-init="() => init($refs.element)"
         >
-          <alpine-editor
-            x-model="content"
-            data-ul-classes=""
-            data-ol-classes=""
-            data-li-classes=""
-            data-p-classes=""
-            data-bq-classes="text-red-900"
-            data-pre-classes=""
-            data-code-classes=""
-            data-editor-classes="py-2 focus:outline-none"
-          >
-            <div data-type="menu">
+          <template x-if="editor">
+            <div class="py-2">
               <button
-                type="button"
-                data-command="strong"
-                data-active-class="editor__button--isActive"
-                class="editor__button"
+                class="commentcarp__button"
+                @click="editor.chain().toggleBold().focus().run()"
+                :class="{ 'is-active': editor.isActive('bold') }"
               >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <text
-                    x="50%"
-                    y="50%"
-                    text-anchor="middle"
-                    dy=".5ex"
-                    font-family="Segoe UI, Frutiger, Dejavu Sans, Helvetica Neue, Arial, sans-serif"
-                    font-size="15"
-                    font-weight="bold"
-                  >
-                    B
-                  </text>
-                </svg>
-              </button>
-
-              <button
-                type="button"
-                data-command="em"
-                data-active-class="editor__button--isActive"
-                class="editor__button"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <text
-                    x="50%"
-                    y="50%"
-                    text-anchor="middle"
-                    dy=".5ex"
-                    font-family="Segoe UI, Frutiger, Dejavu Sans, Helvetica Neue, Arial, sans-serif"
-                    font-weight="bold"
-                    font-size="15"
-                    font-style="italic"
-                  >
-                    i
-                  </text>
-                </svg>
-              </button>
-
-              <button
-                type="button"
-                data-command="code"
-                data-active-class="editor__button--isActive"
-                class="editor__button"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+                <svg viewBox="0 0 24 24" id="icon--bold">
                   <path
-                    d="M7 6L4 9l3 3v-1.5L5.5 9 7 7.5zm2 0v1.5L10.5 9 9 10.5V12l3-3zM2.406 1A.517.517 0 0 0 2 1.5v13c0 .262.238.5.5.5h11a.52.52 0 0 0 .5-.5V4.375c.002-.102-.13-.193-.156-.219l-3-3A.506.506 0 0 0 10.5 1zM3 2h7v2.5c0 .262.238.5.5.5H13v9H3zm8 .688L12.313 4H11z"
-                  />
+                    d="M17.194 10.962A6.271 6.271 0 0012.844.248H4.3a1.25 1.25 0 000 2.5h1.013a.25.25 0 01.25.25V21a.25.25 0 01-.25.25H4.3a1.25 1.25 0 100 2.5h9.963a6.742 6.742 0 002.93-12.786zm-4.35-8.214a3.762 3.762 0 010 7.523H8.313a.25.25 0 01-.25-.25V3a.25.25 0 01.25-.25zm1.42 18.5H8.313a.25.25 0 01-.25-.25v-7.977a.25.25 0 01.25-.25h5.951a4.239 4.239 0 010 8.477z"
+                  ></path>
                 </svg>
               </button>
-
               <button
-                type="button"
-                data-command="ordered_list"
-                data-active-class="editor__button--isActive"
-                class="editor__button"
+                class="commentcarp__button"
+                @click="editor.chain().toggleItalic().focus().run()"
+                :class="{ 'is-active': editor.isActive('italic') }"
               >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+                <svg viewBox="0 0 24 24" id="icon--italic">
                   <path
-                    d="M6 2h9v2H6zm0 5h9v2H6zm0 5h9v2H6zm-2.799.846q.392.1.594.352.205.25.205.636 0 .576-.441.877-.441.298-1.287.298-.298 0-.599-.05-.298-.046-.591-.142v-.77q.28.14.555.212.277.07.545.07.396 0 .607-.137.212-.138.212-.394 0-.265-.218-.4-.215-.137-.638-.137h-.4v-.644h.421q.376 0 .56-.116.185-.12.185-.36 0-.224-.18-.346-.178-.122-.505-.122-.242 0-.488.055-.246.054-.49.16v-.731q.295-.083.586-.125.29-.041.57-.041.756 0 1.13.249.375.246.375.744 0 .34-.179.558-.179.215-.529.304zm-.905-3.609H4v.734H1.186v-.734L2.599 7.99q.19-.172.28-.335.091-.163.091-.34 0-.272-.184-.438-.182-.166-.485-.166-.234 0-.511.101-.278.099-.594.296v-.851q.337-.112.667-.169.329-.06.645-.06.696 0 1.08.307.386.306.386.853 0 .317-.163.592-.164.272-.688.731l-.827.726zM1.228 4.276h.903V1.714l-.927.19V1.21l.922-.191h.971v3.258H4v.706H1.228v-.706z"
-                  />
+                    d="M22.5.248h-7.637a1.25 1.25 0 000 2.5h1.086a.25.25 0 01.211.384L4.78 21.017a.5.5 0 01-.422.231H1.5a1.25 1.25 0 000 2.5h7.637a1.25 1.25 0 000-2.5H8.051a.25.25 0 01-.211-.384L19.22 2.98a.5.5 0 01.422-.232H22.5a1.25 1.25 0 000-2.5z"
+                  ></path>
+                </svg>
+              </button>
+              <button
+                class="commentcarp__button"
+                @click="editor.chain().focus().toggleBulletList().run()"
+                :class="{ 'is-active': editor.isActive('bulletList') }"
+              >
+                <svg viewBox="0 0 24 24" id="icon--ul">
+                  <circle cx="2.5" cy="3.998" r="2.5"></circle>
+                  <path d="M8.5 5H23a1 1 0 000-2H8.5a1 1 0 000 2z"></path>
+                  <circle cx="2.5" cy="11.998" r="2.5"></circle>
+                  <path d="M23 11H8.5a1 1 0 000 2H23a1 1 0 000-2z"></path>
+                  <circle cx="2.5" cy="19.998" r="2.5"></circle>
+                  <path d="M23 19H8.5a1 1 0 000 2H23a1 1 0 000-2z"></path>
                 </svg>
               </button>
 
               <button
-                type="button"
-                data-command="bullet_list"
-                data-active-class="editor__button--isActive"
-                class="editor__button"
+                class="commentcarp__button"
+                @click="editor.chain().focus().toggleCode().run()"
+                :class="{ 'is-active': editor.isActive('code') }"
               >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M6 2h9v2H6zm0 5h9v2H6zm0 5h9v2H6z" />
-                  <circle cx="3" cy="3" r="1.75" />
-                  <circle cx="3" cy="8" r="1.75" />
-                  <circle cx="3" cy="13" r="1.75" />
-                </svg>
-              </button>
-
-              <button
-                type="button"
-                data-command="lift"
-                data-active-class="editor__button--isActive"
-                class="editor__button"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+                <svg viewBox="0 0 24 24" id="icon--code">
                   <path
-                    d="M1 1h14v2H1zm0 4h9v2H1zm0 4h9v2H1zm0 4h14v2H1zm10-5l4-3v6z"
-                  />
+                    d="M9.147 21.552a1.244 1.244 0 01-.895-.378L.84 13.561a2.257 2.257 0 010-3.125l7.412-7.613a1.25 1.25 0 011.791 1.744l-6.9 7.083a.5.5 0 000 .7l6.9 7.082a1.25 1.25 0 01-.9 2.122zm5.707 0a1.25 1.25 0 01-.9-2.122l6.9-7.083a.5.5 0 000-.7l-6.9-7.082a1.25 1.25 0 011.791-1.744l7.411 7.612a2.257 2.257 0 010 3.125l-7.412 7.614a1.244 1.244 0 01-.89.38zm6.514-9.373z"
+                  ></path>
                 </svg>
               </button>
-
               <button
-                type="button"
-                data-command="join_up"
-                data-active-class="editor__button--isActive"
-                class="editor__button"
+                class="commentcarp__button"
+                @click="editor.chain().focus().toggleCodeBlock().run()"
+                :class="{ 'is-active': editor.isActive('codeBlock') }"
               >
-                JUP
-              </button>
-              <button
-                type="button"
-                data-command="join_down"
-                data-active-class="editor__button--isActive"
-                class="editor__button"
-              >
-                JDO
-              </button>
-              <button
-                type="button"
-                data-command="paragraph"
-                data-active-class="editor__button--isActive"
-                class="editor__button"
-              >
-                PA
-              </button>
-
-              <button
-                type="button"
-                data-command="blockquote"
-                data-active-class="editor__button--isActive"
-                class="editor__button"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+                <svg viewBox="0 0 24 24" id="icon--code">
                   <path
-                    d="M8 2.013c-1.998 0-3.818.382-5.188 1.125S.499 5.054.499 6.513c0 1.237.926 2.345 2.281 3.156s3.197 1.344 5.219 1.344c.344 0 .563.019.906 0l5.875 2.938c.377.18.854-.32.656-.688l-1.813-3.656c1.242-.79 1.875-2.014 1.875-3.094 0-1.46-.943-2.632-2.313-3.375S9.998 2.013 8 2.013z"
-                  />
+                    d="M9.147 21.552a1.244 1.244 0 01-.895-.378L.84 13.561a2.257 2.257 0 010-3.125l7.412-7.613a1.25 1.25 0 011.791 1.744l-6.9 7.083a.5.5 0 000 .7l6.9 7.082a1.25 1.25 0 01-.9 2.122zm5.707 0a1.25 1.25 0 01-.9-2.122l6.9-7.083a.5.5 0 000-.7l-6.9-7.082a1.25 1.25 0 011.791-1.744l7.411 7.612a2.257 2.257 0 010 3.125l-7.412 7.614a1.244 1.244 0 01-.89.38zm6.514-9.373z"
+                  ></path>
                 </svg>
               </button>
 
               <button
-                type="button"
-                data-command="code_block"
-                data-active-class="editor__button--isActive"
-                class="editor__button"
+                class="commentcarp__button"
+                @click="editor.chain().focus().toggleBlockquote().run()"
+                :class="{ 'is-active': editor.isActive('blockquote') }"
               >
-                CB
+                <svg viewBox="0 0 24 24" id="icon--quote">
+                  <path
+                    d="M18.559 3.932a4.942 4.942 0 100 9.883 4.609 4.609 0 001.115-.141.25.25 0 01.276.368 6.83 6.83 0 01-5.878 3.523 1.25 1.25 0 000 2.5 9.71 9.71 0 009.428-9.95V8.873a4.947 4.947 0 00-4.941-4.941zm-12.323 0a4.942 4.942 0 000 9.883 4.6 4.6 0 001.115-.141.25.25 0 01.277.368 6.83 6.83 0 01-5.878 3.523 1.25 1.25 0 000 2.5 9.711 9.711 0 009.428-9.95V8.873a4.947 4.947 0 00-4.942-4.941z"
+                  ></path>
+                </svg>
               </button>
             </div>
+          </template>
 
-            <div
-              data-type="editor"
-              id="commentcarp__editor"
-              class="prose focus:outline-none"
-            ></div>
-          </alpine-editor>
+          <div
+            x-ref="element"
+            id="commentcarp__editor"
+            class="prose focus:outline-none"
+          ></div>
         </div>
         <div class="flex justify-end py-4">
           <button
-            onClick="postComment()"
-            class="bg-blue-500 px-4 py-2 text-lg font-semibold tracking-wider text-white rounded hover:bg-blue-600"
+            @click="post()"
+            :disabled="loading"
+            class="flex items-center px-4 py-2 font-semibold text-black border-2 border-black hover:border-gray-900 hover:bg-gray-50 disabled:opacity-50 rounded-full focus:outline-none transition-colors"
           >
+            <div
+              x-show="loading"
+              x-transition:enter="transition ease-out duration-300"
+              x-transition:enter-start="opacity-0 transform scale-90"
+              x-transition:enter-end="opacity-100 transform scale-100"
+              x-transition:leave="transition ease-in duration-300"
+              x-transition:leave-start="opacity-100 transform scale-100"
+              x-transition:leave-end="opacity-0 transform scale-90"
+            >
+              <svg
+                class="animate-spin mr-2"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  opacity="0.2"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M2 12C2 6.47715 6.47715 2 12 2V5C8.13401 5 5 8.13401 5 12H2Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
             Post Comment
           </button>
         </div>
