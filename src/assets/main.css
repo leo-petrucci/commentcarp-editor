@@ -4,6 +4,10 @@
 
 @import "tailwindcss/utilities";
 
+.ProseMirror:focus {
+  @apply outline-none;
+}
+
 .commentcarp__button {
   @apply inline-flex items-center justify-center relative w-8 h-8 rounded bg-white text-sm leading-5 font-medium text-gray-700 transition ease-in-out duration-150 mr-2;
 }
@@ -27,4 +31,27 @@
 
 .prose ul li p {
   @apply m-0;
+}
+
+.tooltip:before {
+  @apply whitespace-nowrap absolute w-auto px-4 py-1 rounded bg-black text-white text-center opacity-0 transition-opacity;
+  content: attr(data-text);
+  top: 50%;
+  transform: translateY(-50%);
+  margin-top: -30px;
+}
+
+.tooltip:after {
+  @apply absolute opacity-0 transition-opacity;
+  content: "";
+  margin-top: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 7px solid #000;
+  border-color: black transparent transparent transparent;
+}
+
+.tooltip:hover:before,
+.tooltip:hover:after {
+  @apply opacity-100;
 }
