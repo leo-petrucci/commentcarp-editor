@@ -20,6 +20,7 @@
     "@tiptap/extension-text": "^2.0.0-beta.3",
     "@tiptap/starter-kit": "^2.0.0-beta.28",
     "alpinejs": "^2.8.2",
+    "axios": "^0.21.1",
     "turndown": "^7.0.0"
   },
   "devDependencies": {

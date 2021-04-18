@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
   </head>
   <body>
-    <div x-data="comment()" />
+    <div x-data="comment()" x-init="init(); addListener()" />
     <div id="app" class="flex flex-col items-center">
       <div class="max-w-lg w-full flex flex-col justify-end">
         <div
@@ -101,7 +101,7 @@
           <button
             @click="post()"
             :disabled="loading"
-            class="flex items-center px-4 py-2 font-semibold text-black border-2 border-black hover:border-gray-900 hover:bg-gray-50 disabled:opacity-50 rounded-full focus:outline-none transition-colors"
+            class="flex items-center px-4 py-2 text-sm font-semibold text-black border-2 border-black hover:border-gray-900 hover:bg-gray-50 disabled:opacity-50 rounded-full focus:outline-none transition-colors"
           >
             <div
               x-show="loading"
@@ -113,7 +113,7 @@
               x-transition:leave-end="opacity-0 transform scale-90"
             >
               <svg
-                class="animate-spin mr-2"
+                class="animate-spin"
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
@@ -133,7 +133,31 @@
                 />
               </svg>
             </div>
-            Post Comment
+
+            <div
+              x-bind:class="{ 'ml-2': loading }"
+              x-show="loggedIn === true"
+              x-transition:enter="transition ease-out duration-300"
+              x-transition:enter-start="opacity-0 transform scale-90"
+              x-transition:enter-end="opacity-100 transform scale-100"
+              x-transition:leave="transition ease-in duration-300"
+              x-transition:leave-start="opacity-100 transform scale-100"
+              x-transition:leave-end="opacity-0 transform scale-90"
+            >
+              Post Comment
+            </div>
+            <div
+              x-bind:class="{ 'ml-2': loading }"
+              x-show="loggedIn === false"
+              x-transition:enter="transition ease-out duration-300"
+              x-transition:enter-start="opacity-0 transform scale-90"
+              x-transition:enter-end="opacity-100 transform scale-100"
+              x-transition:leave="transition ease-in duration-300"
+              x-transition:leave-start="opacity-100 transform scale-100"
+              x-transition:leave-end="opacity-0 transform scale-90"
+            >
+              Login with Twitter
+            </div>
           </button>
         </div>
       </div>
