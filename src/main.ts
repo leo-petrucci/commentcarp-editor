@@ -40,7 +40,7 @@ declare global {
   }
 }
 
-const endpoint = "https://commentcarp-jty4q7mwx-creativiii.vercel.app/api";
+const endpoint = "https://commentcarp-m63cjxnc8-creativiii.vercel.app/api";
 
 const comment = (content: Content) => {
   return {
@@ -139,7 +139,7 @@ const comment = (content: Content) => {
       const left = (width - w) / 2 / systemZoom + dualScreenLeft;
       const top = (height - h) / 2 / systemZoom + dualScreenTop;
       window.open(
-        "https://commentcarp-jty4q7mwx-creativiii.vercel.app/api/auth/twitter/",
+        `${endpoint}/auth/twitter/`,
         "Twitter Login",
         `
         height=${h},
