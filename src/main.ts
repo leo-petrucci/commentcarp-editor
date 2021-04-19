@@ -40,7 +40,7 @@ declare global {
   }
 }
 
-const endpoint = "http://localhost:3000/api";
+const endpoint = process.env.API_ADDRESS;
 
 const comment = (content: Content) => {
   return {
@@ -223,7 +223,7 @@ const handleGraphQL = async ({
   headers: Headers;
   body: string;
 }): Promise<unknown> => {
-  const result = await fetch(endpoint, {
+  const result = await fetch(endpoint!, {
     method: "POST",
     headers,
     body,
