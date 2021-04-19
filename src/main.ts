@@ -139,7 +139,7 @@ const comment = (content: Content) => {
       const left = (width - w) / 2 / systemZoom + dualScreenLeft;
       const top = (height - h) / 2 / systemZoom + dualScreenTop;
       window.open(
-        "http://localhost:3000/api/auth/twitter/",
+        "https://commentcarp-jty4q7mwx-creativiii.vercel.app/api/auth/twitter/",
         "Twitter Login",
         `
         height=${h},
