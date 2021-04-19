@@ -40,7 +40,7 @@ declare global {
   }
 }
 
-const endpoint = process.env.API_ADDRESS;
+const endpoint = "https://commentcarp-jty4q7mwx-creativiii.vercel.app/api";
 
 const comment = (content: Content) => {
   return {
