@@ -40,7 +40,7 @@ declare global {
   }
 }
 
-const endpoint = "https://commentcarp-m63cjxnc8-creativiii.vercel.app/api";
+const endpoint = "https://commentcarp-mbzy4xy40-creativiii.vercel.app/api";
 
 const comment = (content: Content) => {
   return {
@@ -227,6 +227,7 @@ const handleGraphQL = async ({
     method: "POST",
     headers,
     body,
+    redirect: "follow",
     credentials: "include",
   }).then((response) => response.json());
 
