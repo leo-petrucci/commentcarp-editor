@@ -40,7 +40,7 @@ declare global {
   }
 }
 
-const endpoint = "https://commentcarp-mbzy4xy40-creativiii.vercel.app/api";
+const endpoint = "https://commentcarp-ez96nmp3o-creativiii.vercel.app";
 
 const comment = (content: Content) => {
   return {
@@ -76,7 +76,12 @@ const comment = (content: Content) => {
       window.addEventListener(
         "message",
         (event) => {
-          if (event.data === "login-success") {
+          console.log(event);
+          if (event.origin === endpoint) {
+            const cookie = `socialAccesstoken=${window.escape(event.data)}`;
+            console.log(cookie);
+            document.cookie = cookie;
+            document.cookie = "test=poop";
             console.log("login was successful, reloading");
             this.checkLogin();
           }
@@ -139,7 +144,7 @@ const comment = (content: Content) => {
       const left = (width - w) / 2 / systemZoom + dualScreenLeft;
       const top = (height - h) / 2 / systemZoom + dualScreenTop;
       window.open(
-        `${endpoint}/auth/twitter/`,
+        `${endpoint}/api/auth/twitter/`,
         "Twitter Login",
         `
         height=${h},
@@ -216,6 +221,13 @@ const send = async (
   }
 };
 
+function getCookie(name: string): string | null {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(";").shift()!;
+  return null;
+}
+
 const handleGraphQL = async ({
   headers,
   body,
@@ -223,9 +235,18 @@ const handleGraphQL = async ({
   headers: Headers;
   body: string;
 }): Promise<unknown> => {
-  const result = await fetch(endpoint!, {
+  let parsedHeaders = headers;
+
+  parsedHeaders.append(
+    "Authorization",
+    `Bearer ${getCookie("socialAccesstoken")}`
+  );
+
+  console.log(parsedHeaders);
+
+  const result = await fetch(`${endpoint!}/api`, {
     method: "POST",
-    headers,
+    headers: parsedHeaders,
     body,
     redirect: "follow",
     credentials: "include",
