@@ -8,12 +8,36 @@ body {
   @apply m-4;
 }
 
+.ProseMirror {
+  @apply px-2 py-4;
+}
+
 .ProseMirror:focus {
   @apply outline-none;
 }
 
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #ced4da;
+  pointer-events: none;
+  height: 0;
+}
+
+.commentcarp__buttoncontainer {
+  @apply flex pr-2 mr-2 border-r border-gray-200 border-solid;
+}
+
+.commentcarp__buttoncontainer button:first-of-type {
+  @apply ml-0;
+}
+
+.commentcarp__buttoncontainer button {
+  @apply ml-2;
+}
+
 .commentcarp__button {
-  @apply relative inline-flex items-center justify-center w-8 h-8 mr-2 text-sm font-medium leading-5 text-gray-700 transition duration-150 ease-in-out bg-white rounded;
+  @apply relative flex items-center justify-center w-8 h-8 text-sm font-medium leading-5 text-gray-700 transition duration-150 ease-in-out bg-white rounded;
 }
 
 .commentcarp__button svg {

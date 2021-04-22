@@ -15,8 +15,10 @@
     "@tiptap/extension-code": "^2.0.0-beta.3",
     "@tiptap/extension-code-block": "^2.0.0-beta.5",
     "@tiptap/extension-document": "^2.0.0-beta.3",
+    "@tiptap/extension-italic": "^2.0.0-beta.5",
     "@tiptap/extension-list-item": "^2.0.0-beta.3",
     "@tiptap/extension-paragraph": "^2.0.0-beta.4",
+    "@tiptap/extension-placeholder": "^2.0.0-beta.7",
     "@tiptap/extension-text": "^2.0.0-beta.3",
     "alpinejs": "^2.8.2"
   },

@@ -7,9 +7,11 @@ import BulletList from "@tiptap/extension-bullet-list";
 import ListItem from "@tiptap/extension-list-item";
 import Text from "@tiptap/extension-text";
 import Bold from "@tiptap/extension-bold";
+import Italic from "@tiptap/extension-italic";
 import Code from "@tiptap/extension-code";
 import CodeBlock from "@tiptap/extension-code-block";
 import Blockquote from "@tiptap/extension-blockquote";
+import Placeholder from "@tiptap/extension-placeholder";
 import "./assets/main.css";
 
 const init = () => {
@@ -71,11 +73,13 @@ const comment = (content: Content) => {
           Paragraph,
           Text,
           Bold,
+          Italic,
           BulletList,
           ListItem,
           Code,
           CodeBlock,
           Blockquote,
+          Placeholder,
         ],
         content: this.content,
         onUpdate: ({ editor }) => {
@@ -136,6 +140,7 @@ const comment = (content: Content) => {
           await send(this.content as string);
           this.loading = false;
           await this.getComments();
+          this.editor.commands.clearContent();
         } catch (err) {
           throw new Error(err);
         }
