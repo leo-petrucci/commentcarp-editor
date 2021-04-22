@@ -1,6 +1,5 @@
 // @ts-ignore
 import Alpine from "alpinejs";
-import TurndownService from "turndown";
 import { Content, Editor } from "@tiptap/core";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
@@ -33,6 +32,12 @@ declare global {
       loading: boolean;
       loggedIn?: boolean;
       user: ConvertedUserInterface | null;
+      comments: {
+        isError: boolean;
+        isLoading: boolean;
+        list: CommentsInterface[];
+      };
+      getComments: () => Promise<unknown>;
       init: (element: Element) => void;
       post: () => void;
       checkLogin: () => void;
@@ -40,7 +45,7 @@ declare global {
   }
 }
 
-const endpoint = "https://commentcarp-ez96nmp3o-creativiii.vercel.app";
+const endpoint = "http://localhost:3000";
 
 const comment = (content: Content) => {
   return {
@@ -50,6 +55,12 @@ const comment = (content: Content) => {
 
     editor: null,
     content: content,
+
+    comments: {
+      isLoading: true,
+      isError: false,
+      list: [],
+    },
 
     init(element: Element) {
       // @ts-ignore
@@ -89,6 +100,17 @@ const comment = (content: Content) => {
         false
       );
     },
+    async getComments() {
+      try {
+        const { comments } = await fetchComments();
+        // @ts-ignore
+        this.comments.isLoading = false;
+        // @ts-ignore
+        this.comments.list = comments;
+        console.log(this.comments.list, comments);
+        // @ts-ignore
+      } catch (err) {}
+    },
     async checkLogin() {
       try {
         const user = await auth();
@@ -103,17 +125,13 @@ const comment = (content: Content) => {
         this.loggedIn = false;
       }
     },
-    post() {
+    async post() {
       if (this.loggedIn) {
         this.loading = true;
-        const turndownService = new TurndownService({
-          codeBlockStyle: "fenced",
-        });
-        console.log(this.content);
-        const markdown = turndownService.turndown(this.content as string);
-
         try {
-          send(markdown);
+          await send(this.content as string);
+          this.loading = false;
+          await this.getComments();
         } catch (err) {
           throw new Error(err);
         }
@@ -187,6 +205,36 @@ const auth = async (): Promise<{ socialInfo: ConvertedUserInterface }> => {
   }
 };
 
+interface CommentsInterface {
+  id: string;
+  origin: string;
+  platformId: string;
+  provider: string;
+  profileUrl: string;
+  username: string;
+  displayName: string;
+  photo: string;
+  body: string;
+}
+
+const fetchComments = async (): Promise<{ comments: CommentsInterface[] }> => {
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
+
+  const body = JSON.stringify({
+    query:
+      "query ($origin: String!) {\r\n    comments (origin: $origin) {\r\n        id\r\n        origin\r\n        platformId\r\n        provider\r\n        profileUrl\r\n        displayName\r\n        photo\r\n        body\r\n    }\r\n}",
+    variables: { origin: window.location.href },
+  });
+  try {
+    return (await handleGraphQL({ headers, body })) as {
+      comments: CommentsInterface[];
+    };
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 export interface CommentResponseInterface {
   origin: string;
   platformId: string;
@@ -208,7 +256,7 @@ const send = async (
 
   const body = JSON.stringify({
     query:
-      "mutation ($body: String!, $origin: String!) {\r\n    comment (body: $body, origin: $origin) {\r\n        body\r\n        origin\r\n        username\r\n    }\r\n}",
+      "mutation ($body: String!, $origin: String!) {\r\n    addComment (body: $body, origin: $origin) {\r\n        body\r\n        origin\r\n        username\r\n    }\r\n}",
     variables: { origin: window.location.href, body: comment },
   });
 

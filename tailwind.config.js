@@ -32,6 +32,12 @@ module.exports = {
             "blockquote p:first-of-type::before": false,
             "blockquote p:first-of-type::after": false,
             "ul li p": false,
+            p: {
+              margin: ".5rem 0",
+            },
+            pre: {
+              margin: ".5rem 0",
+            },
           },
         },
       },

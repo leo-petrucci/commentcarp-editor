@@ -9,7 +9,7 @@
 }
 
 .commentcarp__button {
-  @apply inline-flex items-center justify-center relative w-8 h-8 rounded bg-white text-sm leading-5 font-medium text-gray-700 transition ease-in-out duration-150 mr-2;
+  @apply relative inline-flex items-center justify-center w-8 h-8 mr-2 text-sm font-medium leading-5 text-gray-700 transition duration-150 ease-in-out bg-white rounded;
 }
 
 .commentcarp__button svg {
@@ -25,8 +25,22 @@
   @apply outline-none;
 }
 
-#commentcarp__editor p code {
-  @apply px-2 py-1 rounded text-sm font-bold bg-gray-200 text-gray-900;
+.commentcarp__userlink a {
+  @apply no-underline;
+}
+
+.commentcarp__userlink:hover #commentcarp__username {
+  @apply underline;
+}
+
+#commentcarp__editor p:first-of-type,
+#commentcarp__comments p:first-of-type {
+  @apply mt-0;
+}
+
+#commentcarp__editor p code,
+#commentcarp__comments p code {
+  @apply px-2 py-1 text-sm font-bold text-gray-900 bg-gray-200 rounded;
 }
 
 .prose ul li p {
@@ -34,7 +48,7 @@
 }
 
 .tooltip:before {
-  @apply whitespace-nowrap absolute w-auto px-4 py-1 rounded bg-black text-white text-center opacity-0 transition-opacity;
+  @apply absolute w-auto px-4 py-1 text-center text-white transition-opacity bg-black rounded opacity-0 whitespace-nowrap;
   content: attr(data-text);
   top: 50%;
   transform: translateY(-50%);
@@ -42,7 +56,7 @@
 }
 
 .tooltip:after {
-  @apply absolute opacity-0 transition-opacity;
+  @apply absolute transition-opacity opacity-0;
   content: "";
   margin-top: -10px;
   top: 50%;

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "tsc && cross-env NODE_ENV=production vite build"
+    "build": "tsc && NODE_ENV=production vite build"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.4.0",
@@ -18,15 +18,11 @@
     "@tiptap/extension-list-item": "^2.0.0-beta.3",
     "@tiptap/extension-paragraph": "^2.0.0-beta.4",
     "@tiptap/extension-text": "^2.0.0-beta.3",
-    "@tiptap/starter-kit": "^2.0.0-beta.28",
-    "alpinejs": "^2.8.2",
-    "turndown": "^7.0.0"
+    "alpinejs": "^2.8.2"
   },
   "devDependencies": {
     "@types/node": "^14.14.41",
-    "@types/turndown": "^5.0.0",
     "autoprefixer": "^10.2.5",
-    "cross-env": "^7.0.3",
     "postcss": "^8.2.10",
     "tailwindcss": "^2.1.1",
     "typescript": "^4.2.4",
