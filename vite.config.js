@@ -1,4 +1,6 @@
+const { resolve } = require("path");
 /**
+ *
  * @type {import('vite').UserConfig}
  */
 export default {
@@ -7,5 +9,11 @@ export default {
   },
   build: {
     brotliSize: true,
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, "index.html"),
+        template: resolve(__dirname, "template.html"),
+      },
+    },
   },
 };
