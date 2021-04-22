@@ -11,7 +11,7 @@ export default {
     brotliSize: true,
     rollupOptions: {
       input: {
-        main: resolve(__dirname, "index.html"),
+        commentcarp: resolve(__dirname, "index.html"),
         template: resolve(__dirname, "template.html"),
       },
     },

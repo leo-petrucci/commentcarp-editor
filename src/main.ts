@@ -12,12 +12,17 @@ import Code from "@tiptap/extension-code";
 import CodeBlock from "@tiptap/extension-code-block";
 import Blockquote from "@tiptap/extension-blockquote";
 import Placeholder from "@tiptap/extension-placeholder";
-import "./assets/main.css";
+// @ts-ignore
+import styles from "./assets/main.css";
 
 const init = async () => {
   const shadowDom = await fetch("/template.html").then((res) => res.text());
   const commentcarpRoot = document.getElementById("commentcarp")!;
   // const commentcarpShadow = commentcarpRoot.attachShadow({ mode: "open" });
+
+  const style = document.createElement("style");
+  style.textContent = styles;
+  document.head.append(style);
 
   const template = document.createElement("template");
   template.innerHTML = shadowDom.trim();

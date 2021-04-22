@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "tsc && NODE_ENV=production vite build"
+    "build": "tsc && NODE_ENV=production vite build",
+    "serve": "vite preview"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.4.0",
