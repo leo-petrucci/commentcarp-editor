@@ -3,25 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Commentcarp Test</title>
+    <title>⚡️ Vite + Tailwind</title>
   </head>
   <body>
     <div
       defer-x-data="comment(`<p>This is a simple example using <code>tiptap</code> and <code>alpinejs</code>.</p>`)"
-      x-init="() => init($refs.element); checkLogin(); addListener(); getComments()"
+      x-init="() => init($refs.element); checkLogin(); addListener()"
     />
     <div id="app" class="flex flex-col items-center">
-      <div class="flex flex-col justify-end w-full max-w-lg">
+      <div class="max-w-lg w-full flex flex-col justify-end">
         <!-- User's profile -->
         <div id="commentcarp__user">
           <template x-if="loggedIn">
-            <div class="flex items-center justify-end px-2 pt-2">
+            <div class="flex items-center px-2 pt-2 justify-end">
               <div
-                class="w-6 h-6 mr-2 bg-cover rounded-full"
+                class="w-6 h-6 bg-cover rounded-full mr-2"
                 x-bind:style="`background-image: url(${ user.photo })`"
               ></div>
               <div class="font-bold" x-text="user.displayName"></div>
-              <div class="flex ml-1 text-gray-500">
+              <div class="text-gray-500 flex">
                 @
                 <div x-text="user.username"></div>
               </div>
@@ -126,7 +126,7 @@
           ></div>
         </div>
         <a
-          class="pr-2 text-xs text-right text-gray-500 cursor-pointer hover:underline"
+          class="text-xs text-gray-500 text-right pr-2 hover:underline cursor-pointer"
         >
           Safety first: Commentcarp won't save or share any of your private info
           when you comment.
@@ -135,7 +135,7 @@
           <button
             @click="post()"
             :disabled="loading"
-            class="flex items-center px-4 py-2 text-sm font-semibold text-black transition-colors border-2 border-black rounded-full hover:border-gray-900 hover:bg-gray-50 disabled:opacity-50 focus:outline-none"
+            class="flex items-center px-4 py-2 text-sm font-semibold text-black border-2 border-black hover:border-gray-900 hover:bg-gray-50 disabled:opacity-50 rounded-full focus:outline-none transition-colors"
           >
             <div
               x-show="loading"
@@ -193,53 +193,6 @@
               Login with Twitter
             </div>
           </button>
-        </div>
-
-        <!-- Comments List -->
-        <div x-show="!comments.isLoading">
-          <div
-            class="text-sm text-center text-gray-500"
-            x-show="comments.list.length === 0"
-          >
-            There are no comments yet!
-          </div>
-          <div class="prose" id="commentcarp__comments">
-            <template x-for="(item, index) in comments.list" :key="index">
-              <!-- Comment Container -->
-              <div class="flex mb-2">
-                <!-- User Avatar -->
-                <a x-bind:href="getLink(item)" target="_blank">
-                  <div
-                    class="w-12 h-12 rounded-full"
-                    x-bind:style="`background-image: url(${ item.photo })`"
-                  ></div
-                ></a>
-
-                <!-- Comment Main -->
-                <div class="flex flex-col flex-1 ml-2">
-                  <!-- Username -->
-                  <div class="commentcarp__userlink">
-                    <a
-                      class="flex items-center"
-                      x-bind:href="getLink(item)"
-                      target="_blank"
-                    >
-                      <div
-                        class="font-bold"
-                        id="commentcarp__username"
-                        x-text="item.displayName"
-                      ></div>
-                      <div class="flex ml-1 text-gray-500">
-                        @
-                        <div x-text="item.username"></div></div
-                    ></a>
-                  </div>
-                  <!-- Comment Body -->
-                  <div x-html="item.body"></div>
-                </div>
-              </div>
-            </template>
-          </div>
         </div>
       </div>
     </div>

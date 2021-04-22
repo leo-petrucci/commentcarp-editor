@@ -3,6 +3,9 @@
  */
 export default {
   server: {
-    port: 8000,
+    port: 9999,
+  },
+  build: {
+    brotliSize: true,
   },
 };

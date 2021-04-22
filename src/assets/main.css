@@ -1,5 +1,75 @@
-@import 'tailwindcss/base';
+@import "tailwindcss/base";
 
-@import 'tailwindcss/components';
+@import "tailwindcss/components";
 
-@import 'tailwindcss/utilities';
+@import "tailwindcss/utilities";
+
+body {
+  @apply m-4;
+}
+
+.ProseMirror:focus {
+  @apply outline-none;
+}
+
+.commentcarp__button {
+  @apply relative inline-flex items-center justify-center w-8 h-8 mr-2 text-sm font-medium leading-5 text-gray-700 transition duration-150 ease-in-out bg-white rounded;
+}
+
+.commentcarp__button svg {
+  height: 14px;
+  width: 14px;
+}
+
+.commentcarp__button:hover {
+  @apply bg-gray-100;
+}
+
+.commentcarp__button:focus {
+  @apply outline-none;
+}
+
+.commentcarp__userlink a {
+  @apply no-underline;
+}
+
+.commentcarp__userlink:hover #commentcarp__username {
+  @apply underline;
+}
+
+#commentcarp__editor p:first-of-type,
+#commentcarp__comments p:first-of-type {
+  @apply mt-0;
+}
+
+#commentcarp__editor p code,
+#commentcarp__comments p code {
+  @apply px-2 py-1 text-sm font-bold text-gray-900 bg-gray-200 rounded;
+}
+
+.prose ul li p {
+  @apply m-0;
+}
+
+.tooltip:before {
+  @apply absolute w-auto px-4 py-1 text-center text-white transition-opacity bg-black rounded opacity-0 whitespace-nowrap;
+  content: attr(data-text);
+  top: 50%;
+  transform: translateY(-50%);
+  margin-top: -30px;
+}
+
+.tooltip:after {
+  @apply absolute transition-opacity opacity-0;
+  content: "";
+  margin-top: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 7px solid #000;
+  border-color: black transparent transparent transparent;
+}
+
+.tooltip:hover:before,
+.tooltip:hover:after {
+  @apply opacity-100;
+}
