@@ -140,6 +140,7 @@ const comment = (content: Content) => {
           await send(this.content as string);
           this.loading = false;
           await this.getComments();
+          // @ts-ignore
           this.editor.commands.clearContent();
         } catch (err) {
           throw new Error(err);
