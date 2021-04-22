@@ -16,13 +16,13 @@ import "./assets/main.css";
 
 const init = async () => {
   const shadowDom = await fetch("/template.html").then((res) => res.text());
-  const commentcarpRoot = document.getElementById("commentcarp");
+  const commentcarpRoot = document.getElementById("commentcarp")!;
   // const commentcarpShadow = commentcarpRoot.attachShadow({ mode: "open" });
 
   const template = document.createElement("template");
   template.innerHTML = shadowDom.trim();
   // const parsedDom = new DOMParser().parseFromString(shadowDom, "text/html");
-  commentcarpRoot.appendChild(template.content);
+  commentcarpRoot.appendChild(template.content!);
   const comp = commentcarpRoot.querySelector("[defer-x-data]")!;
   comp.setAttribute("x-data", comp.getAttribute("defer-x-data")!);
   Alpine.initializeComponent(comp);
