@@ -45,7 +45,7 @@ declare global {
   }
 }
 
-const endpoint = "http://localhost:3000";
+const endpoint = "https://commentcarp.vercel.app";
 
 const comment = (content: Content) => {
   return {
@@ -87,13 +87,9 @@ const comment = (content: Content) => {
       window.addEventListener(
         "message",
         (event) => {
-          console.log(event);
           if (event.origin === endpoint) {
             const cookie = `socialAccesstoken=${window.escape(event.data)}`;
-            console.log(cookie);
             document.cookie = cookie;
-            document.cookie = "test=poop";
-            console.log("login was successful, reloading");
             this.checkLogin();
           }
         },
@@ -107,9 +103,17 @@ const comment = (content: Content) => {
         this.comments.isLoading = false;
         // @ts-ignore
         this.comments.list = comments;
-        console.log(this.comments.list, comments);
         // @ts-ignore
-      } catch (err) {}
+      } catch (err) {
+        // @ts-ignore
+        this.comments.isLoading = false;
+      }
+    },
+    getLink(user: ConvertedUserInterface) {
+      switch (user.provider) {
+        case "twitter":
+          return `https://twitter.com/i/user/${user.platformId}`;
+      }
     },
     async checkLogin() {
       try {
@@ -185,6 +189,7 @@ export interface ConvertedUserInterface {
   url: string;
   photo: string;
   provider: "twitter";
+  platformId: string;
 }
 
 const auth = async (): Promise<{ socialInfo: ConvertedUserInterface }> => {
@@ -223,7 +228,7 @@ const fetchComments = async (): Promise<{ comments: CommentsInterface[] }> => {
 
   const body = JSON.stringify({
     query:
-      "query ($origin: String!) {\r\n    comments (origin: $origin) {\r\n        id\r\n        origin\r\n        platformId\r\n        provider\r\n        profileUrl\r\n        displayName\r\n        photo\r\n        body\r\n    }\r\n}",
+      "query ($origin: String!) {\r\n    comments (origin: $origin) {\r\n        id\r\n        origin\r\n        platformId\r\n        provider\r\n        profileUrl\r\n        displayName\r\n        username\r\n        photo\r\n        body\r\n    }\r\n}",
     variables: { origin: window.location.href },
   });
   try {
@@ -249,8 +254,6 @@ export interface CommentResponseInterface {
 const send = async (
   comment: string
 ): Promise<{ comment: CommentResponseInterface }> => {
-  console.log(comment);
-
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
 
@@ -289,8 +292,6 @@ const handleGraphQL = async ({
     "Authorization",
     `Bearer ${getCookie("socialAccesstoken")}`
   );
-
-  console.log(parsedHeaders);
 
   const result = await fetch(`${endpoint!}/api`, {
     method: "POST",

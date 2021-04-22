@@ -4,6 +4,10 @@
 
 @import "tailwindcss/utilities";
 
+body {
+  @apply m-4;
+}
+
 .ProseMirror:focus {
   @apply outline-none;
 }
