@@ -1,201 +1,273 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>⚡️ Vite + Tailwind</title>
-  </head>
-  <body>
-    <div
-      defer-x-data="comment(`<p>This is a simple example using <code>tiptap</code> and <code>alpinejs</code>.</p>`)"
-      x-init="() => init($refs.element); checkLogin(); addListener()"
-    />
-    <div id="app" class="flex flex-col items-center">
-      <div class="max-w-lg w-full flex flex-col justify-end">
-        <!-- User's profile -->
-        <div id="commentcarp__user">
-          <template x-if="loggedIn">
-            <div class="flex items-center px-2 pt-2 justify-end">
-              <div
-                class="w-6 h-6 bg-cover rounded-full mr-2"
-                x-bind:style="`background-image: url(${ user.photo })`"
-              ></div>
-              <div class="font-bold" x-text="user.displayName"></div>
-              <div class="text-gray-500 flex">
-                @
-                <div x-text="user.username"></div>
+<div
+  defer-x-data="comment()"
+  x-init="() => init($refs.element); checkLogin(); addListener(); getComments()"
+/>
+<div id="app" class="flex flex-col items-center">
+  <div class="flex flex-col justify-end w-full max-w-lg">
+    <!-- User's profile -->
+    <div id="commentcarp__user">
+      <template x-if="loggedIn">
+        <div class="flex items-center justify-end px-2 pt-2">
+          <div
+            class="w-6 h-6 mr-2 bg-cover rounded-full"
+            x-bind:style="`background-image: url(${ user.photo })`"
+          ></div>
+          <div class="font-bold" x-text="user.displayName"></div>
+          <div class="flex ml-1 text-gray-500">
+            @
+            <div x-text="user.username"></div>
+          </div>
+        </div>
+      </template>
+      <div x-show="!loggedIn">
+        <!-- some kind of message here? idk -->
+      </div>
+    </div>
+    <!-- User's Profile End -->
+
+    <div>
+      <template x-if="editor">
+        <div class="flex py-2 border-b border-gray-200 border-solid">
+          <div class="commentcarp__buttoncontainer">
+            <button
+              data-text="Bold"
+              class="commentcarp__button tooltip"
+              @click="editor.chain().toggleBold().focus().run()"
+              :class="{ 'is-active': editor.isActive('bold') }"
+            >
+              <svg viewBox="0 0 24 24" id="icon--bold" height="14" width="14">
+                <path
+                  d="M17.194 10.962A6.271 6.271 0 0012.844.248H4.3a1.25 1.25 0 000 2.5h1.013a.25.25 0 01.25.25V21a.25.25 0 01-.25.25H4.3a1.25 1.25 0 100 2.5h9.963a6.742 6.742 0 002.93-12.786zm-4.35-8.214a3.762 3.762 0 010 7.523H8.313a.25.25 0 01-.25-.25V3a.25.25 0 01.25-.25zm1.42 18.5H8.313a.25.25 0 01-.25-.25v-7.977a.25.25 0 01.25-.25h5.951a4.239 4.239 0 010 8.477z"
+                ></path>
+              </svg>
+            </button>
+
+            <button
+              data-text="Italic"
+              class="commentcarp__button tooltip"
+              @click="editor.chain().toggleItalic().focus().run()"
+              :class="{ 'is-active': editor.isActive('italic') }"
+            >
+              <svg viewBox="0 0 24 24" id="icon--italic">
+                <path
+                  d="M22.5.248h-7.637a1.25 1.25 0 000 2.5h1.086a.25.25 0 01.211.384L4.78 21.017a.5.5 0 01-.422.231H1.5a1.25 1.25 0 000 2.5h7.637a1.25 1.25 0 000-2.5H8.051a.25.25 0 01-.211-.384L19.22 2.98a.5.5 0 01.422-.232H22.5a1.25 1.25 0 000-2.5z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+
+          <div class="commentcarp__buttoncontainer">
+            <button
+              data-text="List"
+              class="commentcarp__button tooltip"
+              @click="editor.chain().focus().toggleBulletList().run()"
+              :class="{ 'is-active': editor.isActive('bulletList') }"
+            >
+              <svg viewBox="0 0 24 24" id="icon--ul">
+                <circle cx="2.5" cy="3.998" r="2.5"></circle>
+                <path d="M8.5 5H23a1 1 0 000-2H8.5a1 1 0 000 2z"></path>
+                <circle cx="2.5" cy="11.998" r="2.5"></circle>
+                <path d="M23 11H8.5a1 1 0 000 2H23a1 1 0 000-2z"></path>
+                <circle cx="2.5" cy="19.998" r="2.5"></circle>
+                <path d="M23 19H8.5a1 1 0 000 2H23a1 1 0 000-2z"></path>
+              </svg>
+            </button>
+          </div>
+
+          <div class="commentcarp__buttoncontainer">
+            <button
+              data-text="Inline Code"
+              class="commentcarp__button tooltip"
+              @click="editor.chain().focus().toggleCode().run()"
+              :class="{ 'is-active': editor.isActive('code') }"
+            >
+              <svg viewBox="0 0 24 24" id="icon--code">
+                <path
+                  d="M9.147 21.552a1.244 1.244 0 01-.895-.378L.84 13.561a2.257 2.257 0 010-3.125l7.412-7.613a1.25 1.25 0 011.791 1.744l-6.9 7.083a.5.5 0 000 .7l6.9 7.082a1.25 1.25 0 01-.9 2.122zm5.707 0a1.25 1.25 0 01-.9-2.122l6.9-7.083a.5.5 0 000-.7l-6.9-7.082a1.25 1.25 0 011.791-1.744l7.411 7.612a2.257 2.257 0 010 3.125l-7.412 7.614a1.244 1.244 0 01-.89.38zm6.514-9.373z"
+                ></path>
+              </svg>
+            </button>
+
+            <button
+              data-text="Code Block"
+              class="commentcarp__button tooltip"
+              @click="editor.chain().focus().toggleCodeBlock().run()"
+              :class="{ 'is-active': editor.isActive('codeBlock') }"
+            >
+              <svg viewBox="0 0 24 24" id="icon--code">
+                <path
+                  d="M9.147 21.552a1.244 1.244 0 01-.895-.378L.84 13.561a2.257 2.257 0 010-3.125l7.412-7.613a1.25 1.25 0 011.791 1.744l-6.9 7.083a.5.5 0 000 .7l6.9 7.082a1.25 1.25 0 01-.9 2.122zm5.707 0a1.25 1.25 0 01-.9-2.122l6.9-7.083a.5.5 0 000-.7l-6.9-7.082a1.25 1.25 0 011.791-1.744l7.411 7.612a2.257 2.257 0 010 3.125l-7.412 7.614a1.244 1.244 0 01-.89.38zm6.514-9.373z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+
+          <div class="commentcarp__buttoncontainer">
+            <button
+              data-text="Quote"
+              class="commentcarp__button tooltip"
+              @click="editor.chain().focus().toggleBlockquote().run()"
+              :class="{ 'is-active': editor.isActive('blockquote') }"
+            >
+              <svg viewBox="0 0 24 24" id="icon--quote">
+                <path
+                  d="M18.559 3.932a4.942 4.942 0 100 9.883 4.609 4.609 0 001.115-.141.25.25 0 01.276.368 6.83 6.83 0 01-5.878 3.523 1.25 1.25 0 000 2.5 9.71 9.71 0 009.428-9.95V8.873a4.947 4.947 0 00-4.941-4.941zm-12.323 0a4.942 4.942 0 000 9.883 4.6 4.6 0 001.115-.141.25.25 0 01.277.368 6.83 6.83 0 01-5.878 3.523 1.25 1.25 0 000 2.5 9.711 9.711 0 009.428-9.95V8.873a4.947 4.947 0 00-4.942-4.941z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </template>
+
+      <div
+        x-ref="element"
+        id="commentcarp__editor"
+        class="prose focus:outline-none"
+      ></div>
+    </div>
+    <a
+      class="pr-2 text-xs text-right text-gray-500 cursor-pointer hover:underline"
+    >
+      Safety first: Commentcarp won't save or share any of your private info
+      when you comment.
+    </a>
+    <div class="flex justify-end py-2">
+      <button
+        @click="post()"
+        :disabled="loading"
+        class="flex items-center px-4 py-2 text-sm font-semibold text-black transition-colors border-2 border-black rounded-full hover:border-gray-900 hover:bg-gray-50 disabled:opacity-50 focus:outline-none"
+      >
+        <div
+          x-show="loading"
+          x-transition:enter="transition ease-out duration-300"
+          x-transition:enter-start="opacity-0 transform scale-90"
+          x-transition:enter-end="opacity-100 transform scale-100"
+          x-transition:leave="transition ease-in duration-300"
+          x-transition:leave-start="opacity-100 transform scale-100"
+          x-transition:leave-end="opacity-0 transform scale-90"
+        >
+          <svg
+            class="animate-spin"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              opacity="0.2"
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+              fill="currentColor"
+            />
+            <path
+              d="M2 12C2 6.47715 6.47715 2 12 2V5C8.13401 5 5 8.13401 5 12H2Z"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
+
+        <div
+          x-bind:class="{ 'ml-2': loading }"
+          x-show="loggedIn === true"
+          x-transition:enter="transition ease-out duration-300"
+          x-transition:enter-start="opacity-0 transform scale-90"
+          x-transition:enter-end="opacity-100 transform scale-100"
+          x-transition:leave="transition ease-in duration-300"
+          x-transition:leave-start="opacity-100 transform scale-100"
+          x-transition:leave-end="opacity-0 transform scale-90"
+        >
+          Post Comment
+        </div>
+        <div
+          x-bind:class="{ 'ml-2': loading }"
+          x-show="loggedIn === false"
+          x-transition:enter="transition ease-out duration-300"
+          x-transition:enter-start="opacity-0 transform scale-90"
+          x-transition:enter-end="opacity-100 transform scale-100"
+          x-transition:leave="transition ease-in duration-300"
+          x-transition:leave-start="opacity-100 transform scale-100"
+          x-transition:leave-end="opacity-0 transform scale-90"
+        >
+          Login with Twitter
+        </div>
+      </button>
+    </div>
+
+    <div class="relative">
+      <div
+        x-show="comments.isLoading"
+        x-transition:leave="transition ease-in duration-200 absolute w-full"
+        x-transition:leave-start="opacity-100 transform scale-100 "
+        x-transition:leave-end="opacity-0 transform scale-90"
+      >
+        <template x-for="item in ['','','']">
+          <!-- Comment Container -->
+          <div class="flex mb-4">
+            <!-- User Avatar -->
+            <div class="w-12 h-12 rounded-full skeleton"></div>
+
+            <div class="flex flex-col flex-1 ml-2">
+              <div class="w-20 h-6 mb-2 commentcarp__userlink skeleton"></div>
+              <div class="w-full h-6 mb-2 skeleton"></div>
+              <div class="w-full h-6 skeleton"></div>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- Comments List -->
+      <div
+        x-show="!comments.isLoading"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 transform scale-90"
+        x-transition:enter-end="opacity-100 transform scale-100 relative"
+      >
+        <div
+          class="text-sm text-center text-gray-500"
+          x-show="comments.list.length === 0"
+        >
+          There are no comments yet!
+        </div>
+        <div class="prose" id="commentcarp__comments">
+          <template x-for="(item, index) in comments.list" :key="index">
+            <!-- Comment Container -->
+            <div class="flex mb-4">
+              <!-- User Avatar -->
+              <a x-bind:href="getLink(item)" target="_blank">
+                <div
+                  class="w-12 h-12 rounded-full"
+                  x-bind:style="`background-image: url(${ item.photo })`"
+                ></div
+              ></a>
+
+              <!-- Comment Main -->
+              <div class="flex flex-col flex-1 ml-2">
+                <!-- Username -->
+                <div class="commentcarp__userlink">
+                  <a
+                    class="flex items-center"
+                    x-bind:href="getLink(item)"
+                    target="_blank"
+                  >
+                    <div
+                      class="font-bold"
+                      id="commentcarp__username"
+                      x-text="item.displayName"
+                    ></div>
+                    <div class="flex ml-1 text-gray-500">
+                      @
+                      <div x-text="item.username"></div></div
+                  ></a>
+                </div>
+                <!-- Comment Body -->
+                <div x-html="item.body"></div>
               </div>
             </div>
           </template>
-          <div x-show="!loggedIn">
-            <!-- some kind of message here? idk -->
-          </div>
-        </div>
-        <!-- User's Profile End -->
-
-        <div>
-          <template x-if="editor">
-            <div class="py-2">
-              <button
-                data-text="Bold"
-                class="commentcarp__button tooltip"
-                @click="editor.chain().toggleBold().focus().run()"
-                :class="{ 'is-active': editor.isActive('bold') }"
-              >
-                <svg viewBox="0 0 24 24" id="icon--bold" height="14" width="14">
-                  <path
-                    d="M17.194 10.962A6.271 6.271 0 0012.844.248H4.3a1.25 1.25 0 000 2.5h1.013a.25.25 0 01.25.25V21a.25.25 0 01-.25.25H4.3a1.25 1.25 0 100 2.5h9.963a6.742 6.742 0 002.93-12.786zm-4.35-8.214a3.762 3.762 0 010 7.523H8.313a.25.25 0 01-.25-.25V3a.25.25 0 01.25-.25zm1.42 18.5H8.313a.25.25 0 01-.25-.25v-7.977a.25.25 0 01.25-.25h5.951a4.239 4.239 0 010 8.477z"
-                  ></path>
-                </svg>
-              </button>
-
-              <button
-                data-text="Italic"
-                class="commentcarp__button tooltip"
-                @click="editor.chain().toggleItalic().focus().run()"
-                :class="{ 'is-active': editor.isActive('italic') }"
-              >
-                <svg viewBox="0 0 24 24" id="icon--italic">
-                  <path
-                    d="M22.5.248h-7.637a1.25 1.25 0 000 2.5h1.086a.25.25 0 01.211.384L4.78 21.017a.5.5 0 01-.422.231H1.5a1.25 1.25 0 000 2.5h7.637a1.25 1.25 0 000-2.5H8.051a.25.25 0 01-.211-.384L19.22 2.98a.5.5 0 01.422-.232H22.5a1.25 1.25 0 000-2.5z"
-                  ></path>
-                </svg>
-              </button>
-
-              <button
-                data-text="List"
-                class="commentcarp__button tooltip"
-                @click="editor.chain().focus().toggleBulletList().run()"
-                :class="{ 'is-active': editor.isActive('bulletList') }"
-              >
-                <svg viewBox="0 0 24 24" id="icon--ul">
-                  <circle cx="2.5" cy="3.998" r="2.5"></circle>
-                  <path d="M8.5 5H23a1 1 0 000-2H8.5a1 1 0 000 2z"></path>
-                  <circle cx="2.5" cy="11.998" r="2.5"></circle>
-                  <path d="M23 11H8.5a1 1 0 000 2H23a1 1 0 000-2z"></path>
-                  <circle cx="2.5" cy="19.998" r="2.5"></circle>
-                  <path d="M23 19H8.5a1 1 0 000 2H23a1 1 0 000-2z"></path>
-                </svg>
-              </button>
-
-              <button
-                data-text="Inline Code"
-                class="commentcarp__button tooltip"
-                @click="editor.chain().focus().toggleCode().run()"
-                :class="{ 'is-active': editor.isActive('code') }"
-              >
-                <svg viewBox="0 0 24 24" id="icon--code">
-                  <path
-                    d="M9.147 21.552a1.244 1.244 0 01-.895-.378L.84 13.561a2.257 2.257 0 010-3.125l7.412-7.613a1.25 1.25 0 011.791 1.744l-6.9 7.083a.5.5 0 000 .7l6.9 7.082a1.25 1.25 0 01-.9 2.122zm5.707 0a1.25 1.25 0 01-.9-2.122l6.9-7.083a.5.5 0 000-.7l-6.9-7.082a1.25 1.25 0 011.791-1.744l7.411 7.612a2.257 2.257 0 010 3.125l-7.412 7.614a1.244 1.244 0 01-.89.38zm6.514-9.373z"
-                  ></path>
-                </svg>
-              </button>
-
-              <button
-                data-text="Code Block"
-                class="commentcarp__button tooltip"
-                @click="editor.chain().focus().toggleCodeBlock().run()"
-                :class="{ 'is-active': editor.isActive('codeBlock') }"
-              >
-                <svg viewBox="0 0 24 24" id="icon--code">
-                  <path
-                    d="M9.147 21.552a1.244 1.244 0 01-.895-.378L.84 13.561a2.257 2.257 0 010-3.125l7.412-7.613a1.25 1.25 0 011.791 1.744l-6.9 7.083a.5.5 0 000 .7l6.9 7.082a1.25 1.25 0 01-.9 2.122zm5.707 0a1.25 1.25 0 01-.9-2.122l6.9-7.083a.5.5 0 000-.7l-6.9-7.082a1.25 1.25 0 011.791-1.744l7.411 7.612a2.257 2.257 0 010 3.125l-7.412 7.614a1.244 1.244 0 01-.89.38zm6.514-9.373z"
-                  ></path>
-                </svg>
-              </button>
-
-              <button
-                data-text="Quote"
-                class="commentcarp__button tooltip"
-                @click="editor.chain().focus().toggleBlockquote().run()"
-                :class="{ 'is-active': editor.isActive('blockquote') }"
-              >
-                <svg viewBox="0 0 24 24" id="icon--quote">
-                  <path
-                    d="M18.559 3.932a4.942 4.942 0 100 9.883 4.609 4.609 0 001.115-.141.25.25 0 01.276.368 6.83 6.83 0 01-5.878 3.523 1.25 1.25 0 000 2.5 9.71 9.71 0 009.428-9.95V8.873a4.947 4.947 0 00-4.941-4.941zm-12.323 0a4.942 4.942 0 000 9.883 4.6 4.6 0 001.115-.141.25.25 0 01.277.368 6.83 6.83 0 01-5.878 3.523 1.25 1.25 0 000 2.5 9.711 9.711 0 009.428-9.95V8.873a4.947 4.947 0 00-4.942-4.941z"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-          </template>
-
-          <div
-            x-ref="element"
-            id="commentcarp__editor"
-            class="prose focus:outline-none"
-          ></div>
-        </div>
-        <a
-          class="text-xs text-gray-500 text-right pr-2 hover:underline cursor-pointer"
-        >
-          Safety first: Commentcarp won't save or share any of your private info
-          when you comment.
-        </a>
-        <div class="flex justify-end py-2">
-          <button
-            @click="post()"
-            :disabled="loading"
-            class="flex items-center px-4 py-2 text-sm font-semibold text-black border-2 border-black hover:border-gray-900 hover:bg-gray-50 disabled:opacity-50 rounded-full focus:outline-none transition-colors"
-          >
-            <div
-              x-show="loading"
-              x-transition:enter="transition ease-out duration-300"
-              x-transition:enter-start="opacity-0 transform scale-90"
-              x-transition:enter-end="opacity-100 transform scale-100"
-              x-transition:leave="transition ease-in duration-300"
-              x-transition:leave-start="opacity-100 transform scale-100"
-              x-transition:leave-end="opacity-0 transform scale-90"
-            >
-              <svg
-                class="animate-spin"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  opacity="0.2"
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M2 12C2 6.47715 6.47715 2 12 2V5C8.13401 5 5 8.13401 5 12H2Z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-
-            <div
-              x-bind:class="{ 'ml-2': loading }"
-              x-show="loggedIn === true"
-              x-transition:enter="transition ease-out duration-300"
-              x-transition:enter-start="opacity-0 transform scale-90"
-              x-transition:enter-end="opacity-100 transform scale-100"
-              x-transition:leave="transition ease-in duration-300"
-              x-transition:leave-start="opacity-100 transform scale-100"
-              x-transition:leave-end="opacity-0 transform scale-90"
-            >
-              Post Comment
-            </div>
-            <div
-              x-bind:class="{ 'ml-2': loading }"
-              x-show="loggedIn === false"
-              x-transition:enter="transition ease-out duration-300"
-              x-transition:enter-start="opacity-0 transform scale-90"
-              x-transition:enter-end="opacity-100 transform scale-100"
-              x-transition:leave="transition ease-in duration-300"
-              x-transition:leave-start="opacity-100 transform scale-100"
-              x-transition:leave-end="opacity-0 transform scale-90"
-            >
-              Login with Twitter
-            </div>
-          </button>
         </div>
       </div>
     </div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
-</html>
+  </div>
+</div>
