@@ -97,3 +97,30 @@ body {
 .tooltip:hover:after {
   @apply opacity-100;
 }
+
+.skeleton {
+  @apply relative overflow-hidden bg-gray-100 rounded-md;
+}
+
+.skeleton::before {
+  content: "";
+  @apply absolute block;
+  left: -150px;
+  top: 0;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    #fff 50%,
+    transparent 100%
+  );
+  animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes load {
+  from {
+    left: -150px;
+  }
+  to {
+    left: 100%;
+  }
+}

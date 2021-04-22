@@ -208,50 +208,80 @@
           </button>
         </div>
 
-        <!-- Comments List -->
-        <div x-show="!comments.isLoading">
+        <div class="relative">
           <div
-            class="text-sm text-center text-gray-500"
-            x-show="comments.list.length === 0"
+            x-show="comments.isLoading"
+            x-transition:leave="transition ease-in duration-200 absolute w-full"
+            x-transition:leave-start="opacity-100 transform scale-100 "
+            x-transition:leave-end="opacity-0 transform scale-90"
           >
-            There are no comments yet!
-          </div>
-          <div class="prose" id="commentcarp__comments">
-            <template x-for="(item, index) in comments.list" :key="index">
+            <template x-for="item in ['','','']">
               <!-- Comment Container -->
               <div class="flex mb-4">
                 <!-- User Avatar -->
-                <a x-bind:href="getLink(item)" target="_blank">
-                  <div
-                    class="w-12 h-12 rounded-full"
-                    x-bind:style="`background-image: url(${ item.photo })`"
-                  ></div
-                ></a>
+                <div class="w-12 h-12 rounded-full skeleton"></div>
 
-                <!-- Comment Main -->
                 <div class="flex flex-col flex-1 ml-2">
-                  <!-- Username -->
-                  <div class="commentcarp__userlink">
-                    <a
-                      class="flex items-center"
-                      x-bind:href="getLink(item)"
-                      target="_blank"
-                    >
-                      <div
-                        class="font-bold"
-                        id="commentcarp__username"
-                        x-text="item.displayName"
-                      ></div>
-                      <div class="flex ml-1 text-gray-500">
-                        @
-                        <div x-text="item.username"></div></div
-                    ></a>
-                  </div>
-                  <!-- Comment Body -->
-                  <div x-html="item.body"></div>
+                  <div
+                    class="w-20 h-6 mb-2 commentcarp__userlink skeleton"
+                  ></div>
+                  <div class="w-full h-6 mb-2 skeleton"></div>
+                  <div class="w-full h-6 skeleton"></div>
                 </div>
               </div>
             </template>
+          </div>
+
+          <!-- Comments List -->
+          <div
+            x-show="!comments.isLoading"
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 transform scale-90"
+            x-transition:enter-end="opacity-100 transform scale-100 relative"
+          >
+            <div
+              class="text-sm text-center text-gray-500"
+              x-show="comments.list.length === 0"
+            >
+              There are no comments yet!
+            </div>
+            <div class="prose" id="commentcarp__comments">
+              <template x-for="(item, index) in comments.list" :key="index">
+                <!-- Comment Container -->
+                <div class="flex mb-4">
+                  <!-- User Avatar -->
+                  <a x-bind:href="getLink(item)" target="_blank">
+                    <div
+                      class="w-12 h-12 rounded-full"
+                      x-bind:style="`background-image: url(${ item.photo })`"
+                    ></div
+                  ></a>
+
+                  <!-- Comment Main -->
+                  <div class="flex flex-col flex-1 ml-2">
+                    <!-- Username -->
+                    <div class="commentcarp__userlink">
+                      <a
+                        class="flex items-center"
+                        x-bind:href="getLink(item)"
+                        target="_blank"
+                      >
+                        <div
+                          class="font-bold"
+                          id="commentcarp__username"
+                          x-text="item.displayName"
+                        ></div>
+                        <div class="flex ml-1 text-gray-500">
+                          @
+                          <div x-text="item.username"></div></div
+                      ></a>
+                    </div>
+                    <!-- Comment Body -->
+                    <div x-html="item.body"></div>
+                  </div>
+                </div>
+              </template>
+            </div>
           </div>
         </div>
       </div>
