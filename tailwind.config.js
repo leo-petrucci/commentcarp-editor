@@ -8,6 +8,7 @@ module.exports = {
     safeList: [],
     content: [
       "./index.html",
+      "./template.html",
       "./src/**/*.vue",
       "./src/**/*.js",
       // etc.
