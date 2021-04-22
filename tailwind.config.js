@@ -38,6 +38,12 @@ module.exports = {
             pre: {
               margin: ".5rem 0",
             },
+            ul: {
+              margin: ".5rem 0",
+            },
+            blockquote: {
+              margin: ".5rem 0",
+            },
           },
         },
       },
