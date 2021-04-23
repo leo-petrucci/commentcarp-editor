@@ -91,7 +91,7 @@ const comment = (content: Content) => {
           Code,
           CodeBlock,
           Blockquote,
-          Placeholder.configure({ placeholder: "" }),
+          Placeholder.configure({ placeholder: "Write a comment!" }),
         ],
         content: this.content,
         onUpdate: ({ editor }) => {
