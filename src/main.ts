@@ -15,15 +15,10 @@ import Placeholder from "@tiptap/extension-placeholder";
 // @ts-ignore
 import styles from "./assets/main.css";
 
-console.log(process.env.VERCEL_ENV);
-
 const init = async () => {
   const shadowDom = await fetch(
-    `${
-      process.env.VERCEL_ENV === "production"
-        ? "https://commentcarp-editor.vercel.app"
-        : "http://localhost:3000"
-    }/template.html`
+    // @ts-ignore
+    `${import.meta.env.VITE_APP_URL}/template.html`
   ).then((res) => res.text());
   const commentcarpRoot = document.getElementById("commentcarp")!;
   // const commentcarpShadow = commentcarpRoot.attachShadow({ mode: "open" });
