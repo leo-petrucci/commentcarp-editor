@@ -14,6 +14,9 @@ export default {
         commentcarp: resolve(__dirname, "index.html"),
         template: resolve(__dirname, "template.html"),
       },
+      output: {
+        entryFileNames: "assets/[name].js",
+      },
     },
   },
 };
