@@ -59,7 +59,7 @@ declare global {
   }
 }
 
-const endpoint = "https://commentcarp.vercel.app";
+const endpoint = import.meta.env.VITE_API_URL;
 
 const comment = (content: Content) => {
   return {
