@@ -15,6 +15,8 @@ import Placeholder from "@tiptap/extension-placeholder";
 // @ts-ignore
 import styles from "./assets/main.css";
 
+console.log(process.env.VERCEL_ENV);
+
 const init = async () => {
   const shadowDom = await fetch(
     `${
