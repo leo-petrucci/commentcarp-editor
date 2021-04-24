@@ -157,7 +157,7 @@ const comment = (content: Content = "") => {
           this.content = "";
         } catch (err) {
           this.loading = false;
-          this.errorMessage = err;
+          this.errorMessage = err.toString().replace("Error:", "");
           throw new Error(err);
         }
       } else {
@@ -323,7 +323,6 @@ const handleGraphQL = async ({
   }).then((response) => response.json());
 
   if (result.errors) {
-    console.log("error", result.errors[0].message);
     throw new Error(result.errors[0].message);
   }
 

@@ -129,7 +129,7 @@
     <div x-text="errorMessage" class="text-sm text-center text-red-600"></div>
 
     <div class="flex items-center justify-end py-2">
-      <button
+      <div
         class="relative flex items-center justify-center tooltip"
         data-text="How do we use your data?"
       >
@@ -152,7 +152,7 @@
             />
           </svg>
         </a>
-      </button>
+      </div>
       <button
         @click="post()"
         :disabled="loading"
