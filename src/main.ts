@@ -43,6 +43,7 @@ declare global {
     comment: (
       content: Content
     ) => {
+      editor: Editor | null;
       loading: boolean;
       loggedIn?: boolean;
       user: ConvertedUserInterface | null;
@@ -61,14 +62,15 @@ declare global {
 
 const endpoint = import.meta.env.VITE_API_URL;
 
-const comment = (content: Content) => {
+const comment = (content: Content = "") => {
   return {
     loading: true,
     loggedIn: undefined,
     user: null,
 
-    editor: null,
+    editor: null as null | Editor,
     content: content,
+    errorMessage: "",
 
     comments: {
       isLoading: true,
@@ -77,7 +79,6 @@ const comment = (content: Content) => {
     },
 
     init(element: Element) {
-      // @ts-ignore
       this.editor = new Editor({
         element: element,
         extensions: [
@@ -152,9 +153,11 @@ const comment = (content: Content) => {
           await send(this.content as string);
           this.loading = false;
           await this.getComments();
-          // @ts-ignore
-          this.editor.commands.clearContent();
+          this.editor?.commands.clearContent();
+          this.content = "";
         } catch (err) {
+          this.loading = false;
+          this.errorMessage = err;
           throw new Error(err);
         }
       } else {
@@ -320,6 +323,7 @@ const handleGraphQL = async ({
   }).then((response) => response.json());
 
   if (result.errors) {
+    console.log("error", result.errors[0].message);
     throw new Error(result.errors[0].message);
   }
 
