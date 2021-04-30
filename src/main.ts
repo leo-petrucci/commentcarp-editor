@@ -15,13 +15,17 @@ import Placeholder from "@tiptap/extension-placeholder";
 // @ts-ignore
 import styles from "./assets/main.css";
 
+const scripts = document.getElementsByTagName("script");
+const lastScript = scripts[scripts.length - 1];
+const scriptName = lastScript;
+const key = scriptName.getAttribute("data-key");
+
 const init = async () => {
   const shadowDom = await fetch(
     // @ts-ignore
     `${import.meta.env.VITE_APP_URL}/template.html`
   ).then((res) => res.text());
   const commentcarpRoot = document.getElementById("commentcarp")!;
-  // const commentcarpShadow = commentcarpRoot.attachShadow({ mode: "open" });
 
   const style = document.createElement("style");
   style.textContent = styles;
@@ -29,7 +33,6 @@ const init = async () => {
 
   const template = document.createElement("template");
   template.innerHTML = shadowDom.trim();
-  // const parsedDom = new DOMParser().parseFromString(shadowDom, "text/html");
   commentcarpRoot.appendChild(template.content!);
   const comp = commentcarpRoot.querySelector("[defer-x-data]")!;
   comp.setAttribute("x-data", comp.getAttribute("defer-x-data")!);
@@ -105,7 +108,9 @@ const comment = (content: Content = "") => {
         "message",
         (event) => {
           if (event.origin === endpoint) {
-            const cookie = `socialAccesstoken=${window.escape(event.data)}`;
+            const cookie = `socialAccesstoken=${window.escape(
+              event.data
+            )}; Max-Age=604800;`;
             document.cookie = cookie;
             this.checkLogin();
           }
@@ -249,8 +254,8 @@ const fetchComments = async (): Promise<{ comments: CommentsInterface[] }> => {
 
   const body = JSON.stringify({
     query:
-      "query ($origin: String!) {\r\n    comments (origin: $origin) {\r\n        id\r\n        origin\r\n        platformId\r\n        provider\r\n        profileUrl\r\n        displayName\r\n        username\r\n        photo\r\n        body\r\n    }\r\n}",
-    variables: { origin: window.location.href },
+      "query ($origin: String!, $key: String!) {\r\n    comments (origin: $origin, key: $key) {\r\n        id\r\n        origin\r\n        platformId\r\n        provider\r\n        profileUrl\r\n        displayName\r\n        username\r\n        photo\r\n        body\r\n    }\r\n}",
+    variables: { origin: window.location.href, key },
   });
   try {
     return (await handleGraphQL({ headers, body })) as {
@@ -280,8 +285,8 @@ const send = async (
 
   const body = JSON.stringify({
     query:
-      "mutation ($body: String!, $origin: String!) {\r\n    addComment (body: $body, origin: $origin) {\r\n        body\r\n        origin\r\n        username\r\n    }\r\n}",
-    variables: { origin: window.location.href, body: comment },
+      "mutation ($body: String!, $origin: String!, $key: String!) {\r\n    addComment (body: $body, origin: $origin, key: $key) {\r\n        body\r\n        origin\r\n        username\r\n    }\r\n}",
+    variables: { origin: window.location.href, body: comment, key },
   });
 
   try {
