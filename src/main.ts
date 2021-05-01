@@ -15,10 +15,8 @@ import Placeholder from "@tiptap/extension-placeholder";
 // @ts-ignore
 import styles from "./assets/main.css";
 
-const scripts = document.getElementsByTagName("script");
-const lastScript = scripts[scripts.length - 1];
-const scriptName = lastScript;
-const key = scriptName.getAttribute("data-key");
+// @ts-ignore
+const key = document.getElementsByName("key")[0].content;
 
 const init = async () => {
   const shadowDom = await fetch(
