@@ -25,7 +25,7 @@
     </div>
     <!-- User's Profile End -->
 
-    <div>
+    <div id="#commentcarp__editor">
       <template x-if="editor">
         <div class="flex py-2 border-b border-gray-200 border-solid">
           <div class="commentcarp__buttoncontainer">
@@ -137,7 +137,7 @@
           target="_blank"
           rel="”nofollow”"
           href="https://commentcarp.club/how-it-works"
-          class="pr-2 text-xs text-right text-gray-500 cursor-pointer hover:underline"
+          class="pr-2 text-xs text-right text-gray-500 cursor-pointer  hover:underline"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -156,7 +156,7 @@
       <button
         @click="post()"
         :disabled="loading"
-        class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 transition-colors border border-gray-200 rounded-md hover:border-gray-700 hover:bg-gray-50 disabled:opacity-50 focus:outline-none"
+        class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 transition-colors border border-gray-200 rounded-md  hover:border-gray-700 hover:bg-gray-50 disabled:opacity-50 focus:outline-none"
       >
         <div
           x-show="loading"

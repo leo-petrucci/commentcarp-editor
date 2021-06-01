@@ -4,19 +4,15 @@
 
 @import "tailwindcss/utilities";
 
-body {
-  @apply m-4;
-}
-
-.ProseMirror {
+#commentcarp__editor .ProseMirror {
   @apply px-2 py-4;
 }
 
-.ProseMirror:focus {
+#commentcarp__editor .ProseMirror:focus {
   @apply outline-none;
 }
 
-.ProseMirror p.is-editor-empty:first-child::before {
+#commentcarp__editor .ProseMirror p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   float: left;
   color: #ced4da;
@@ -71,11 +67,11 @@ body {
   @apply px-2 py-1 text-sm font-bold text-gray-900 bg-gray-200 rounded;
 }
 
-.prose ul li p {
+#commentcarp__editor .prose ul li p {
   @apply m-0;
 }
 
-.tooltip:before {
+#commentcarp__editor .tooltip:before {
   @apply absolute w-auto px-4 py-1 text-center text-white transition-opacity bg-black rounded opacity-0 whitespace-nowrap;
   content: attr(data-text);
   top: 50%;
@@ -83,7 +79,7 @@ body {
   margin-top: -30px;
 }
 
-.tooltip:after {
+#commentcarp__editor .tooltip:after {
   @apply absolute transition-opacity opacity-0;
   content: "";
   margin-top: -10px;
@@ -93,16 +89,16 @@ body {
   border-color: black transparent transparent transparent;
 }
 
-.tooltip:hover:before,
-.tooltip:hover:after {
+#commentcarp__editor .tooltip:hover:before,
+#commentcarp__editor .tooltip:hover:after {
   @apply opacity-100;
 }
 
-.skeleton {
+#commentcarp__editor .skeleton {
   @apply relative overflow-hidden bg-gray-100 rounded-md;
 }
 
-.skeleton::before {
+#commentcarp__editor .skeleton::before {
   content: "";
   @apply absolute block;
   left: -150px;
