@@ -9,6 +9,7 @@ export default {
   },
   build: {
     brotliSize: true,
+    polyfillDynamicImport: false,
     rollupOptions: {
       input: {
         commentcarp: resolve(__dirname, "index.html"),
