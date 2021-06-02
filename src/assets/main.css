@@ -92,11 +92,11 @@
   @apply cc-opacity-100;
 }
 
-#commentcarp__editor .skeleton {
+.commentcarp__skeleton {
   @apply cc-relative cc-overflow-hidden cc-bg-gray-100 cc-rounded-md;
 }
 
-#commentcarp__editor .skeleton::before {
+.commentcarp__skeleton::before {
   content: "";
   @apply cc-absolute cc-block;
   left: -150px;
