@@ -39,8 +39,8 @@ const init = async () => {
 
 init();
 
-window.addEventListener("load", function () {
-  console.log("page is loaded");
+window.addEventListener("routeChangeComplete", function () {
+  console.log("router change");
   init();
 });
 
