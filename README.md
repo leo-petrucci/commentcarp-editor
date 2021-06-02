@@ -6,6 +6,6 @@ Features:
 
 - Ultra light thanks to Alpine.js
 - Great editing experience out of the box with TipTap
-- Simple install
+- Simple drag and drop install
 
 Check out an example at [Commentcarp](https://commentcarp.club/).
