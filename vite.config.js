@@ -18,7 +18,7 @@ export default {
         template: resolve(__dirname, "template.html"),
       },
       output: {
-        // entryFileNames: "assets/[name].js",
+        entryFileNames: "assets/commentcarp.js",
         manualChunks: () => "commentcarp.js",
       },
     },
