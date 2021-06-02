@@ -1,9 +1,11 @@
 const { resolve } = require("path");
+import { viteSingleFile } from "vite-plugin-singlefile";
 /**
  *
  * @type {import('vite').UserConfig}
  */
 export default {
+  plugins: [viteSingleFile()],
   server: {
     port: 9999,
   },
@@ -16,7 +18,8 @@ export default {
         template: resolve(__dirname, "template.html"),
       },
       output: {
-        entryFileNames: "assets/[name].js",
+        // entryFileNames: "assets/[name].js",
+        manualChunks: () => "commentcarp.js",
       },
     },
   },
