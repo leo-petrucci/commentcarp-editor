@@ -39,11 +39,13 @@ const init = async () => {
 
 init();
 
+window.addEventListener("locationchange", function () {
+  init();
+});
+
 declare global {
   interface Window {
-    comment: (
-      content: Content
-    ) => {
+    comment: (content: Content) => {
       editor: Editor | null;
       loading: boolean;
       loggedIn?: boolean;
