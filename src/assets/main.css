@@ -18,6 +18,22 @@
   height: 0;
 }
 
+.commentcarp__container {
+  @apply flex flex-col items-center;
+}
+
+.commentcarp__internal {
+  @apply flex flex-col justify-end w-full max-w-lg;
+}
+
+.user__container {
+  @apply flex items-center justify-end px-2 pt-2;
+}
+
+.user__avatar {
+  @apply w-6 h-6 mr-2 bg-cover rounded-full;
+}
+
 .commentcarp__buttoncontainer {
   @apply flex pr-2 mr-2 border-r border-gray-200 border-solid;
 }
