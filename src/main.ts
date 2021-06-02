@@ -41,7 +41,6 @@ const init = async () => {
 init();
 
 window.addEventListener("initCommentCarp", function () {
-  console.log("initialising");
   init();
 });
 
