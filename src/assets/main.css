@@ -2,6 +2,8 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+/* Ensure styles are only applied to editor with #commentcarp__editor */
+
 #commentcarp__editor .ProseMirror {
   @apply px-2 py-4;
 }
