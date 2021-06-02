@@ -39,8 +39,8 @@ const init = async () => {
 
 init();
 
-window.addEventListener("popstate", function () {
-  console.log("url changed");
+window.addEventListener("load", function () {
+  console.log("page is loaded");
   init();
 });
 
