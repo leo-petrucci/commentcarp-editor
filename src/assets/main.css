@@ -3,11 +3,11 @@
 @import "tailwindcss/utilities";
 
 #commentcarp__editor .ProseMirror {
-  @apply px-2 py-4;
+  @apply cc-px-2 cc-py-4;
 }
 
 #commentcarp__editor .ProseMirror:focus {
-  @apply outline-none;
+  @apply cc-outline-none;
 }
 
 #commentcarp__editor .ProseMirror p.is-editor-empty:first-child::before {
@@ -18,36 +18,20 @@
   height: 0;
 }
 
-.commentcarp__container {
-  @apply flex flex-col items-center;
-}
-
-.commentcarp__internal {
-  @apply flex flex-col justify-end w-full max-w-lg;
-}
-
-.user__container {
-  @apply flex items-center justify-end px-2 pt-2;
-}
-
-.user__avatar {
-  @apply w-6 h-6 mr-2 bg-cover rounded-full;
-}
-
 .commentcarp__buttoncontainer {
-  @apply flex pr-2 mr-2 border-r border-gray-200 border-solid;
+  @apply cc-flex cc-pr-2 cc-mr-2 cc-border-r cc-border-gray-200 cc-border-solid;
 }
 
 .commentcarp__buttoncontainer button:first-of-type {
-  @apply ml-0;
+  @apply cc-ml-0;
 }
 
 .commentcarp__buttoncontainer button {
-  @apply ml-2;
+  @apply cc-ml-2;
 }
 
 .commentcarp__button {
-  @apply relative flex items-center justify-center w-8 h-8 text-sm font-medium leading-5 text-gray-700 transition duration-150 ease-in-out bg-white rounded;
+  @apply cc-relative cc-flex cc-items-center cc-justify-center cc-w-8 cc-h-8 cc-text-sm cc-font-medium cc-leading-5 cc-text-gray-700 cc-transition cc-duration-150 cc-ease-in-out cc-bg-white cc-rounded;
 }
 
 .commentcarp__button svg {
@@ -56,45 +40,45 @@
 }
 
 .commentcarp__button:hover {
-  @apply bg-gray-100;
+  @apply cc-bg-gray-100;
 }
 
 .commentcarp__button:focus {
-  @apply outline-none;
+  @apply cc-outline-none;
 }
 
 .commentcarp__userlink a {
-  @apply no-underline;
+  @apply cc-no-underline;
 }
 
 .commentcarp__userlink:hover #commentcarp__username {
-  @apply underline;
+  @apply cc-underline;
 }
 
 #commentcarp__editor p:first-of-type,
 #commentcarp__comments p:first-of-type {
-  @apply mt-0;
+  @apply cc-mt-0;
 }
 
 #commentcarp__editor p code,
 #commentcarp__comments p code {
-  @apply px-2 py-1 text-sm font-bold text-gray-900 bg-gray-200 rounded;
+  @apply cc-px-2 cc-py-1 cc-text-sm cc-font-bold cc-text-gray-900 cc-bg-gray-200 cc-rounded;
 }
 
 #commentcarp__editor .prose ul li p {
-  @apply m-0;
+  @apply cc-m-0;
 }
 
-#commentcarp__editor .tooltip:before {
-  @apply absolute w-auto px-4 py-1 text-center text-white transition-opacity bg-black rounded opacity-0 whitespace-nowrap;
+.cc-tooltip:before {
+  @apply cc-absolute cc-w-auto cc-px-4 cc-py-1 cc-text-center cc-text-white cc-transition-opacity cc-bg-black cc-rounded cc-opacity-0 cc-whitespace-nowrap;
   content: attr(data-text);
   top: 50%;
   transform: translateY(-50%);
   margin-top: -30px;
 }
 
-#commentcarp__editor .tooltip:after {
-  @apply absolute transition-opacity opacity-0;
+.cc-tooltip:after {
+  @apply cc-absolute cc-transition-opacity cc-opacity-0;
   content: "";
   margin-top: -10px;
   top: 50%;
@@ -103,18 +87,18 @@
   border-color: black transparent transparent transparent;
 }
 
-#commentcarp__editor .tooltip:hover:before,
-#commentcarp__editor .tooltip:hover:after {
-  @apply opacity-100;
+.cc-tooltip:hover:before,
+.cc-tooltip:hover:after {
+  @apply cc-opacity-100;
 }
 
 #commentcarp__editor .skeleton {
-  @apply relative overflow-hidden bg-gray-100 rounded-md;
+  @apply cc-relative cc-overflow-hidden cc-bg-gray-100 cc-rounded-md;
 }
 
 #commentcarp__editor .skeleton::before {
   content: "";
-  @apply absolute block;
+  @apply cc-absolute cc-block;
   left: -150px;
   top: 0;
   background: linear-gradient(

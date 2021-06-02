@@ -2,18 +2,18 @@
   defer-x-data="comment()"
   x-init="() => init($refs.element); checkLogin(); addListener(); getComments()"
 />
-<div id="app" class="commentcarp__container">
-  <div class="commentcarp__internal">
+<div id="app" class="cc-flex cc-flex-col cc-items-center">
+  <div class="cc-flex cc-flex-col cc-justify-end cc-w-full cc-max-w-lg">
     <!-- User's profile -->
     <div id="commentcarp__user">
       <template x-if="loggedIn">
-        <div class="user__container">
+        <div class="cc-flex cc-items-center cc-justify-end cc-px-2 cc-pt-2">
           <div
-            class="user__avatar"
+            class="cc-w-6 cc-h-6 cc-mr-2 cc-bg-cover cc-rounded-full"
             x-bind:style="`background-image: url(${ user.photo })`"
           ></div>
-          <div class="font-bold" x-text="user.displayName"></div>
-          <div class="flex ml-1 text-gray-500">
+          <div class="cc-font-bold" x-text="user.displayName"></div>
+          <div class="cc-flex cc-ml-1 cc-text-gray-500">
             @
             <div x-text="user.username"></div>
           </div>
@@ -27,11 +27,13 @@
 
     <div id="commentcarp__editor">
       <template x-if="editor">
-        <div class="flex py-2 border-b border-gray-200 border-solid">
+        <div
+          class="cc-flex cc-py-2 cc-border-b cc-border-gray-200 cc-border-solid"
+        >
           <div class="commentcarp__buttoncontainer">
             <button
               data-text="Bold"
-              class="commentcarp__button tooltip"
+              class="commentcarp__button cc-tooltip"
               @click="editor.chain().toggleBold().focus().run()"
               :class="{ 'is-active': editor.isActive('bold') }"
             >
@@ -44,7 +46,7 @@
 
             <button
               data-text="Italic"
-              class="commentcarp__button tooltip"
+              class="commentcarp__button cc-tooltip"
               @click="editor.chain().toggleItalic().focus().run()"
               :class="{ 'is-active': editor.isActive('italic') }"
             >
@@ -59,7 +61,7 @@
           <div class="commentcarp__buttoncontainer">
             <button
               data-text="List"
-              class="commentcarp__button tooltip"
+              class="commentcarp__button cc-tooltip"
               @click="editor.chain().focus().toggleBulletList().run()"
               :class="{ 'is-active': editor.isActive('bulletList') }"
             >
@@ -77,7 +79,7 @@
           <div class="commentcarp__buttoncontainer">
             <button
               data-text="Inline Code"
-              class="commentcarp__button tooltip"
+              class="commentcarp__button cc-tooltip"
               @click="editor.chain().focus().toggleCode().run()"
               :class="{ 'is-active': editor.isActive('code') }"
             >
@@ -90,7 +92,7 @@
 
             <button
               data-text="Code Block"
-              class="commentcarp__button tooltip"
+              class="commentcarp__button cc-tooltip"
               @click="editor.chain().focus().toggleCodeBlock().run()"
               :class="{ 'is-active': editor.isActive('codeBlock') }"
             >
@@ -105,7 +107,7 @@
           <div class="commentcarp__buttoncontainer">
             <button
               data-text="Quote"
-              class="commentcarp__button tooltip"
+              class="commentcarp__button cc-tooltip"
               @click="editor.chain().focus().toggleBlockquote().run()"
               :class="{ 'is-active': editor.isActive('blockquote') }"
             >
@@ -122,26 +124,29 @@
       <div
         x-ref="element"
         id="commentcarp__editor"
-        class="prose focus:outline-none"
+        class="cc-prose focus:cc-outline-none"
       ></div>
     </div>
 
-    <div x-text="errorMessage" class="text-sm text-center text-red-600"></div>
+    <div
+      x-text="errorMessage"
+      class="cc-text-sm cc-text-center cc-text-red-600"
+    ></div>
 
-    <div class="flex items-center justify-end py-2">
+    <div class="cc-flex cc-items-center cc-justify-end cc-py-2">
       <div
-        class="relative flex items-center justify-center tooltip"
+        class="cc-relative cc-flex cc-items-center cc-justify-center cc-tooltip"
         data-text="How do we use your data?"
       >
         <a
           target="_blank"
           rel="”nofollow”"
           href="https://commentcarp.club/how-it-works"
-          class="pr-2 text-xs text-right text-gray-500 cursor-pointer  hover:underline"
+          class=" cc-pr-2 cc-text-xs cc-text-right cc-text-gray-500 cc-cursor-pointer hover:cc-underline"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="w-5 h-5"
+            class="cc-w-5 cc-h-5"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -156,19 +161,19 @@
       <button
         @click="post()"
         :disabled="loading"
-        class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 transition-colors border border-gray-200 rounded-md  hover:border-gray-700 hover:bg-gray-50 disabled:opacity-50 focus:outline-none"
+        class=" cc-flex cc-items-center cc-px-4 cc-py-2 cc-text-sm cc-font-medium cc-text-gray-700 cc-transition-colors cc-border cc-border-gray-200 cc-rounded-md hover:cc-border-gray-700 hover:cc-bg-gray-50 disabled:cc-opacity-50 focus:cc-outline-none"
       >
         <div
           x-show="loading"
-          x-transition:enter="transition ease-out duration-300"
-          x-transition:enter-start="opacity-0 transform scale-90"
-          x-transition:enter-end="opacity-100 transform scale-100"
-          x-transition:leave="transition ease-in duration-300"
-          x-transition:leave-start="opacity-100 transform scale-100"
-          x-transition:leave-end="opacity-0 transform scale-90"
+          x-transition:enter="cc-transition cc-ease-out cc-duration-300"
+          x-transition:enter-start="cc-opacity-0 cc-transform cc-scale-90"
+          x-transition:enter-end="cc-opacity-100 cc-transform cc-scale-100"
+          x-transition:leave="cc-transition cc-ease-in cc-duration-300"
+          x-transition:leave-start="cc-opacity-100 cc-transform cc-scale-100"
+          x-transition:leave-end="cc-opacity-0 cc-transform cc-scale-90"
         >
           <svg
-            class="animate-spin"
+            class="cc-animate-spin"
             width="16"
             height="16"
             viewBox="0 0 24 24"
@@ -192,24 +197,24 @@
         <div
           x-bind:class="{ 'ml-2': loading }"
           x-show="loggedIn === true"
-          x-transition:enter="transition ease-out duration-300"
-          x-transition:enter-start="opacity-0 transform scale-90"
-          x-transition:enter-end="opacity-100 transform scale-100"
-          x-transition:leave="transition ease-in duration-300"
-          x-transition:leave-start="opacity-100 transform scale-100"
-          x-transition:leave-end="opacity-0 transform scale-90"
+          x-transition:enter="cc-transition cc-ease-out cc-duration-300"
+          x-transition:enter-start="cc-opacity-0 cc-transform cc-scale-90"
+          x-transition:enter-end="cc-opacity-100 cc-transform cc-scale-100"
+          x-transition:leave="cc-transition cc-ease-in cc-duration-300"
+          x-transition:leave-start="cc-opacity-100 cc-transform cc-scale-100"
+          x-transition:leave-end="cc-opacity-0 cc-transform cc-scale-90"
         >
           Post Comment
         </div>
         <div
           x-bind:class="{ 'ml-2': loading }"
           x-show="loggedIn === false"
-          x-transition:enter="transition ease-out duration-300"
-          x-transition:enter-start="opacity-0 transform scale-90"
-          x-transition:enter-end="opacity-100 transform scale-100"
-          x-transition:leave="transition ease-in duration-300"
-          x-transition:leave-start="opacity-100 transform scale-100"
-          x-transition:leave-end="opacity-0 transform scale-90"
+          x-transition:enter="cc-transition cc-ease-out cc-duration-300"
+          x-transition:enter-start="cc-opacity-0 cc-transform cc-scale-90"
+          x-transition:enter-end="cc-opacity-100 cc-transform cc-scale-100"
+          x-transition:leave="cc-transition cc-ease-in cc-duration-300"
+          x-transition:leave-start="cc-opacity-100 cc-transform cc-scale-100"
+          x-transition:leave-end="cc-opacity-0 cc-transform cc-scale-90"
         >
           Post with Twitter
         </div>
@@ -219,20 +224,22 @@
     <div class="relative">
       <div
         x-show="comments.isLoading"
-        x-transition:leave="transition ease-in duration-200 absolute w-full"
-        x-transition:leave-start="opacity-100 transform scale-100 "
-        x-transition:leave-end="opacity-0 transform scale-90"
+        x-transition:leave="cc-transition cc-ease-in cc-duration-200 cc-absolute cc-w-full"
+        x-transition:leave-start="cc-opacity-100 cc-transform cc-scale-100 "
+        x-transition:leave-end="cc-opacity-0 cc-transform cc-scale-90"
       >
         <template x-for="item in ['','','']">
           <!-- Comment Container -->
-          <div class="flex mb-4">
+          <div class="cc-flex cc-mb-4">
             <!-- User Avatar -->
-            <div class="w-12 h-12 rounded-full skeleton"></div>
+            <div class="cc-w-12 cc-h-12 cc-rounded-full skeleton"></div>
 
-            <div class="flex flex-col flex-1 ml-2">
-              <div class="w-20 h-6 mb-2 commentcarp__userlink skeleton"></div>
-              <div class="w-full h-6 mb-2 skeleton"></div>
-              <div class="w-full h-6 skeleton"></div>
+            <div class="cc-flex cc-flex-col cc-flex-1 cc-ml-2">
+              <div
+                class="cc-w-20 cc-h-6 cc-mb-2 commentcarp__userlink skeleton"
+              ></div>
+              <div class="cc-w-full cc-h-6 cc-mb-2 skeleton"></div>
+              <div class="cc-w-full cc-h-6 skeleton"></div>
             </div>
           </div>
         </template>
@@ -241,43 +248,43 @@
       <!-- Comments List -->
       <div
         x-show="!comments.isLoading"
-        x-transition:enter="transition ease-out duration-200"
-        x-transition:enter-start="opacity-0 transform scale-90"
-        x-transition:enter-end="opacity-100 transform scale-100 relative"
+        x-transition:enter="cc-transition cc-ease-out cc-duration-200"
+        x-transition:enter-start="cc-opacity-0 cc-transform cc-scale-90"
+        x-transition:enter-end="cc-opacity-100 cc-transform cc-scale-100 cc-relative"
       >
         <div
-          class="text-sm text-center text-gray-500"
+          class="cc-text-sm cc-text-center cc-text-gray-500"
           x-show="comments.list.length === 0"
         >
           There are no comments yet!
         </div>
-        <div class="prose" id="commentcarp__comments">
+        <div class="cc-prose" id="commentcarp__comments">
           <template x-for="(item, index) in comments.list" :key="index">
             <!-- Comment Container -->
-            <div class="flex mb-4">
+            <div class="cc-flex cc-mb-4">
               <!-- User Avatar -->
               <a x-bind:href="getLink(item)" target="_blank">
                 <div
-                  class="w-12 h-12 rounded-full"
+                  class="cc-w-12 cc-h-12 cc-rounded-full"
                   x-bind:style="`background-image: url(${ item.photo })`"
                 ></div
               ></a>
 
               <!-- Comment Main -->
-              <div class="flex flex-col flex-1 ml-2">
+              <div class="cc-flex cc-flex-col cc-flex-1 cc-ml-2">
                 <!-- Username -->
                 <div class="commentcarp__userlink">
                   <a
-                    class="flex items-center"
+                    class="cc-flex cc-items-center"
                     x-bind:href="getLink(item)"
                     target="_blank"
                   >
                     <div
-                      class="font-bold"
+                      class="cc-font-bold"
                       id="commentcarp__username"
                       x-text="item.displayName"
                     ></div>
-                    <div class="flex ml-1 text-gray-500">
+                    <div class="cc-flex cc-ml-1 cc-text-gray-500">
                       @
                       <div x-text="item.username"></div></div
                   ></a>
