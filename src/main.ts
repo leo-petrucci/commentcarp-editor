@@ -39,7 +39,8 @@ const init = async () => {
 
 init();
 
-window.addEventListener("locationchange", function () {
+window.addEventListener("popstate", function () {
+  console.log("url changed");
   init();
 });
 
