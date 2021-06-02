@@ -24,18 +24,20 @@ const init = async () => {
     `${import.meta.env.VITE_APP_URL}/template.html`
   ).then((res) => res.text());
   const commentcarpRoot = document.getElementById("commentcarp")!;
-  commentcarpRoot.innerHTML = "";
+  if (commentcarpRoot) {
+    commentcarpRoot.innerHTML = "";
 
-  const style = document.createElement("style");
-  style.textContent = styles;
-  document.head.append(style);
+    const style = document.createElement("style");
+    style.textContent = styles;
+    document.head.append(style);
 
-  const template = document.createElement("template");
-  template.innerHTML = shadowDom.trim();
-  commentcarpRoot.appendChild(template.content!);
-  const comp = commentcarpRoot.querySelector("[defer-x-data]")!;
-  comp.setAttribute("x-data", comp.getAttribute("defer-x-data")!);
-  Alpine.initializeComponent(comp);
+    const template = document.createElement("template");
+    template.innerHTML = shadowDom.trim();
+    commentcarpRoot.appendChild(template.content!);
+    const comp = commentcarpRoot.querySelector("[defer-x-data]")!;
+    comp.setAttribute("x-data", comp.getAttribute("defer-x-data")!);
+    Alpine.initializeComponent(comp);
+  }
 };
 
 init();
