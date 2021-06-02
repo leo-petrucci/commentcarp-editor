@@ -24,6 +24,7 @@ const init = async () => {
     `${import.meta.env.VITE_APP_URL}/template.html`
   ).then((res) => res.text());
   const commentcarpRoot = document.getElementById("commentcarp")!;
+  commentcarpRoot.innerHTML = "";
 
   const style = document.createElement("style");
   style.textContent = styles;
@@ -39,8 +40,8 @@ const init = async () => {
 
 init();
 
-window.addEventListener("routeChangeComplete", function () {
-  console.log("router change");
+window.addEventListener("initCommentCarp", function () {
+  console.log("initialising");
   init();
 });
 
