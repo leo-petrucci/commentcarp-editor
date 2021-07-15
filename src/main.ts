@@ -244,7 +244,6 @@ interface CommentsInterface {
   origin: string;
   platformId: string;
   provider: string;
-  profileUrl: string;
   username: string;
   displayName: string;
   photo: string;
@@ -257,7 +256,7 @@ const fetchComments = async (): Promise<{ comments: CommentsInterface[] }> => {
 
   const body = JSON.stringify({
     query:
-      "query ($origin: String!, $key: String!) {\r\n    comments (origin: $origin, key: $key) {\r\n        id\r\n        origin\r\n        platformId\r\n        provider\r\n        profileUrl\r\n        displayName\r\n        username\r\n        photo\r\n        body\r\n    }\r\n}",
+      "query ($origin: String!, $key: String!) {\r\n    comments (origin: $origin, key: $key) {\r\n        id\r\n        origin\r\n        platformId\r\n        provider\r\n        displayName\r\n        username\r\n        photo\r\n        body\r\n    }\r\n}",
     variables: { origin: window.location.href, key },
   });
   try {
@@ -273,7 +272,6 @@ export interface CommentResponseInterface {
   origin: string;
   platformId: string;
   provider: "twitter";
-  profileUrl: string;
   username: string;
   displayName: string;
   photo: string;
