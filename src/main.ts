@@ -111,7 +111,7 @@ const comment = (content: Content = "") => {
         "message",
         (event) => {
           if (event.origin === endpoint) {
-            const cookie = `socialAccesstoken=${window.escape(
+            const cookie = `token=${window.escape(
               event.data
             )}; Max-Age=604800;`;
             document.cookie = cookie;
@@ -123,11 +123,11 @@ const comment = (content: Content = "") => {
     },
     async getComments() {
       try {
-        const { comments } = await fetchComments();
+        const { getAllComments } = await fetchComments();
         // @ts-ignore
         this.comments.isLoading = false;
         // @ts-ignore
-        this.comments.list = comments;
+        this.comments.list = getAllComments;
         // @ts-ignore
       } catch (err) {
         // @ts-ignore
@@ -144,7 +144,7 @@ const comment = (content: Content = "") => {
       try {
         const user = await auth();
         // @ts-ignore
-        this.user = user.socialInfo;
+        this.user = user.getMyCommenterProfile;
         this.loading = false;
         // @ts-ignore
         this.loggedIn = true;
@@ -195,7 +195,7 @@ const comment = (content: Content = "") => {
       const left = (width - w) / 2 / systemZoom + dualScreenLeft;
       const top = (height - h) / 2 / systemZoom + dualScreenTop;
       window.open(
-        `${endpoint}/api/auth/twitter/`,
+        `${endpoint}/api/oauth/`,
         "Twitter Login",
         `
         height=${h},
@@ -221,18 +221,18 @@ export interface ConvertedUserInterface {
   platformId: string;
 }
 
-const auth = async (): Promise<{ socialInfo: ConvertedUserInterface }> => {
+const auth = async (): Promise<{ getMyCommenterProfile: ConvertedUserInterface }> => {
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
 
   const body = JSON.stringify({
     query:
-      "query {\r\n    socialInfo {\r\n        username\r\n        displayName\r\n        url\r\n        photo\r\n    }\r\n}",
+      "query {\r\n    getMyCommenterProfile {\r\n        username\r\n        displayName\r\n        photo\r\n    }\r\n}",
     variables: {},
   });
   try {
     return (await handleGraphQL({ headers, body })) as {
-      socialInfo: ConvertedUserInterface;
+      getMyCommenterProfile: ConvertedUserInterface;
     };
   } catch (err) {
     throw new Error(err);
@@ -250,18 +250,18 @@ interface CommentsInterface {
   body: string;
 }
 
-const fetchComments = async (): Promise<{ comments: CommentsInterface[] }> => {
+const fetchComments = async (): Promise<{ getAllComments: CommentsInterface[] }> => {
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
 
   const body = JSON.stringify({
     query:
-      "query ($origin: String!, $key: String!) {\r\n    comments (origin: $origin, key: $key) {\r\n        id\r\n        origin\r\n        platformId\r\n        provider\r\n        displayName\r\n        username\r\n        photo\r\n        body\r\n    }\r\n}",
+      "query ($origin: String!, $key: String!) {\r\n    getAllComments (origin: $origin, key: $key) {\r\n        id\r\n        origin\r\n        platformId\r\n        provider\r\n        displayName\r\n        username\r\n        photo\r\n        body\r\n    }\r\n}",
     variables: { origin: window.location.href, key },
   });
   try {
     return (await handleGraphQL({ headers, body })) as {
-      comments: CommentsInterface[];
+      getAllComments: CommentsInterface[];
     };
   } catch (err) {
     throw new Error(err);
@@ -286,7 +286,7 @@ const send = async (
 
   const body = JSON.stringify({
     query:
-      "mutation ($body: String!, $origin: String!, $key: String!) {\r\n    addComment (body: $body, origin: $origin, key: $key) {\r\n        body\r\n        origin\r\n        username\r\n    }\r\n}",
+      "mutation ($body: String!, $origin: String!, $key: String!) {\r\n    addOneComment (body: $body, origin: $origin, key: $key) {\r\n        body\r\n        origin\r\n        username\r\n    }\r\n}",
     variables: { origin: window.location.href, body: comment, key },
   });
 
@@ -317,7 +317,7 @@ const handleGraphQL = async ({
 
   parsedHeaders.append(
     "Authorization",
-    `Bearer ${getCookie("socialAccesstoken")}`
+    `Bearer ${getCookie("token")}`
   );
 
   const result = await fetch(`${endpoint!}/api`, {
