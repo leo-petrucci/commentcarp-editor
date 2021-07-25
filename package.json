@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.4.0",
-    "@tiptap/core": "^2.0.0-beta.38",
+    "@tiptap/core": "^2.0.0-beta.86",
     "@tiptap/extension-blockquote": "^2.0.0-beta.6",
     "@tiptap/extension-bold": "^2.0.0-beta.6",
     "@tiptap/extension-bullet-list": "^2.0.0-beta.6",
@@ -18,10 +18,13 @@
     "@tiptap/extension-document": "^2.0.0-beta.5",
     "@tiptap/extension-italic": "^2.0.0-beta.6",
     "@tiptap/extension-list-item": "^2.0.0-beta.6",
+    "@tiptap/extension-mention": "^2.0.0-beta.61",
     "@tiptap/extension-paragraph": "^2.0.0-beta.7",
     "@tiptap/extension-placeholder": "^2.0.0-beta.8",
     "@tiptap/extension-text": "^2.0.0-beta.5",
-    "alpinejs": "^2.8.2"
+    "alpinejs": "^2.8.2",
+    "html-template-string": "^1.2.6",
+    "tippy.js": "^6.3.1"
   },
   "devDependencies": {
     "@types/node": "^14.14.41",
