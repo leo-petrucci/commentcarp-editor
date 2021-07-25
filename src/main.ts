@@ -242,11 +242,13 @@ const auth = async (): Promise<{ getMyCommenterProfile: ConvertedUserInterface }
 interface CommentsInterface {
   id: string;
   origin: string;
-  platformId: string;
-  provider: string;
-  username: string;
-  displayName: string;
-  photo: string;
+  commenter: {
+    platformId: string;
+    provider: "twitter";
+    username: string;
+    displayName: string;
+    photo: string;
+  }
   body: string;
 }
 
@@ -256,7 +258,7 @@ const fetchComments = async (): Promise<{ getAllComments: CommentsInterface[] }>
 
   const body = JSON.stringify({
     query:
-      "query ($origin: String!, $key: String!) {\r\n    getAllComments (origin: $origin, key: $key) {\r\n        id\r\n        origin\r\n        platformId\r\n        provider\r\n        displayName\r\n        username\r\n        photo\r\n        body\r\n    }\r\n}",
+      "query ($origin: String!, $key: String!) {\r\n    getAllComments (origin: $origin, key: $key) {\r\n        id\r\n        origin\r\n        commenter\r\n        { platformId\r\n        provider\r\n        displayName\r\n        username\r\n        photo\r\n }       body\r\n    }\r\n}",
     variables: { origin: window.location.href, key },
   });
   try {
@@ -270,11 +272,13 @@ const fetchComments = async (): Promise<{ getAllComments: CommentsInterface[] }>
 
 export interface CommentResponseInterface {
   origin: string;
-  platformId: string;
-  provider: "twitter";
-  username: string;
-  displayName: string;
-  photo: string;
+  commenter: {
+    platformId: string;
+    provider: "twitter";
+    username: string;
+    displayName: string;
+    photo: string;
+  }
   body: string;
 }
 
@@ -286,7 +290,7 @@ const send = async (
 
   const body = JSON.stringify({
     query:
-      "mutation ($body: String!, $origin: String!, $key: String!) {\r\n    addOneComment (body: $body, origin: $origin, key: $key) {\r\n        body\r\n        origin\r\n        username\r\n    }\r\n}",
+      "mutation ($body: String!, $origin: String!, $key: String!) {\r\n    addOneComment (body: $body, origin: $origin, key: $key) {\r\n        body\r\n        origin\r\n                commenter\r\n        { username\r\n }    }\r\n}",
     variables: { origin: window.location.href, body: comment, key },
   });
 
