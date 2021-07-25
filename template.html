@@ -268,7 +268,7 @@
               <a x-bind:href="getLink(item)" target="_blank">
                 <div
                   class="cc-w-12 cc-h-12 cc-rounded-full"
-                  x-bind:style="`background-image: url(${ item.photo })`"
+                  x-bind:style="`background-image: url(${ item.commenter.photo })`"
                 ></div
               ></a>
 
@@ -284,11 +284,11 @@
                     <div
                       class="cc-font-bold"
                       id="commentcarp__username"
-                      x-text="item.displayName"
+                      x-text="item.commenter.displayName"
                     ></div>
                     <div class="cc-flex cc-ml-1 cc-text-gray-500">
                       @
-                      <div x-text="item.username"></div></div
+                      <div x-text="item.commenter.username"></div></div
                   ></a>
                 </div>
                 <!-- Comment Body -->
