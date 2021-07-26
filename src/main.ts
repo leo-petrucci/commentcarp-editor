@@ -89,7 +89,9 @@ const comment = (content: Content = "") => {
       list: [],
     },
 
-    init(element: Element) {
+    async init(element: Element) {
+      const { getAllCommenters } = await fetchCommenters();
+
       this.editor = new Editor({
         element: element,
         extensions: [
@@ -110,33 +112,8 @@ const comment = (content: Content = "") => {
             },
             suggestion: {
               items: (query) => {
-                return [
-                  "Lea Thompson",
-                  "Cyndi Lauper",
-                  "Tom Cruise",
-                  "Madonna",
-                  "Jerry Hall",
-                  "Joan Collins",
-                  "Winona Ryder",
-                  "Christina Applegate",
-                  "Alyssa Milano",
-                  "Molly Ringwald",
-                  "Ally Sheedy",
-                  "Debbie Harry",
-                  "Olivia Newton-John",
-                  "Elton John",
-                  "Michael J. Fox",
-                  "Axl Rose",
-                  "Emilio Estevez",
-                  "Ralph Macchio",
-                  "Rob Lowe",
-                  "Jennifer Grey",
-                  "Mickey Rourke",
-                  "John Cusack",
-                  "Matthew Broderick",
-                  "Justine Bateman",
-                  "Lisa Bonet",
-                ]
+                return getAllCommenters
+                  .map(({ username }) => username)
                   .filter((item) =>
                     item.toLowerCase().startsWith(query.toLowerCase())
                   )
@@ -146,9 +123,8 @@ const comment = (content: Content = "") => {
                 let popup: any;
 
                 const selectItem = (props: SuggestionProps, item: any) => {
-                  console.log(props, item);
                   if (item) {
-                    props.command({ id: item });
+                    props.command({ id: item, mention: "idk" });
                   }
                 };
 
@@ -168,15 +144,10 @@ const comment = (content: Content = "") => {
                   });
 
                   div.appendChild(items);
-
-                  console.log(div.firstChild);
-
                   return div.firstChild;
                 };
                 return {
                   onStart: (props) => {
-                    console.log("START", props);
-
                     // @ts-ignore
                     popup = tippy("body", {
                       getReferenceClientRect: props.clientRect,
@@ -193,19 +164,15 @@ const comment = (content: Content = "") => {
                     console.log(popup[0]);
                   },
                   onUpdate(props) {
-                    console.log("UPDATE", props);
-
                     popup[0].setProps({
                       getReferenceClientRect: props.clientRect,
                       content: menu(props),
                     });
                   },
                   onKeyDown(props) {
-                    console.log("KEYDOWN", props);
                     return false;
                   },
                   onExit(props) {
-                    console.log("EXIT", props);
                     popup[0].destroy();
                   },
                 };
@@ -323,15 +290,8 @@ const comment = (content: Content = "") => {
 
 window.comment = comment;
 
-export interface ConvertedUserInterface {
-  id: string;
-  username: string;
-  displayName: string;
+export interface ConvertedUserInterface extends CommenterInterface {
   verified?: boolean;
-  url: string;
-  photo: string;
-  provider: "twitter";
-  platformId: string;
 }
 
 const auth = async (): Promise<{
@@ -357,13 +317,7 @@ const auth = async (): Promise<{
 interface CommentsInterface {
   id: string;
   origin: string;
-  commenter: {
-    platformId: string;
-    provider: "twitter";
-    username: string;
-    displayName: string;
-    photo: string;
-  }
+  commenter: CommenterInterface;
   body: string;
 }
 
@@ -389,13 +343,7 @@ const fetchComments = async (): Promise<{
 
 export interface CommentResponseInterface {
   origin: string;
-  commenter: {
-    platformId: string;
-    provider: "twitter";
-    username: string;
-    displayName: string;
-    photo: string;
-  }
+  commenter: CommenterInterface;
   body: string;
 }
 
@@ -414,6 +362,43 @@ const send = async (
   try {
     return (await handleGraphQL({ headers, body })) as {
       comment: CommentResponseInterface;
+    };
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export interface CommenterInterface {
+  platformId: string;
+  provider: "twitter";
+  username: string;
+  displayName: string;
+  photo: string;
+}
+
+const fetchCommenters = async (): Promise<{
+  getAllCommenters: CommenterInterface[];
+}> => {
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
+
+  const body = JSON.stringify({
+    query: `
+      query ($origin: String!, $key: String!) {
+        getAllCommenters(origin: $origin, key: $key) {
+          platformId
+          provider
+          displayName
+          username
+          photo
+        }
+      }
+    `,
+    variables: { origin: window.location.href, key },
+  });
+  try {
+    return (await handleGraphQL({ headers, body })) as {
+      getAllCommenters: CommenterInterface[];
     };
   } catch (err) {
     throw new Error(err);
