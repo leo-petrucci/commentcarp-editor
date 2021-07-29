@@ -169,10 +169,10 @@ const comment = (content: Content = "") => {
                       content: menu(props),
                     });
                   },
-                  onKeyDown(props) {
+                  onKeyDown() {
                     return false;
                   },
-                  onExit(props) {
+                  onExit() {
                     popup[0].destroy();
                   },
                 };
