@@ -124,7 +124,7 @@
       <div
         x-ref="element"
         id="commentcarp__editor"
-        class="cc-prose focus:cc-outline-none"
+        class="cc-prose focus:cc-outline-none cc-max-w-none"
       ></div>
     </div>
 
@@ -142,7 +142,10 @@
           target="_blank"
           rel="”nofollow”"
           href="https://commentcarp.club/how-it-works"
-          class=" cc-pr-2 cc-text-xs cc-text-right cc-text-gray-500 cc-cursor-pointer hover:cc-underline"
+          class="
+            cc-pr-2 cc-text-xs cc-text-right cc-text-gray-500 cc-cursor-pointer
+            hover:cc-underline
+          "
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -161,7 +164,22 @@
       <button
         @click="post()"
         :disabled="loading"
-        class=" cc-flex cc-items-center cc-px-4 cc-py-2 cc-text-sm cc-font-medium cc-text-gray-700 cc-transition-colors cc-border cc-border-gray-200 cc-rounded-md hover:cc-border-gray-700 hover:cc-bg-gray-50 disabled:cc-opacity-50 focus:cc-outline-none"
+        class="
+          cc-flex
+          cc-items-center
+          cc-px-4
+          cc-py-2
+          cc-text-sm
+          cc-font-medium
+          cc-text-gray-700
+          cc-transition-colors
+          cc-border
+          cc-border-gray-200
+          cc-rounded-md
+          hover:cc-border-gray-700 hover:cc-bg-gray-50
+          disabled:cc-opacity-50
+          focus:cc-outline-none
+        "
       >
         <div
           x-show="loading"
@@ -238,7 +256,10 @@
 
             <div class="cc-flex cc-flex-col cc-flex-1 cc-ml-2">
               <div
-                class=" cc-w-20 cc-h-6 cc-mb-2 commentcarp__userlink commentcarp__skeleton"
+                class="
+                  cc-w-20 cc-h-6 cc-mb-2
+                  commentcarp__userlink commentcarp__skeleton
+                "
               ></div>
               <div class="cc-w-full cc-h-6 cc-mb-2 commentcarp__skeleton"></div>
               <div class="cc-w-full cc-h-6 commentcarp__skeleton"></div>
@@ -265,7 +286,7 @@
             <!-- Comment Container -->
             <div class="cc-flex cc-mb-4">
               <!-- User Avatar -->
-              <a x-bind:href="getLink(item)" target="_blank">
+              <a x-bind:href="getLink(item.commenter)" target="_blank">
                 <div
                   class="cc-w-12 cc-h-12 cc-rounded-full"
                   x-bind:style="`background-image: url(${ item.commenter.photo })`"
@@ -278,7 +299,7 @@
                 <div class="commentcarp__userlink">
                   <a
                     class="cc-flex cc-items-center"
-                    x-bind:href="getLink(item)"
+                    x-bind:href="getLink(item.commenter)"
                     target="_blank"
                   >
                     <div
