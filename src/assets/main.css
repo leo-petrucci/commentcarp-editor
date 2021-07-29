@@ -118,3 +118,20 @@
     left: 100%;
   }
 }
+
+.mention {
+  @apply cc-text-orange-900 cc-bg-orange-100 cc-rounded cc-px-1;
+}
+
+.items {
+  @apply cc-relative cc-rounded cc-bg-white cc-text-gray-700 cc-overflow-hidden cc-text-sm cc-shadow cc-flex cc-flex-col;
+}
+
+.item {
+  @apply cc-block cc-w-full cc-text-left cc-px-2 cc-py-1;
+}
+
+.item.is-selected,
+.item:hover {
+  @apply cc-text-orange-900 cc-bg-orange-100;
+}

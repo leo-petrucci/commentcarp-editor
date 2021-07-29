@@ -1,3 +1,4 @@
+const colors = require("tailwindcss/colors");
 const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
@@ -25,6 +26,9 @@ module.exports = {
       fontWeight: ["hover", "focus"],
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+      },
+      colors: {
+        orange: colors.orange,
       },
       typography: {
         DEFAULT: {
