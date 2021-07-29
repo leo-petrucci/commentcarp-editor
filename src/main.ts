@@ -1,5 +1,7 @@
 // @ts-ignore
 import Alpine from "alpinejs";
+// @ts-ignore
+import html from "html-template-string";
 import { Content, Editor } from "@tiptap/core";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
@@ -9,11 +11,14 @@ import Text from "@tiptap/extension-text";
 import Bold from "@tiptap/extension-bold";
 import Italic from "@tiptap/extension-italic";
 import Code from "@tiptap/extension-code";
+import Mention from "@tiptap/extension-mention";
 import CodeBlock from "@tiptap/extension-code-block";
 import Blockquote from "@tiptap/extension-blockquote";
 import Placeholder from "@tiptap/extension-placeholder";
 // @ts-ignore
 import styles from "./assets/main.css";
+import tippy from "tippy.js";
+import { SuggestionProps } from "@tiptap/suggestion";
 
 // @ts-ignore
 const key = document.getElementsByName("key")[0].content;
@@ -84,7 +89,9 @@ const comment = (content: Content = "") => {
       list: [],
     },
 
-    init(element: Element) {
+    async init(element: Element) {
+      const { getAllCommenters } = await fetchCommenters();
+
       this.editor = new Editor({
         element: element,
         extensions: [
@@ -99,6 +106,79 @@ const comment = (content: Content = "") => {
           CodeBlock,
           Blockquote,
           Placeholder.configure({ placeholder: "Write a comment!" }),
+          Mention.configure({
+            HTMLAttributes: {
+              class: "mention",
+            },
+            suggestion: {
+              items: (query) => {
+                return getAllCommenters
+                  .map(({ username }) => username)
+                  .filter((item) =>
+                    item.toLowerCase().startsWith(query.toLowerCase())
+                  )
+                  .slice(0, 5);
+              },
+              render: () => {
+                let popup: any;
+
+                const selectItem = (props: SuggestionProps, item: any) => {
+                  if (item) {
+                    props.command({ id: item, mention: "idk" });
+                  }
+                };
+
+                const menu = (props: SuggestionProps) => {
+                  const div = document.createElement("div");
+                  const items = document.createElement("div");
+                  items.className = "items";
+
+                  props.items.forEach((suggestion) => {
+                    const button = document.createElement("button");
+                    button.innerText = suggestion;
+                    button.className = "item";
+                    button.addEventListener("click", function () {
+                      selectItem(props, suggestion);
+                    });
+                    items.appendChild(button);
+                  });
+
+                  div.appendChild(items);
+                  return div.firstChild;
+                };
+                return {
+                  onStart: (props) => {
+                    // @ts-ignore
+                    popup = tippy("body", {
+                      getReferenceClientRect: props.clientRect,
+                      appendTo: () =>
+                        document.getElementById("commentcarp") as Element,
+                      content: menu(props),
+                      showOnCreate: true,
+                      interactive: true,
+                      allowHTML: true,
+                      trigger: "manual",
+                      placement: "bottom-start",
+                    });
+
+                    console.log(popup[0]);
+                  },
+                  onUpdate(props) {
+                    popup[0].setProps({
+                      getReferenceClientRect: props.clientRect,
+                      content: menu(props),
+                    });
+                  },
+                  onKeyDown() {
+                    return false;
+                  },
+                  onExit() {
+                    popup[0].destroy();
+                  },
+                };
+              },
+            },
+          }),
         ],
         content: this.content,
         onUpdate: ({ editor }) => {
@@ -210,18 +290,13 @@ const comment = (content: Content = "") => {
 
 window.comment = comment;
 
-export interface ConvertedUserInterface {
-  id: string;
-  username: string;
-  displayName: string;
+export interface ConvertedUserInterface extends CommenterInterface {
   verified?: boolean;
-  url: string;
-  photo: string;
-  provider: "twitter";
-  platformId: string;
 }
 
-const auth = async (): Promise<{ getMyCommenterProfile: ConvertedUserInterface }> => {
+const auth = async (): Promise<{
+  getMyCommenterProfile: ConvertedUserInterface;
+}> => {
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
 
@@ -242,17 +317,13 @@ const auth = async (): Promise<{ getMyCommenterProfile: ConvertedUserInterface }
 interface CommentsInterface {
   id: string;
   origin: string;
-  commenter: {
-    platformId: string;
-    provider: "twitter";
-    username: string;
-    displayName: string;
-    photo: string;
-  }
+  commenter: CommenterInterface;
   body: string;
 }
 
-const fetchComments = async (): Promise<{ getAllComments: CommentsInterface[] }> => {
+const fetchComments = async (): Promise<{
+  getAllComments: CommentsInterface[];
+}> => {
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
 
@@ -272,13 +343,7 @@ const fetchComments = async (): Promise<{ getAllComments: CommentsInterface[] }>
 
 export interface CommentResponseInterface {
   origin: string;
-  commenter: {
-    platformId: string;
-    provider: "twitter";
-    username: string;
-    displayName: string;
-    photo: string;
-  }
+  commenter: CommenterInterface;
   body: string;
 }
 
@@ -303,6 +368,43 @@ const send = async (
   }
 };
 
+export interface CommenterInterface {
+  platformId: string;
+  provider: "twitter";
+  username: string;
+  displayName: string;
+  photo: string;
+}
+
+const fetchCommenters = async (): Promise<{
+  getAllCommenters: CommenterInterface[];
+}> => {
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
+
+  const body = JSON.stringify({
+    query: `
+      query ($origin: String!, $key: String!) {
+        getAllCommenters(origin: $origin, key: $key) {
+          platformId
+          provider
+          displayName
+          username
+          photo
+        }
+      }
+    `,
+    variables: { origin: window.location.href, key },
+  });
+  try {
+    return (await handleGraphQL({ headers, body })) as {
+      getAllCommenters: CommenterInterface[];
+    };
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 function getCookie(name: string): string | null {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -319,10 +421,7 @@ const handleGraphQL = async ({
 }): Promise<unknown> => {
   let parsedHeaders = headers;
 
-  parsedHeaders.append(
-    "Authorization",
-    `Bearer ${getCookie("token")}`
-  );
+  parsedHeaders.append("Authorization", `Bearer ${getCookie("token")}`);
 
   const result = await fetch(`${endpoint!}/api`, {
     method: "POST",
