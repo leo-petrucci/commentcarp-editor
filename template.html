@@ -142,10 +142,7 @@
           target="_blank"
           rel="”nofollow”"
           href="https://commentcarp.club/how-it-works"
-          class="
-            cc-pr-2 cc-text-xs cc-text-right cc-text-gray-500 cc-cursor-pointer
-            hover:cc-underline
-          "
+          class=" cc-pr-2 cc-text-xs cc-text-right cc-text-gray-500 cc-cursor-pointer hover:cc-underline"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -164,22 +161,7 @@
       <button
         @click="post()"
         :disabled="loading"
-        class="
-          cc-flex
-          cc-items-center
-          cc-px-4
-          cc-py-2
-          cc-text-sm
-          cc-font-medium
-          cc-text-gray-700
-          cc-transition-colors
-          cc-border
-          cc-border-gray-200
-          cc-rounded-md
-          hover:cc-border-gray-700 hover:cc-bg-gray-50
-          disabled:cc-opacity-50
-          focus:cc-outline-none
-        "
+        class=" cc-flex cc-items-center cc-px-4 cc-py-2 cc-text-sm cc-font-medium cc-text-gray-700 cc-transition-colors cc-border cc-border-gray-200 cc-rounded-md hover:cc-border-gray-700 hover:cc-bg-gray-50 disabled:cc-opacity-50 focus:cc-outline-none"
       >
         <div
           x-show="loading"
@@ -239,11 +221,11 @@
       </button>
     </div>
 
-    <div class="relative">
+    <div class="cc-relative">
       <div
         x-show="comments.isLoading"
-        x-transition:leave="cc-transition cc-ease-in cc-duration-200 cc-absolute cc-w-full"
-        x-transition:leave-start="cc-opacity-100 cc-transform cc-scale-100 "
+        x-transition:leave="cc-left-0 cc-top-0 cc-transition cc-ease-in cc-duration-200 cc-absolute cc-w-full"
+        x-transition:leave-start="cc-opacity-100 cc-transform cc-scale-100"
         x-transition:leave-end="cc-opacity-0 cc-transform cc-scale-90"
       >
         <template x-for="item in ['','','']">
@@ -256,10 +238,7 @@
 
             <div class="cc-flex cc-flex-col cc-flex-1 cc-ml-2">
               <div
-                class="
-                  cc-w-20 cc-h-6 cc-mb-2
-                  commentcarp__userlink commentcarp__skeleton
-                "
+                class=" cc-w-20 cc-h-6 cc-mb-2 commentcarp__userlink commentcarp__skeleton"
               ></div>
               <div class="cc-w-full cc-h-6 cc-mb-2 commentcarp__skeleton"></div>
               <div class="cc-w-full cc-h-6 commentcarp__skeleton"></div>
