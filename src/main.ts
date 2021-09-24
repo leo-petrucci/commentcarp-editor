@@ -221,14 +221,14 @@ const comment = (content: Content = "") => {
       }
     },
     async checkLogin() {
-      try {
-        const user = await auth();
+      const user = await auth();
+      if (user.getMyCommenterProfile) {
         // @ts-ignore
         this.user = user.getMyCommenterProfile;
         this.loading = false;
         // @ts-ignore
         this.loggedIn = true;
-      } catch (err) {
+      } else {
         this.loading = false;
         // @ts-ignore
         this.loggedIn = false;
@@ -295,7 +295,7 @@ export interface ConvertedUserInterface extends CommenterInterface {
 }
 
 const auth = async (): Promise<{
-  getMyCommenterProfile: ConvertedUserInterface;
+  getMyCommenterProfile?: ConvertedUserInterface;
 }> => {
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
@@ -310,7 +310,7 @@ const auth = async (): Promise<{
       getMyCommenterProfile: ConvertedUserInterface;
     };
   } catch (err) {
-    throw new Error(err);
+    return {};
   }
 };
 
@@ -337,7 +337,8 @@ const fetchComments = async (): Promise<{
       getAllComments: CommentsInterface[];
     };
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
+    return { getAllComments: [] };
   }
 };
 
@@ -349,7 +350,7 @@ export interface CommentResponseInterface {
 
 const send = async (
   comment: string
-): Promise<{ comment: CommentResponseInterface }> => {
+): Promise<{ comment?: CommentResponseInterface }> => {
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
 
@@ -364,7 +365,8 @@ const send = async (
       comment: CommentResponseInterface;
     };
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
+    return {};
   }
 };
 
@@ -401,7 +403,8 @@ const fetchCommenters = async (): Promise<{
       getAllCommenters: CommenterInterface[];
     };
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
+    return { getAllCommenters: [] };
   }
 };
 
