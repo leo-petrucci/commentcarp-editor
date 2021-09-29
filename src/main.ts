@@ -306,7 +306,11 @@ const auth = async (): Promise<{
     variables: {},
   });
   try {
-    return (await handleGraphQL({ headers, body })) as {
+    return (await handleGraphQL({
+      headers,
+      body,
+      identifier: "getMyCommenterProfile",
+    })) as {
       getMyCommenterProfile: ConvertedUserInterface;
     };
   } catch (err) {
@@ -333,7 +337,11 @@ const fetchComments = async (): Promise<{
     variables: { origin: window.location.href, key },
   });
   try {
-    return (await handleGraphQL({ headers, body })) as {
+    return (await handleGraphQL({
+      headers,
+      body,
+      identifier: "getAllComments",
+    })) as {
       getAllComments: CommentsInterface[];
     };
   } catch (err) {
@@ -361,7 +369,11 @@ const send = async (
   });
 
   try {
-    return (await handleGraphQL({ headers, body })) as {
+    return (await handleGraphQL({
+      headers,
+      body,
+      identifier: "addOneComment",
+    })) as {
       comment: CommentResponseInterface;
     };
   } catch (err) {
@@ -399,7 +411,11 @@ const fetchCommenters = async (): Promise<{
     variables: { origin: window.location.href, key },
   });
   try {
-    return (await handleGraphQL({ headers, body })) as {
+    return (await handleGraphQL({
+      headers,
+      body,
+      identifier: "getAllCommenters",
+    })) as {
       getAllCommenters: CommenterInterface[];
     };
   } catch (err) {
@@ -418,15 +434,17 @@ function getCookie(name: string): string | null {
 const handleGraphQL = async ({
   headers,
   body,
+  identifier,
 }: {
   headers: Headers;
   body: string;
+  identifier?: string;
 }): Promise<unknown> => {
   let parsedHeaders = headers;
 
   parsedHeaders.append("Authorization", `Bearer ${getCookie("token")}`);
 
-  const result = await fetch(`${endpoint!}/api`, {
+  const result = await fetch(`${endpoint!}/api${identifier || ""}`, {
     method: "POST",
     headers: parsedHeaders,
     body,
