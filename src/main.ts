@@ -23,13 +23,7 @@ import { SuggestionProps } from "@tiptap/suggestion";
 const script = document.querySelector('script[data-name="commentcarp"]');
 
 // @ts-ignore
-const newKey = script?.attributes["data-key"].nodeValue;
-
-console.log(newKey);
-
-const key =
-  // @ts-ignore
-  newKey;
+const key = script?.attributes["data-key"].nodeValue;
 
 const init = async () => {
   const shadowDom = await fetch(
