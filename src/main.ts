@@ -20,8 +20,16 @@ import styles from "./assets/main.css";
 import tippy from "tippy.js";
 import { SuggestionProps } from "@tiptap/suggestion";
 
+const script = document.querySelector('script[data-name="commentcarp"]');
+
 // @ts-ignore
-const key = document.getElementsByName("key")[0].content;
+const newKey = script?.attributes["data-key"].nodeValue;
+
+console.log(newKey);
+
+const key =
+  // @ts-ignore
+  newKey;
 
 const init = async () => {
   const shadowDom = await fetch(
