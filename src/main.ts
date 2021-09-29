@@ -309,7 +309,7 @@ const auth = async (): Promise<{
     return (await handleGraphQL({
       headers,
       body,
-      identifier: "getMyCommenterProfile",
+      identifier: "?getMyCommenterProfile",
     })) as {
       getMyCommenterProfile: ConvertedUserInterface;
     };
@@ -340,7 +340,7 @@ const fetchComments = async (): Promise<{
     return (await handleGraphQL({
       headers,
       body,
-      identifier: "getAllComments",
+      identifier: "?getAllComments",
     })) as {
       getAllComments: CommentsInterface[];
     };
@@ -372,7 +372,7 @@ const send = async (
     return (await handleGraphQL({
       headers,
       body,
-      identifier: "addOneComment",
+      identifier: "?addOneComment",
     })) as {
       comment: CommentResponseInterface;
     };
@@ -414,7 +414,7 @@ const fetchCommenters = async (): Promise<{
     return (await handleGraphQL({
       headers,
       body,
-      identifier: "getAllCommenters",
+      identifier: "?getAllCommenters",
     })) as {
       getAllCommenters: CommenterInterface[];
     };
