@@ -95,220 +95,222 @@ document.addEventListener("alpine:init", () => {
   Alpine.data("comment", () => comment);
 });
 
-const comment = (content: Content = "") => {
-  return {
-    loading: true,
-    loggedIn: undefined,
-    user: null,
+const comment = () => {};
 
-    editor: null as null | Editor,
-    content: content,
-    errorMessage: "",
+// const comment = (content: Content = "") => {
+//   return {
+//     loading: true,
+//     loggedIn: undefined,
+//     user: null,
 
-    comments: {
-      isLoading: true,
-      isError: false,
-      list: [],
-    },
+//     editor: null as null | Editor,
+//     content: content,
+//     errorMessage: "",
 
-    async init(element: Element) {
-      const { getAllCommenters } = await fetchCommenters();
+//     comments: {
+//       isLoading: true,
+//       isError: false,
+//       list: [],
+//     },
 
-      this.editor = new Editor({
-        element: element,
-        extensions: [
-          Document,
-          Paragraph,
-          Text,
-          Bold,
-          Italic,
-          BulletList,
-          ListItem,
-          Code,
-          CodeBlock,
-          Blockquote,
-          Placeholder.configure({ placeholder: "Write a comment!" }),
-          Mention.configure({
-            HTMLAttributes: {
-              class: "mention",
-            },
-            suggestion: {
-              items: (query) => {
-                return getAllCommenters
-                  .map(({ username }) => username)
-                  .filter((item) =>
-                    item.toLowerCase().startsWith(query.toLowerCase())
-                  )
-                  .slice(0, 5);
-              },
-              render: () => {
-                let popup: any;
+//     async init(element: Element) {
+//       const { getAllCommenters } = await fetchCommenters();
 
-                const selectItem = (props: SuggestionProps, item: any) => {
-                  if (item) {
-                    props.command({ id: item, mention: "idk" });
-                  }
-                };
+//       this.editor = new Editor({
+//         element: element,
+//         extensions: [
+//           Document,
+//           Paragraph,
+//           Text,
+//           Bold,
+//           Italic,
+//           BulletList,
+//           ListItem,
+//           Code,
+//           CodeBlock,
+//           Blockquote,
+//           Placeholder.configure({ placeholder: "Write a comment!" }),
+//           Mention.configure({
+//             HTMLAttributes: {
+//               class: "mention",
+//             },
+//             suggestion: {
+//               items: (query) => {
+//                 return getAllCommenters
+//                   .map(({ username }) => username)
+//                   .filter((item) =>
+//                     item.toLowerCase().startsWith(query.toLowerCase())
+//                   )
+//                   .slice(0, 5);
+//               },
+//               render: () => {
+//                 let popup: any;
 
-                const menu = (props: SuggestionProps) => {
-                  const div = document.createElement("div");
-                  const items = document.createElement("div");
-                  items.className = "items";
+//                 const selectItem = (props: SuggestionProps, item: any) => {
+//                   if (item) {
+//                     props.command({ id: item, mention: "idk" });
+//                   }
+//                 };
 
-                  props.items.forEach((suggestion) => {
-                    const button = document.createElement("button");
-                    button.innerText = suggestion;
-                    button.className = "item";
-                    button.addEventListener("click", function () {
-                      selectItem(props, suggestion);
-                    });
-                    items.appendChild(button);
-                  });
+//                 const menu = (props: SuggestionProps) => {
+//                   const div = document.createElement("div");
+//                   const items = document.createElement("div");
+//                   items.className = "items";
 
-                  div.appendChild(items);
-                  return div.firstChild;
-                };
-                return {
-                  onStart: (props) => {
-                    // @ts-ignore
-                    popup = tippy("body", {
-                      getReferenceClientRect: props.clientRect,
-                      appendTo: () =>
-                        document.getElementById("commentcarp") as Element,
-                      content: menu(props),
-                      showOnCreate: true,
-                      interactive: true,
-                      allowHTML: true,
-                      trigger: "manual",
-                      placement: "bottom-start",
-                    });
+//                   props.items.forEach((suggestion) => {
+//                     const button = document.createElement("button");
+//                     button.innerText = suggestion;
+//                     button.className = "item";
+//                     button.addEventListener("click", function () {
+//                       selectItem(props, suggestion);
+//                     });
+//                     items.appendChild(button);
+//                   });
 
-                    console.log(popup[0]);
-                  },
-                  onUpdate(props) {
-                    popup[0].setProps({
-                      getReferenceClientRect: props.clientRect,
-                      content: menu(props),
-                    });
-                  },
-                  onKeyDown() {
-                    return false;
-                  },
-                  onExit() {
-                    popup[0].destroy();
-                  },
-                };
-              },
-            },
-          }),
-        ],
-        content: this.content,
-        onUpdate: ({ editor }) => {
-          this.content = editor.getHTML();
-        },
-      });
-    },
-    addListener() {
-      window.addEventListener(
-        "message",
-        (event) => {
-          if (event.origin === endpoint) {
-            const cookie = `token=${window.escape(
-              event.data
-            )}; Max-Age=604800;`;
-            document.cookie = cookie;
-            this.checkLogin();
-          }
-        },
-        false
-      );
-    },
-    async getComments() {
-      try {
-        const { getAllComments } = await fetchComments();
-        // @ts-ignore
-        this.comments.isLoading = false;
-        // @ts-ignore
-        this.comments.list = getAllComments;
-        // @ts-ignore
-      } catch (err) {
-        // @ts-ignore
-        this.comments.isLoading = false;
-      }
-    },
-    getLink(user: ConvertedUserInterface) {
-      switch (user.provider) {
-        case "twitter":
-          return `https://twitter.com/i/user/${user.platformId}`;
-      }
-    },
-    async checkLogin() {
-      const user = await auth();
-      if (user.getMyCommenterProfile) {
-        // @ts-ignore
-        this.user = user.getMyCommenterProfile;
-        this.loading = false;
-        // @ts-ignore
-        this.loggedIn = true;
-      } else {
-        this.loading = false;
-        // @ts-ignore
-        this.loggedIn = false;
-      }
-    },
-    async post() {
-      if (this.loggedIn) {
-        this.loading = true;
-        try {
-          await send(this.content as string);
-          this.loading = false;
-          await this.getComments();
-          this.editor?.commands.clearContent();
-          this.content = "";
-        } catch (err: any) {
-          this.loading = false;
-          this.errorMessage = err.toString().replace("Error:", "");
-          throw new Error(err);
-        }
-      } else {
-        this.login();
-      }
-    },
-    login() {
-      const w = 450;
-      const h = 450;
-      const dualScreenLeft =
-        window.screenLeft !== undefined ? window.screenLeft : window.screenX;
-      const dualScreenTop =
-        window.screenTop !== undefined ? window.screenTop : window.screenY;
+//                   div.appendChild(items);
+//                   return div.firstChild;
+//                 };
+//                 return {
+//                   onStart: (props) => {
+//                     // @ts-ignore
+//                     popup = tippy("body", {
+//                       getReferenceClientRect: props.clientRect,
+//                       appendTo: () =>
+//                         document.getElementById("commentcarp") as Element,
+//                       content: menu(props),
+//                       showOnCreate: true,
+//                       interactive: true,
+//                       allowHTML: true,
+//                       trigger: "manual",
+//                       placement: "bottom-start",
+//                     });
 
-      const width = window.innerWidth
-        ? window.innerWidth
-        : document.documentElement.clientWidth
-        ? document.documentElement.clientWidth
-        : screen.width;
-      const height = window.innerHeight
-        ? window.innerHeight
-        : document.documentElement.clientHeight
-        ? document.documentElement.clientHeight
-        : screen.height;
+//                     console.log(popup[0]);
+//                   },
+//                   onUpdate(props) {
+//                     popup[0].setProps({
+//                       getReferenceClientRect: props.clientRect,
+//                       content: menu(props),
+//                     });
+//                   },
+//                   onKeyDown() {
+//                     return false;
+//                   },
+//                   onExit() {
+//                     popup[0].destroy();
+//                   },
+//                 };
+//               },
+//             },
+//           }),
+//         ],
+//         content: this.content,
+//         onUpdate: ({ editor }) => {
+//           this.content = editor.getHTML();
+//         },
+//       });
+//     },
+//     addListener() {
+//       window.addEventListener(
+//         "message",
+//         (event) => {
+//           if (event.origin === endpoint) {
+//             const cookie = `token=${window.escape(
+//               event.data
+//             )}; Max-Age=604800;`;
+//             document.cookie = cookie;
+//             this.checkLogin();
+//           }
+//         },
+//         false
+//       );
+//     },
+//     async getComments() {
+//       try {
+//         const { getAllComments } = await fetchComments();
+//         // @ts-ignore
+//         this.comments.isLoading = false;
+//         // @ts-ignore
+//         this.comments.list = getAllComments;
+//         // @ts-ignore
+//       } catch (err) {
+//         // @ts-ignore
+//         this.comments.isLoading = false;
+//       }
+//     },
+//     getLink(user: ConvertedUserInterface) {
+//       switch (user.provider) {
+//         case "twitter":
+//           return `https://twitter.com/i/user/${user.platformId}`;
+//       }
+//     },
+//     async checkLogin() {
+//       const user = await auth();
+//       if (user.getMyCommenterProfile) {
+//         // @ts-ignore
+//         this.user = user.getMyCommenterProfile;
+//         this.loading = false;
+//         // @ts-ignore
+//         this.loggedIn = true;
+//       } else {
+//         this.loading = false;
+//         // @ts-ignore
+//         this.loggedIn = false;
+//       }
+//     },
+//     async post() {
+//       if (this.loggedIn) {
+//         this.loading = true;
+//         try {
+//           await send(this.content as string);
+//           this.loading = false;
+//           await this.getComments();
+//           this.editor?.commands.clearContent();
+//           this.content = "";
+//         } catch (err: any) {
+//           this.loading = false;
+//           this.errorMessage = err.toString().replace("Error:", "");
+//           throw new Error(err);
+//         }
+//       } else {
+//         this.login();
+//       }
+//     },
+//     login() {
+//       const w = 450;
+//       const h = 450;
+//       const dualScreenLeft =
+//         window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+//       const dualScreenTop =
+//         window.screenTop !== undefined ? window.screenTop : window.screenY;
 
-      const systemZoom = width / window.screen.availWidth;
-      const left = (width - w) / 2 / systemZoom + dualScreenLeft;
-      const top = (height - h) / 2 / systemZoom + dualScreenTop;
-      window.open(
-        `${endpoint}/api/oauth/`,
-        "Twitter Login",
-        `
-        height=${h},
-        width=${w},
-        top=${top},
-        left=${left}
-      `
-      );
-    },
-  };
-};
+//       const width = window.innerWidth
+//         ? window.innerWidth
+//         : document.documentElement.clientWidth
+//         ? document.documentElement.clientWidth
+//         : screen.width;
+//       const height = window.innerHeight
+//         ? window.innerHeight
+//         : document.documentElement.clientHeight
+//         ? document.documentElement.clientHeight
+//         : screen.height;
+
+//       const systemZoom = width / window.screen.availWidth;
+//       const left = (width - w) / 2 / systemZoom + dualScreenLeft;
+//       const top = (height - h) / 2 / systemZoom + dualScreenTop;
+//       window.open(
+//         `${endpoint}/api/oauth/`,
+//         "Twitter Login",
+//         `
+//         height=${h},
+//         width=${w},
+//         top=${top},
+//         left=${left}
+//       `
+//       );
+//     },
+//   };
+// };
 
 interface ConvertedUserInterface extends CommenterInterface {
   verified?: boolean;
