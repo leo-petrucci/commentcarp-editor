@@ -2,6 +2,38 @@
 import Alpine from "alpinejs";
 // @ts-ignore
 import html from "html-template-string";
+// @ts-ignore
+import { Content, Editor } from "@tiptap/core";
+// @ts-ignore
+import Document from "@tiptap/extension-document";
+// @ts-ignore
+import Paragraph from "@tiptap/extension-paragraph";
+// @ts-ignore
+import BulletList from "@tiptap/extension-bullet-list";
+// @ts-ignore
+import ListItem from "@tiptap/extension-list-item";
+// @ts-ignore
+import Text from "@tiptap/extension-text";
+// @ts-ignore
+import Bold from "@tiptap/extension-bold";
+// @ts-ignore
+import Italic from "@tiptap/extension-italic";
+// @ts-ignore
+import Code from "@tiptap/extension-code";
+// @ts-ignore
+import Mention from "@tiptap/extension-mention";
+// @ts-ignore
+import CodeBlock from "@tiptap/extension-code-block";
+// @ts-ignore
+import Blockquote from "@tiptap/extension-blockquote";
+// @ts-ignore
+import Placeholder from "@tiptap/extension-placeholder";
+// @ts-ignore
+import styles from "./assets/main.css";
+// @ts-ignore
+import tippy from "tippy.js";
+// @ts-ignoree
+import { SuggestionProps } from "@tiptap/suggestion";
 
 // const script = document.querySelector('script[data-name="commentcarp"]');
 
