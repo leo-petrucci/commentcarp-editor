@@ -43,7 +43,8 @@ const init = async () => {
     commentcarpRoot.appendChild(template.content!);
     const comp = commentcarpRoot.querySelector("[defer-x-data]")!;
     comp.setAttribute("x-data", comp.getAttribute("defer-x-data")!);
-    Alpine.initializeComponent(comp);
+
+    Alpine.start();
   }
 };
 
@@ -74,6 +75,10 @@ declare global {
 }
 
 const endpoint = import.meta.env.VITE_API_URL;
+
+document.addEventListener("alpine:init", () => {
+  Alpine.data("comment", () => comment);
+});
 
 const comment = (content: Content = "") => {
   return {
