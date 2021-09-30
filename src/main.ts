@@ -25,34 +25,34 @@ const script = document.querySelector('script[data-name="commentcarp"]');
 // @ts-ignore
 const key = script?.attributes["data-key"].nodeValue;
 
-// const init = async () => {
-//   const shadowDom = await fetch(
-//     // @ts-ignore
-//     `${import.meta.env.VITE_APP_URL}/template.html`
-//   ).then((res) => res.text());
-//   const commentcarpRoot = document.getElementById("commentcarp")!;
-//   if (commentcarpRoot) {
-//     commentcarpRoot.innerHTML = "";
+const init = async () => {
+  const shadowDom = await fetch(
+    // @ts-ignore
+    `${import.meta.env.VITE_APP_URL}/template.html`
+  ).then((res) => res.text());
+  const commentcarpRoot = document.getElementById("commentcarp")!;
+  if (commentcarpRoot) {
+    commentcarpRoot.innerHTML = "";
 
-//     const style = document.createElement("style");
-//     style.textContent = styles;
-//     document.head.append(style);
+    const style = document.createElement("style");
+    style.textContent = styles;
+    document.head.append(style);
 
-//     const template = document.createElement("template");
-//     template.innerHTML = shadowDom.trim();
-//     commentcarpRoot.appendChild(template.content!);
-//     const comp = commentcarpRoot.querySelector("[defer-x-data]")!;
-//     comp.setAttribute("x-data", comp.getAttribute("defer-x-data")!);
+    const template = document.createElement("template");
+    template.innerHTML = shadowDom.trim();
+    commentcarpRoot.appendChild(template.content!);
+    const comp = commentcarpRoot.querySelector("[defer-x-data]")!;
+    comp.setAttribute("x-data", comp.getAttribute("defer-x-data")!);
 
-//     Alpine.start();
-//   }
-// };
+    Alpine.start();
+  }
+};
 
-// init();
+init();
 
-// window.addEventListener("initCommentCarp", function () {
-//   init();
-// });
+window.addEventListener("initCommentCarp", function () {
+  init();
+});
 
 declare global {
   interface Window {
@@ -76,9 +76,9 @@ declare global {
 
 const endpoint = import.meta.env.VITE_API_URL;
 
-// document.addEventListener("alpine:init", () => {
-//   Alpine.data("comment", () => comment);
-// });
+document.addEventListener("alpine:init", () => {
+  Alpine.data("comment", () => comment);
+});
 
 const comment = (content: Content = "") => {
   return {
@@ -295,7 +295,7 @@ const comment = (content: Content = "") => {
   };
 };
 
-window.comment = comment;
+// window.comment = comment;
 
 export interface ConvertedUserInterface extends CommenterInterface {
   verified?: boolean;
