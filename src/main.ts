@@ -378,6 +378,7 @@ interface CommentResponseInterface {
   body: string;
 }
 
+// @ts-ignore
 const send = async (
   comment: string
 ): Promise<{ comment?: CommentResponseInterface }> => {
@@ -412,6 +413,7 @@ interface CommenterInterface {
   photo: string;
 }
 
+// @ts-ignore
 const fetchCommenters = async (): Promise<{
   getAllCommenters: CommenterInterface[];
 }> => {
