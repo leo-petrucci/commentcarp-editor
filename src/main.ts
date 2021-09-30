@@ -74,11 +74,11 @@ declare global {
   }
 }
 
-const endpoint = import.meta.env.VITE_API_URL;
+// const endpoint = import.meta.env.VITE_API_URL;
 
-document.addEventListener("alpine:init", () => {
-  Alpine.data("comment", () => comment);
-});
+// document.addEventListener("alpine:init", () => {
+//   Alpine.data("comment", () => comment);
+// });
 
 const comment = (content: Content = "") => {
   return {
