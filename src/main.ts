@@ -89,11 +89,13 @@ window.addEventListener("initCommentCarp", function () {
 //   }
 // }
 
-// const endpoint = import.meta.env.VITE_API_URL;
+const endpoint = import.meta.env.VITE_API_URL;
 
-// document.addEventListener("alpine:init", () => {
-//   Alpine.data("comment", () => comment);
-// });
+document.addEventListener("alpine:init", () => {
+  Alpine.data("comment", () => comment);
+});
+
+const comment = () => {};
 
 // const comment = (content: Content = "") => {
 //   return {
@@ -370,111 +372,111 @@ window.addEventListener("initCommentCarp", function () {
 //   }
 // };
 
-// export interface CommentResponseInterface {
-//   origin: string;
-//   commenter: CommenterInterface;
-//   body: string;
-// }
+interface CommentResponseInterface {
+  origin: string;
+  commenter: CommenterInterface;
+  body: string;
+}
 
-// const send = async (
-//   comment: string
-// ): Promise<{ comment?: CommentResponseInterface }> => {
-//   const headers = new Headers();
-//   headers.append("Content-Type", "application/json");
+const send = async (
+  comment: string
+): Promise<{ comment?: CommentResponseInterface }> => {
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
 
-//   const body = JSON.stringify({
-//     query:
-//       "mutation ($body: String!, $origin: String!, $key: String!) {\r\n    addOneComment (body: $body, origin: $origin, key: $key) {\r\n        body\r\n        origin\r\n                commenter\r\n        { username\r\n }    }\r\n}",
-//     variables: { origin: window.location.href, body: comment, key },
-//   });
+  const body = JSON.stringify({
+    query:
+      "mutation ($body: String!, $origin: String!, $key: String!) {\r\n    addOneComment (body: $body, origin: $origin, key: $key) {\r\n        body\r\n        origin\r\n                commenter\r\n        { username\r\n }    }\r\n}",
+    variables: { origin: window.location.href, body: comment, key },
+  });
 
-//   try {
-//     return (await handleGraphQL({
-//       headers,
-//       body,
-//       identifier: "?addOneComment",
-//     })) as {
-//       comment: CommentResponseInterface;
-//     };
-//   } catch (err) {
-//     console.error(err);
-//     return {};
-//   }
-// };
+  try {
+    return (await handleGraphQL({
+      headers,
+      body,
+      identifier: "?addOneComment",
+    })) as {
+      comment: CommentResponseInterface;
+    };
+  } catch (err) {
+    console.error(err);
+    return {};
+  }
+};
 
-// export interface CommenterInterface {
-//   platformId: string;
-//   provider: "twitter";
-//   username: string;
-//   displayName: string;
-//   photo: string;
-// }
+interface CommenterInterface {
+  platformId: string;
+  provider: "twitter";
+  username: string;
+  displayName: string;
+  photo: string;
+}
 
-// const fetchCommenters = async (): Promise<{
-//   getAllCommenters: CommenterInterface[];
-// }> => {
-//   const headers = new Headers();
-//   headers.append("Content-Type", "application/json");
+const fetchCommenters = async (): Promise<{
+  getAllCommenters: CommenterInterface[];
+}> => {
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
 
-//   const body = JSON.stringify({
-//     query: `
-//       query ($origin: String!, $key: String!) {
-//         getAllCommenters(origin: $origin, key: $key) {
-//           platformId
-//           provider
-//           displayName
-//           username
-//           photo
-//         }
-//       }
-//     `,
-//     variables: { origin: window.location.href, key },
-//   });
-//   try {
-//     return (await handleGraphQL({
-//       headers,
-//       body,
-//       identifier: "?getAllCommenters",
-//     })) as {
-//       getAllCommenters: CommenterInterface[];
-//     };
-//   } catch (err) {
-//     console.error(err);
-//     return { getAllCommenters: [] };
-//   }
-// };
+  const body = JSON.stringify({
+    query: `
+      query ($origin: String!, $key: String!) {
+        getAllCommenters(origin: $origin, key: $key) {
+          platformId
+          provider
+          displayName
+          username
+          photo
+        }
+      }
+    `,
+    variables: { origin: window.location.href, key },
+  });
+  try {
+    return (await handleGraphQL({
+      headers,
+      body,
+      identifier: "?getAllCommenters",
+    })) as {
+      getAllCommenters: CommenterInterface[];
+    };
+  } catch (err) {
+    console.error(err);
+    return { getAllCommenters: [] };
+  }
+};
 
-// function getCookie(name: string): string | null {
-//   const value = `; ${document.cookie}`;
-//   const parts = value.split(`; ${name}=`);
-//   if (parts.length === 2) return parts.pop()?.split(";").shift()!;
-//   return null;
-// }
+function getCookie(name: string): string | null {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(";").shift()!;
+  return null;
+}
 
-// const handleGraphQL = async ({
-//   headers,
-//   body,
-//   identifier,
-// }: {
-//   headers: Headers;
-//   body: string;
-//   identifier?: string;
-// }): Promise<unknown> => {
-//   let parsedHeaders = headers;
+const handleGraphQL = async ({
+  headers,
+  body,
+  identifier,
+}: {
+  headers: Headers;
+  body: string;
+  identifier?: string;
+}): Promise<unknown> => {
+  let parsedHeaders = headers;
 
-//   parsedHeaders.append("Authorization", `Bearer ${getCookie("token")}`);
+  parsedHeaders.append("Authorization", `Bearer ${getCookie("token")}`);
 
-//   const result = await fetch(`${endpoint!}/api${identifier || ""}`, {
-//     method: "POST",
-//     headers: parsedHeaders,
-//     body,
-//     redirect: "follow",
-//     credentials: "include",
-//   }).then((response) => response.json());
+  const result = await fetch(`${endpoint!}/api${identifier || ""}`, {
+    method: "POST",
+    headers: parsedHeaders,
+    body,
+    redirect: "follow",
+    credentials: "include",
+  }).then((response) => response.json());
 
-//   if (result.errors) {
-//     throw new Error(result.errors[0].message);
-//   }
+  if (result.errors) {
+    throw new Error(result.errors[0].message);
+  }
 
-//   return result.data;
-// };
+  return result.data;
+};
