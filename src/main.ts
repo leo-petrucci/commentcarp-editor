@@ -2,23 +2,6 @@
 import Alpine from "alpinejs";
 // @ts-ignore
 import html from "html-template-string";
-import { Content, Editor } from "@tiptap/core";
-import Document from "@tiptap/extension-document";
-import Paragraph from "@tiptap/extension-paragraph";
-import BulletList from "@tiptap/extension-bullet-list";
-import ListItem from "@tiptap/extension-list-item";
-import Text from "@tiptap/extension-text";
-import Bold from "@tiptap/extension-bold";
-import Italic from "@tiptap/extension-italic";
-import Code from "@tiptap/extension-code";
-import Mention from "@tiptap/extension-mention";
-import CodeBlock from "@tiptap/extension-code-block";
-import Blockquote from "@tiptap/extension-blockquote";
-import Placeholder from "@tiptap/extension-placeholder";
-// @ts-ignore
-import styles from "./assets/main.css";
-import tippy from "tippy.js";
-import { SuggestionProps } from "@tiptap/suggestion";
 
 // const script = document.querySelector('script[data-name="commentcarp"]');
 
