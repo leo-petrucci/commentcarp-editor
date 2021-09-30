@@ -95,282 +95,282 @@ document.addEventListener("alpine:init", () => {
   Alpine.data("comment", () => comment);
 });
 
-const comment = () => {};
+const comment = (content: Content = "") => {
+  return {
+    loading: true,
+    loggedIn: undefined,
+    user: null,
 
-// const comment = (content: Content = "") => {
-//   return {
-//     loading: true,
-//     loggedIn: undefined,
-//     user: null,
+    editor: null as null | Editor,
+    content: content,
+    errorMessage: "",
 
-//     editor: null as null | Editor,
-//     content: content,
-//     errorMessage: "",
+    comments: {
+      isLoading: true,
+      isError: false,
+      list: [],
+    },
 
-//     comments: {
-//       isLoading: true,
-//       isError: false,
-//       list: [],
-//     },
+    async init(element: Element) {
+      const { getAllCommenters } = await fetchCommenters();
 
-//     async init(element: Element) {
-//       const { getAllCommenters } = await fetchCommenters();
+      this.editor = new Editor({
+        element: element,
+        extensions: [
+          Document,
+          Paragraph,
+          Text,
+          Bold,
+          Italic,
+          BulletList,
+          ListItem,
+          Code,
+          CodeBlock,
+          Blockquote,
+          Placeholder.configure({ placeholder: "Write a comment!" }),
+          Mention.configure({
+            HTMLAttributes: {
+              class: "mention",
+            },
+            suggestion: {
+              items: (query) => {
+                return getAllCommenters
+                  .map(({ username }) => username)
+                  .filter((item) =>
+                    item.toLowerCase().startsWith(query.toLowerCase())
+                  )
+                  .slice(0, 5);
+              },
+              render: () => {
+                let popup: any;
 
-//       this.editor = new Editor({
-//         element: element,
-//         extensions: [
-//           Document,
-//           Paragraph,
-//           Text,
-//           Bold,
-//           Italic,
-//           BulletList,
-//           ListItem,
-//           Code,
-//           CodeBlock,
-//           Blockquote,
-//           Placeholder.configure({ placeholder: "Write a comment!" }),
-//           Mention.configure({
-//             HTMLAttributes: {
-//               class: "mention",
-//             },
-//             suggestion: {
-//               items: (query) => {
-//                 return getAllCommenters
-//                   .map(({ username }) => username)
-//                   .filter((item) =>
-//                     item.toLowerCase().startsWith(query.toLowerCase())
-//                   )
-//                   .slice(0, 5);
-//               },
-//               render: () => {
-//                 let popup: any;
+                const selectItem = (props: SuggestionProps, item: any) => {
+                  if (item) {
+                    props.command({ id: item, mention: "idk" });
+                  }
+                };
 
-//                 const selectItem = (props: SuggestionProps, item: any) => {
-//                   if (item) {
-//                     props.command({ id: item, mention: "idk" });
-//                   }
-//                 };
+                const menu = (props: SuggestionProps) => {
+                  const div = document.createElement("div");
+                  const items = document.createElement("div");
+                  items.className = "items";
 
-//                 const menu = (props: SuggestionProps) => {
-//                   const div = document.createElement("div");
-//                   const items = document.createElement("div");
-//                   items.className = "items";
+                  props.items.forEach((suggestion) => {
+                    const button = document.createElement("button");
+                    button.innerText = suggestion;
+                    button.className = "item";
+                    button.addEventListener("click", function () {
+                      selectItem(props, suggestion);
+                    });
+                    items.appendChild(button);
+                  });
 
-//                   props.items.forEach((suggestion) => {
-//                     const button = document.createElement("button");
-//                     button.innerText = suggestion;
-//                     button.className = "item";
-//                     button.addEventListener("click", function () {
-//                       selectItem(props, suggestion);
-//                     });
-//                     items.appendChild(button);
-//                   });
+                  div.appendChild(items);
+                  return div.firstChild;
+                };
+                return {
+                  onStart: (props) => {
+                    // @ts-ignore
+                    popup = tippy("body", {
+                      getReferenceClientRect: props.clientRect,
+                      appendTo: () =>
+                        document.getElementById("commentcarp") as Element,
+                      content: menu(props),
+                      showOnCreate: true,
+                      interactive: true,
+                      allowHTML: true,
+                      trigger: "manual",
+                      placement: "bottom-start",
+                    });
 
-//                   div.appendChild(items);
-//                   return div.firstChild;
-//                 };
-//                 return {
-//                   onStart: (props) => {
-//                     // @ts-ignore
-//                     popup = tippy("body", {
-//                       getReferenceClientRect: props.clientRect,
-//                       appendTo: () =>
-//                         document.getElementById("commentcarp") as Element,
-//                       content: menu(props),
-//                       showOnCreate: true,
-//                       interactive: true,
-//                       allowHTML: true,
-//                       trigger: "manual",
-//                       placement: "bottom-start",
-//                     });
+                    console.log(popup[0]);
+                  },
+                  onUpdate(props) {
+                    popup[0].setProps({
+                      getReferenceClientRect: props.clientRect,
+                      content: menu(props),
+                    });
+                  },
+                  onKeyDown() {
+                    return false;
+                  },
+                  onExit() {
+                    popup[0].destroy();
+                  },
+                };
+              },
+            },
+          }),
+        ],
+        content: this.content,
+        onUpdate: ({ editor }) => {
+          this.content = editor.getHTML();
+        },
+      });
+    },
+    addListener() {
+      window.addEventListener(
+        "message",
+        (event) => {
+          if (event.origin === endpoint) {
+            const cookie = `token=${window.escape(
+              event.data
+            )}; Max-Age=604800;`;
+            document.cookie = cookie;
+            this.checkLogin();
+          }
+        },
+        false
+      );
+    },
+    async getComments() {
+      try {
+        const { getAllComments } = await fetchComments();
+        // @ts-ignore
+        this.comments.isLoading = false;
+        // @ts-ignore
+        this.comments.list = getAllComments;
+        // @ts-ignore
+      } catch (err) {
+        // @ts-ignore
+        this.comments.isLoading = false;
+      }
+    },
+    getLink(user: ConvertedUserInterface) {
+      switch (user.provider) {
+        case "twitter":
+          return `https://twitter.com/i/user/${user.platformId}`;
+      }
+    },
+    async checkLogin() {
+      const user = await auth();
+      if (user.getMyCommenterProfile) {
+        // @ts-ignore
+        this.user = user.getMyCommenterProfile;
+        this.loading = false;
+        // @ts-ignore
+        this.loggedIn = true;
+      } else {
+        this.loading = false;
+        // @ts-ignore
+        this.loggedIn = false;
+      }
+    },
+    async post() {
+      if (this.loggedIn) {
+        this.loading = true;
+        try {
+          await send(this.content as string);
+          this.loading = false;
+          await this.getComments();
+          this.editor?.commands.clearContent();
+          this.content = "";
+        } catch (err: any) {
+          this.loading = false;
+          this.errorMessage = err.toString().replace("Error:", "");
+          throw new Error(err);
+        }
+      } else {
+        this.login();
+      }
+    },
+    login() {
+      const w = 450;
+      const h = 450;
+      const dualScreenLeft =
+        window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+      const dualScreenTop =
+        window.screenTop !== undefined ? window.screenTop : window.screenY;
 
-//                     console.log(popup[0]);
-//                   },
-//                   onUpdate(props) {
-//                     popup[0].setProps({
-//                       getReferenceClientRect: props.clientRect,
-//                       content: menu(props),
-//                     });
-//                   },
-//                   onKeyDown() {
-//                     return false;
-//                   },
-//                   onExit() {
-//                     popup[0].destroy();
-//                   },
-//                 };
-//               },
-//             },
-//           }),
-//         ],
-//         content: this.content,
-//         onUpdate: ({ editor }) => {
-//           this.content = editor.getHTML();
-//         },
-//       });
-//     },
-//     addListener() {
-//       window.addEventListener(
-//         "message",
-//         (event) => {
-//           if (event.origin === endpoint) {
-//             const cookie = `token=${window.escape(
-//               event.data
-//             )}; Max-Age=604800;`;
-//             document.cookie = cookie;
-//             this.checkLogin();
-//           }
-//         },
-//         false
-//       );
-//     },
-//     async getComments() {
-//       try {
-//         const { getAllComments } = await fetchComments();
-//         // @ts-ignore
-//         this.comments.isLoading = false;
-//         // @ts-ignore
-//         this.comments.list = getAllComments;
-//         // @ts-ignore
-//       } catch (err) {
-//         // @ts-ignore
-//         this.comments.isLoading = false;
-//       }
-//     },
-//     getLink(user: ConvertedUserInterface) {
-//       switch (user.provider) {
-//         case "twitter":
-//           return `https://twitter.com/i/user/${user.platformId}`;
-//       }
-//     },
-//     async checkLogin() {
-//       const user = await auth();
-//       if (user.getMyCommenterProfile) {
-//         // @ts-ignore
-//         this.user = user.getMyCommenterProfile;
-//         this.loading = false;
-//         // @ts-ignore
-//         this.loggedIn = true;
-//       } else {
-//         this.loading = false;
-//         // @ts-ignore
-//         this.loggedIn = false;
-//       }
-//     },
-//     async post() {
-//       if (this.loggedIn) {
-//         this.loading = true;
-//         try {
-//           await send(this.content as string);
-//           this.loading = false;
-//           await this.getComments();
-//           this.editor?.commands.clearContent();
-//           this.content = "";
-//         } catch (err: any) {
-//           this.loading = false;
-//           this.errorMessage = err.toString().replace("Error:", "");
-//           throw new Error(err);
-//         }
-//       } else {
-//         this.login();
-//       }
-//     },
-//     login() {
-//       const w = 450;
-//       const h = 450;
-//       const dualScreenLeft =
-//         window.screenLeft !== undefined ? window.screenLeft : window.screenX;
-//       const dualScreenTop =
-//         window.screenTop !== undefined ? window.screenTop : window.screenY;
+      const width = window.innerWidth
+        ? window.innerWidth
+        : document.documentElement.clientWidth
+        ? document.documentElement.clientWidth
+        : screen.width;
+      const height = window.innerHeight
+        ? window.innerHeight
+        : document.documentElement.clientHeight
+        ? document.documentElement.clientHeight
+        : screen.height;
 
-//       const width = window.innerWidth
-//         ? window.innerWidth
-//         : document.documentElement.clientWidth
-//         ? document.documentElement.clientWidth
-//         : screen.width;
-//       const height = window.innerHeight
-//         ? window.innerHeight
-//         : document.documentElement.clientHeight
-//         ? document.documentElement.clientHeight
-//         : screen.height;
+      const systemZoom = width / window.screen.availWidth;
+      const left = (width - w) / 2 / systemZoom + dualScreenLeft;
+      const top = (height - h) / 2 / systemZoom + dualScreenTop;
+      window.open(
+        `${endpoint}/api/oauth/`,
+        "Twitter Login",
+        `
+        height=${h},
+        width=${w},
+        top=${top},
+        left=${left}
+      `
+      );
+    },
+  };
+};
 
-//       const systemZoom = width / window.screen.availWidth;
-//       const left = (width - w) / 2 / systemZoom + dualScreenLeft;
-//       const top = (height - h) / 2 / systemZoom + dualScreenTop;
-//       window.open(
-//         `${endpoint}/api/oauth/`,
-//         "Twitter Login",
-//         `
-//         height=${h},
-//         width=${w},
-//         top=${top},
-//         left=${left}
-//       `
-//       );
-//     },
-//   };
-// };
+interface ConvertedUserInterface extends CommenterInterface {
+  verified?: boolean;
+}
 
-// export interface ConvertedUserInterface extends CommenterInterface {
-//   verified?: boolean;
-// }
+// @ts-ignore
+const auth = async (): Promise<{
+  getMyCommenterProfile?: ConvertedUserInterface;
+}> => {
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
 
-// const auth = async (): Promise<{
-//   getMyCommenterProfile?: ConvertedUserInterface;
-// }> => {
-//   const headers = new Headers();
-//   headers.append("Content-Type", "application/json");
+  const body = JSON.stringify({
+    query:
+      "query {\r\n    getMyCommenterProfile {\r\n        username\r\n        displayName\r\n        photo\r\n    }\r\n}",
+    variables: {},
+  });
+  try {
+    return (await handleGraphQL({
+      headers,
+      body,
+      identifier: "?getMyCommenterProfile",
+    })) as {
+      getMyCommenterProfile: ConvertedUserInterface;
+    };
+  } catch (err) {
+    return {};
+  }
+};
 
-//   const body = JSON.stringify({
-//     query:
-//       "query {\r\n    getMyCommenterProfile {\r\n        username\r\n        displayName\r\n        photo\r\n    }\r\n}",
-//     variables: {},
-//   });
-//   try {
-//     return (await handleGraphQL({
-//       headers,
-//       body,
-//       identifier: "?getMyCommenterProfile",
-//     })) as {
-//       getMyCommenterProfile: ConvertedUserInterface;
-//     };
-//   } catch (err) {
-//     return {};
-//   }
-// };
+interface CommentsInterface {
+  id: string;
+  origin: string;
+  commenter: CommenterInterface;
+  body: string;
+}
 
-// interface CommentsInterface {
-//   id: string;
-//   origin: string;
-//   commenter: CommenterInterface;
-//   body: string;
-// }
+// @ts-ignore
+const fetchComments = async (): Promise<{
+  getAllComments: CommentsInterface[];
+}> => {
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
 
-// const fetchComments = async (): Promise<{
-//   getAllComments: CommentsInterface[];
-// }> => {
-//   const headers = new Headers();
-//   headers.append("Content-Type", "application/json");
-
-//   const body = JSON.stringify({
-//     query:
-//       "query ($origin: String!, $key: String!) {\r\n    getAllComments (origin: $origin, key: $key) {\r\n        id\r\n        origin\r\n        commenter\r\n        { platformId\r\n        provider\r\n        displayName\r\n        username\r\n        photo\r\n }       body\r\n    }\r\n}",
-//     variables: { origin: window.location.href, key },
-//   });
-//   try {
-//     return (await handleGraphQL({
-//       headers,
-//       body,
-//       identifier: "?getAllComments",
-//     })) as {
-//       getAllComments: CommentsInterface[];
-//     };
-//   } catch (err) {
-//     console.error(err);
-//     return { getAllComments: [] };
-//   }
-// };
+  const body = JSON.stringify({
+    query:
+      "query ($origin: String!, $key: String!) {\r\n    getAllComments (origin: $origin, key: $key) {\r\n        id\r\n        origin\r\n        commenter\r\n        { platformId\r\n        provider\r\n        displayName\r\n        username\r\n        photo\r\n }       body\r\n    }\r\n}",
+    variables: { origin: window.location.href, key },
+  });
+  try {
+    return (await handleGraphQL({
+      headers,
+      body,
+      identifier: "?getAllComments",
+    })) as {
+      getAllComments: CommentsInterface[];
+    };
+  } catch (err) {
+    console.error(err);
+    return { getAllComments: [] };
+  }
+};
 
 interface CommentResponseInterface {
   origin: string;
