@@ -95,7 +95,23 @@ document.addEventListener("alpine:init", () => {
   Alpine.data("comment", () => comment);
 });
 
-const comment = () => {};
+const comment = (content: Content) => {
+  return {
+    loading: true,
+    loggedIn: undefined,
+    user: null,
+
+    editor: null as null | Editor,
+    content: content,
+    errorMessage: "",
+
+    comments: {
+      isLoading: true,
+      isError: false,
+      list: [],
+    },
+  };
+};
 
 // const comment = (content: Content = "") => {
 //   return {
