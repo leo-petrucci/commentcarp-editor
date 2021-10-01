@@ -110,6 +110,104 @@ const comment = (content: Content) => {
       isError: false,
       list: [],
     },
+
+    async init(element: Element) {
+      const { getAllCommenters } = await fetchCommenters();
+
+      this.editor = new Editor({
+        element: element,
+        extensions: [
+          Document,
+          Paragraph,
+          Text,
+          Bold,
+          Italic,
+          BulletList,
+          ListItem,
+          Code,
+          CodeBlock,
+          Blockquote,
+          Placeholder.configure({ placeholder: "Write a comment!" }),
+          Mention.configure({
+            HTMLAttributes: {
+              class: "mention",
+            },
+            suggestion: {
+              items: (query) => {
+                return getAllCommenters
+                  .map(({ username }) => username)
+                  .filter((item) =>
+                    item.toLowerCase().startsWith(query.toLowerCase())
+                  )
+                  .slice(0, 5);
+              },
+              render: () => {
+                let popup: any;
+
+                const selectItem = (props: SuggestionProps, item: any) => {
+                  if (item) {
+                    props.command({ id: item, mention: "idk" });
+                  }
+                };
+
+                const menu = (props: SuggestionProps) => {
+                  const div = document.createElement("div");
+                  const items = document.createElement("div");
+                  items.className = "items";
+
+                  props.items.forEach((suggestion) => {
+                    const button = document.createElement("button");
+                    button.innerText = suggestion;
+                    button.className = "item";
+                    button.addEventListener("click", function () {
+                      selectItem(props, suggestion);
+                    });
+                    items.appendChild(button);
+                  });
+
+                  div.appendChild(items);
+                  return div.firstChild;
+                };
+                return {
+                  onStart: (props) => {
+                    // @ts-ignore
+                    popup = tippy("body", {
+                      getReferenceClientRect: props.clientRect,
+                      appendTo: () =>
+                        document.getElementById("commentcarp") as Element,
+                      content: menu(props),
+                      showOnCreate: true,
+                      interactive: true,
+                      allowHTML: true,
+                      trigger: "manual",
+                      placement: "bottom-start",
+                    });
+
+                    console.log(popup[0]);
+                  },
+                  onUpdate(props) {
+                    popup[0].setProps({
+                      getReferenceClientRect: props.clientRect,
+                      content: menu(props),
+                    });
+                  },
+                  onKeyDown() {
+                    return false;
+                  },
+                  onExit() {
+                    popup[0].destroy();
+                  },
+                };
+              },
+            },
+          }),
+        ],
+        content: this.content,
+        onUpdate: ({ editor }) => {
+          this.content = editor.getHTML();
+        },
+      });
+    },
   };
 };
 
