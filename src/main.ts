@@ -102,6 +102,7 @@ const comment = () => {
     user: null,
 
     editor: null as null | Editor,
+    content: "",
     errorMessage: "",
 
     comments: {
@@ -126,6 +127,9 @@ const comment = () => {
           Blockquote,
           Placeholder.configure({ placeholder: "Write a comment!" }),
         ],
+        onUpdate: ({ editor }) => {
+          this.content = editor.getHTML();
+        },
       });
     },
   };
