@@ -109,25 +109,6 @@ const comment = () => {
       isError: false,
       list: [],
     },
-
-    async init(element: Element) {
-      this.editor = new Editor({
-        element: element,
-        extensions: [
-          Document,
-          Paragraph,
-          Text,
-          Bold,
-          Italic,
-          BulletList,
-          ListItem,
-          Code,
-          CodeBlock,
-          Blockquote,
-          Placeholder.configure({ placeholder: "Write a comment!" }),
-        ],
-      });
-    },
   };
 };
 
