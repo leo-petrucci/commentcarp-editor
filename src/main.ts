@@ -109,6 +109,9 @@ const comment = () => {
       isError: false,
       list: [],
     },
+
+    // @ts-ignore
+    async init(element: Element) {},
   };
 };
 
