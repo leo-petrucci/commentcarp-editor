@@ -95,8 +95,7 @@ document.addEventListener("alpine:init", () => {
   Alpine.data("comment", () => comment);
 });
 
-// @ts-ignore
-const comment = (content: Content) => {
+const comment = () => {
   return {
     loading: true,
     loggedIn: undefined,
