@@ -95,14 +95,13 @@ document.addEventListener("alpine:init", () => {
   Alpine.data("comment", () => comment);
 });
 
-const comment = (content: Content) => {
+const comment = () => {
   return {
     loading: true,
     loggedIn: undefined,
     user: null,
 
     editor: null as null | Editor,
-    content: content,
     errorMessage: "",
 
     comments: {
@@ -127,10 +126,6 @@ const comment = (content: Content) => {
           Blockquote,
           Placeholder.configure({ placeholder: "Write a comment!" }),
         ],
-        content: this.content,
-        onUpdate: ({ editor }) => {
-          this.content = editor.getHTML();
-        },
       });
     },
   };
