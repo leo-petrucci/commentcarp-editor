@@ -95,6 +95,7 @@ document.addEventListener("alpine:init", () => {
   Alpine.data("comment", () => comment);
 });
 
+// @ts-ignore
 const comment = (content: Content) => {
   return {
     loading: true,
@@ -127,6 +128,7 @@ const comment = (content: Content) => {
           Blockquote,
           Placeholder.configure({ placeholder: "Write a comment!" }),
         ],
+        // @ts-ignore
         onUpdate: ({ editor }) => {
           // this.content = editor.getHTML();
         },
