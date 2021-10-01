@@ -102,7 +102,6 @@ const comment = () => {
     user: null,
 
     editor: null as null | Editor,
-    content: "",
     errorMessage: "",
 
     comments: {
