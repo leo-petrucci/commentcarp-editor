@@ -22,7 +22,7 @@
     "@tiptap/extension-paragraph": "^2.0.0-beta.17",
     "@tiptap/extension-placeholder": "^2.0.0-beta.31",
     "@tiptap/extension-text": "^2.0.0-beta.13",
-    "alpinejs": "^2.8.2",
+    "alpinejs": "^3.4.2",
     "html-template-string": "^1.2.6",
     "tippy.js": "^6.3.1"
   },
