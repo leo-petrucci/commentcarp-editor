@@ -97,6 +97,7 @@ document.addEventListener("alpine:init", () => {
 
 const comment = () => {
   return {
+    // @ts-ignore
     async init(element: Element) {},
   };
 };
