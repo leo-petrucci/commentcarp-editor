@@ -97,6 +97,19 @@ document.addEventListener("alpine:init", () => {
 
 const comment = () => {
   return {
+    loading: true,
+    loggedIn: undefined,
+    user: null,
+
+    editor: null as null | Editor,
+    errorMessage: "",
+
+    comments: {
+      isLoading: true,
+      isError: false,
+      list: [],
+    },
+
     // @ts-ignore
     async init(element: Element) {},
   };
