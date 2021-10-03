@@ -1,10 +1,8 @@
 const { resolve } = require("path");
 import { viteSingleFile } from "vite-plugin-singlefile";
-/**
- *
- * @type {import('vite').UserConfig}
- */
-export default {
+import { defineConfig } from "vite";
+
+export default defineConfig({
   plugins: [viteSingleFile()],
   server: {
     port: 9999,
@@ -12,6 +10,11 @@ export default {
   build: {
     brotliSize: true,
     polyfillDynamicImport: false,
+    emptyOutDir: true,
+    minify: "terser",
+    terserOptions: {
+      keep_fnames: true,
+    },
     rollupOptions: {
       input: {
         commentcarp: resolve(__dirname, "index.html"),
@@ -23,4 +26,4 @@ export default {
       },
     },
   },
-};
+});
