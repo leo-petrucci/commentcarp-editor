@@ -110,8 +110,12 @@ const comment = () => {
       list: [],
     },
 
-    // @ts-ignore
-    async init(element: Element) {},
+    async init(element: Element) {
+      this.editor = new Editor({
+        element: element,
+        extensions: [],
+      });
+    },
   };
 };
 
