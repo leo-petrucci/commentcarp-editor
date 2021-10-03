@@ -245,7 +245,7 @@ const comment = (content: Content = "") => {
           await this.getComments();
           this.editor?.commands.clearContent();
           this.content = "";
-        } catch (err) {
+        } catch (err: any) {
           this.loading = false;
           this.errorMessage = err.toString().replace("Error:", "");
           throw new Error(err);
