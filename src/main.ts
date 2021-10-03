@@ -97,25 +97,7 @@ document.addEventListener("alpine:init", () => {
 
 const comment = () => {
   return {
-    loading: true,
-    loggedIn: undefined,
-    user: null,
-
-    editor: null as null | Editor,
-    errorMessage: "",
-
-    comments: {
-      isLoading: true,
-      isError: false,
-      list: [],
-    },
-
-    async init(element: Element) {
-      this.editor = new Editor({
-        element: element,
-        extensions: [],
-      });
-    },
+    async init(element: Element) {},
   };
 };
 
