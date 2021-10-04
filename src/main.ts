@@ -1,7 +1,5 @@
 // @ts-ignore
 import Alpine from "alpinejs";
-// @ts-ignore
-import html from "html-template-string";
 import { Content, Editor } from "@tiptap/core";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
@@ -15,7 +13,6 @@ import Mention from "@tiptap/extension-mention";
 import CodeBlock from "@tiptap/extension-code-block";
 import Blockquote from "@tiptap/extension-blockquote";
 import Placeholder from "@tiptap/extension-placeholder";
-// @ts-ignore
 import styles from "./assets/main.css";
 import tippy from "tippy.js";
 import { SuggestionProps } from "@tiptap/suggestion";
@@ -43,7 +40,8 @@ const init = async () => {
     commentcarpRoot.appendChild(template.content!);
     const comp = commentcarpRoot.querySelector("[defer-x-data]")!;
     comp.setAttribute("x-data", comp.getAttribute("defer-x-data")!);
-    Alpine.initializeComponent(comp);
+
+    Alpine.start();
   }
 };
 
@@ -53,27 +51,11 @@ window.addEventListener("initCommentCarp", function () {
   init();
 });
 
-declare global {
-  interface Window {
-    comment: (content: Content) => {
-      editor: Editor | null;
-      loading: boolean;
-      loggedIn?: boolean;
-      user: ConvertedUserInterface | null;
-      comments: {
-        isError: boolean;
-        isLoading: boolean;
-        list: CommentsInterface[];
-      };
-      getComments: () => Promise<unknown>;
-      init: (element: Element) => void;
-      post: () => void;
-      checkLogin: () => void;
-    };
-  }
-}
-
 const endpoint = import.meta.env.VITE_API_URL;
+
+document.addEventListener("alpine:init", () => {
+  Alpine.data("comment", () => comment);
+});
 
 const comment = (content: Content = "") => {
   return {
@@ -81,6 +63,7 @@ const comment = (content: Content = "") => {
     loggedIn: undefined,
     user: null,
 
+    editorLoaded: false,
     editor: null as null | Editor,
     content: content,
     errorMessage: "",
@@ -245,7 +228,7 @@ const comment = (content: Content = "") => {
           await this.getComments();
           this.editor?.commands.clearContent();
           this.content = "";
-        } catch (err) {
+        } catch (err: any) {
           this.loading = false;
           this.errorMessage = err.toString().replace("Error:", "");
           throw new Error(err);
@@ -281,8 +264,8 @@ const comment = (content: Content = "") => {
         "Twitter Login",
         `
         height=${h},
-        width=${w}, 
-        top=${top}, 
+        width=${w},
+        top=${top},
         left=${left}
       `
       );
@@ -290,12 +273,11 @@ const comment = (content: Content = "") => {
   };
 };
 
-window.comment = comment;
-
-export interface ConvertedUserInterface extends CommenterInterface {
+interface ConvertedUserInterface extends CommenterInterface {
   verified?: boolean;
 }
 
+// @ts-ignore
 const auth = async (): Promise<{
   getMyCommenterProfile?: ConvertedUserInterface;
 }> => {
@@ -327,6 +309,7 @@ interface CommentsInterface {
   body: string;
 }
 
+// @ts-ignore
 const fetchComments = async (): Promise<{
   getAllComments: CommentsInterface[];
 }> => {
@@ -352,12 +335,13 @@ const fetchComments = async (): Promise<{
   }
 };
 
-export interface CommentResponseInterface {
+interface CommentResponseInterface {
   origin: string;
   commenter: CommenterInterface;
   body: string;
 }
 
+// @ts-ignore
 const send = async (
   comment: string
 ): Promise<{ comment?: CommentResponseInterface }> => {
@@ -384,7 +368,7 @@ const send = async (
   }
 };
 
-export interface CommenterInterface {
+interface CommenterInterface {
   platformId: string;
   provider: "twitter";
   username: string;
@@ -392,6 +376,7 @@ export interface CommenterInterface {
   photo: string;
 }
 
+// @ts-ignore
 const fetchCommenters = async (): Promise<{
   getAllCommenters: CommenterInterface[];
 }> => {
