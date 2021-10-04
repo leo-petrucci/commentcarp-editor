@@ -16,10 +16,31 @@
   color: #ced4da;
   pointer-events: none;
   height: 0;
+  @apply cc-text-gray-200 dark:cc-text-gray-700;
+}
+
+.commentcarp__usercontainer {
+  @apply cc-flex cc-items-center cc-justify-end cc-px-2 cc-pt-2;
+}
+
+.commentcarp__useravatar {
+  @apply cc-w-6 cc-h-6 cc-mr-2 cc-bg-cover cc-rounded-full;
+}
+
+.commentcarp__displayname {
+  @apply cc-font-bold;
+}
+
+.commentcarp__username {
+  @apply cc-flex cc-ml-1 cc-text-gray-500;
 }
 
 .commentcarp__buttoncontainer {
-  @apply cc-flex cc-pr-2 cc-mr-2 cc-border-r cc-border-gray-200 cc-border-solid;
+  @apply cc-flex cc-pr-2 cc-mr-2 cc-border-r cc-border-gray-200 dark:cc-border-gray-700 cc-border-solid;
+}
+
+.commentcarp__separator {
+  @apply cc-flex cc-py-2 cc-border-b cc-border-gray-200 dark:cc-border-gray-700 cc-border-solid;
 }
 
 .commentcarp__buttoncontainer button:first-of-type {
@@ -31,7 +52,7 @@
 }
 
 .commentcarp__button {
-  @apply cc-relative cc-flex cc-items-center cc-justify-center cc-w-8 cc-h-8 cc-text-sm cc-font-medium cc-leading-5 cc-text-gray-700 cc-transition cc-duration-150 cc-ease-in-out cc-bg-white cc-rounded;
+  @apply cc-relative cc-flex cc-items-center cc-justify-center cc-w-8 cc-h-8 cc-text-sm cc-font-medium cc-leading-5 cc-text-gray-700 dark:cc-text-gray-200 cc-transition cc-duration-150 cc-ease-in-out cc-bg-white dark:cc-bg-gray-800 cc-rounded;
 }
 
 .commentcarp__button svg {
@@ -40,7 +61,7 @@
 }
 
 .commentcarp__button:hover {
-  @apply cc-bg-gray-100;
+  @apply cc-bg-gray-100 dark:cc-bg-gray-700;
 }
 
 .commentcarp__button:focus {
@@ -93,7 +114,7 @@
 }
 
 .commentcarp__skeleton {
-  @apply cc-relative cc-overflow-hidden cc-bg-gray-100 cc-rounded-md;
+  @apply cc-relative cc-overflow-hidden cc-bg-gray-100 dark:cc-bg-gray-700 cc-rounded-md;
 }
 
 .commentcarp__skeleton::before {
