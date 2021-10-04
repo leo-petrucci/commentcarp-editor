@@ -51,14 +51,6 @@ window.addEventListener("initCommentCarp", function () {
   init();
 });
 
-declare global {
-  interface Window {
-    cc: () => void;
-  }
-}
-
-window.cc = init;
-
 const endpoint = import.meta.env.VITE_API_URL;
 
 document.addEventListener("alpine:init", () => {
@@ -71,6 +63,7 @@ const comment = (content: Content = "") => {
     loggedIn: undefined,
     user: null,
 
+    editorLoaded: false,
     editor: null as null | Editor,
     content: content,
     errorMessage: "",
