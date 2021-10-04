@@ -1,7 +1,5 @@
 // @ts-ignore
 import Alpine from "alpinejs";
-// @ts-ignore
-import html from "html-template-string";
 import { Content, Editor } from "@tiptap/core";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
@@ -53,25 +51,13 @@ window.addEventListener("initCommentCarp", function () {
   init();
 });
 
-// declare global {
-//   interface Window {
-//     comment: (content: Content) => {
-//       editor: Editor | null;
-//       loading: boolean;
-//       loggedIn?: boolean;
-//       user: ConvertedUserInterface | null;
-//       comments: {
-//         isError: boolean;
-//         isLoading: boolean;
-//         list: CommentsInterface[];
-//       };
-//       getComments: () => Promise<unknown>;
-//       init: (element: Element) => void;
-//       post: () => void;
-//       checkLogin: () => void;
-//     };
-//   }
-// }
+declare global {
+  interface Window {
+    cc: () => void;
+  }
+}
+
+window.cc = init;
 
 const endpoint = import.meta.env.VITE_API_URL;
 
