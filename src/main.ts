@@ -22,13 +22,14 @@ const script = document.querySelector('script[data-name="commentcarp"]');
 // @ts-ignore
 const key = script?.attributes["data-key"].nodeValue;
 
+let alpineStarted = false;
 const init = async () => {
-  const shadowDom = await fetch(
-    // @ts-ignore
-    `${import.meta.env.VITE_APP_URL}/template.html`
-  ).then((res) => res.text());
   const commentcarpRoot = document.getElementById("commentcarp")!;
   if (commentcarpRoot) {
+    const shadowDom = await fetch(
+      // @ts-ignore
+      `${import.meta.env.VITE_APP_URL}/template.html`
+    ).then((res) => res.text());
     commentcarpRoot.innerHTML = "";
 
     const style = document.createElement("style");
@@ -41,15 +42,14 @@ const init = async () => {
     const comp = commentcarpRoot.querySelector("[defer-x-data]")!;
     comp.setAttribute("x-data", comp.getAttribute("defer-x-data")!);
 
-    Alpine.start();
+    if (!alpineStarted) Alpine.start();
+    alpineStarted = true;
   }
 };
 
 init();
 
-window.addEventListener("initCommentCarp", function () {
-  init();
-});
+window.addEventListener("initCommentCarp", init);
 
 const endpoint = import.meta.env.VITE_API_URL;
 
