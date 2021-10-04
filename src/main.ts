@@ -1,5 +1,7 @@
 // @ts-ignore
 import Alpine from "alpinejs";
+// @ts-ignore
+import html from "html-template-string";
 import { Content, Editor } from "@tiptap/core";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
@@ -13,6 +15,7 @@ import Mention from "@tiptap/extension-mention";
 import CodeBlock from "@tiptap/extension-code-block";
 import Blockquote from "@tiptap/extension-blockquote";
 import Placeholder from "@tiptap/extension-placeholder";
+// @ts-ignore
 import styles from "./assets/main.css";
 import tippy from "tippy.js";
 import { SuggestionProps } from "@tiptap/suggestion";
@@ -22,14 +25,13 @@ const script = document.querySelector('script[data-name="commentcarp"]');
 // @ts-ignore
 const key = script?.attributes["data-key"].nodeValue;
 
-let alpineStarted = false;
 const init = async () => {
+  const shadowDom = await fetch(
+    // @ts-ignore
+    `${import.meta.env.VITE_APP_URL}/template.html`
+  ).then((res) => res.text());
   const commentcarpRoot = document.getElementById("commentcarp")!;
   if (commentcarpRoot) {
-    const shadowDom = await fetch(
-      // @ts-ignore
-      `${import.meta.env.VITE_APP_URL}/template.html`
-    ).then((res) => res.text());
     commentcarpRoot.innerHTML = "";
 
     const style = document.createElement("style");
@@ -41,21 +43,37 @@ const init = async () => {
     commentcarpRoot.appendChild(template.content!);
     const comp = commentcarpRoot.querySelector("[defer-x-data]")!;
     comp.setAttribute("x-data", comp.getAttribute("defer-x-data")!);
-
-    if (!alpineStarted) Alpine.start();
-    alpineStarted = true;
+    Alpine.initializeComponent(comp);
   }
 };
 
 init();
 
-window.addEventListener("initCommentCarp", init);
+window.addEventListener("initCommentCarp", function () {
+  init();
+});
+
+declare global {
+  interface Window {
+    comment: (content: Content) => {
+      editor: Editor | null;
+      loading: boolean;
+      loggedIn?: boolean;
+      user: ConvertedUserInterface | null;
+      comments: {
+        isError: boolean;
+        isLoading: boolean;
+        list: CommentsInterface[];
+      };
+      getComments: () => Promise<unknown>;
+      init: (element: Element) => void;
+      post: () => void;
+      checkLogin: () => void;
+    };
+  }
+}
 
 const endpoint = import.meta.env.VITE_API_URL;
-
-document.addEventListener("alpine:init", () => {
-  Alpine.data("comment", () => comment);
-});
 
 const comment = (content: Content = "") => {
   return {
@@ -63,7 +81,6 @@ const comment = (content: Content = "") => {
     loggedIn: undefined,
     user: null,
 
-    editorLoaded: false,
     editor: null as null | Editor,
     content: content,
     errorMessage: "",
@@ -228,7 +245,7 @@ const comment = (content: Content = "") => {
           await this.getComments();
           this.editor?.commands.clearContent();
           this.content = "";
-        } catch (err: any) {
+        } catch (err) {
           this.loading = false;
           this.errorMessage = err.toString().replace("Error:", "");
           throw new Error(err);
@@ -264,8 +281,8 @@ const comment = (content: Content = "") => {
         "Twitter Login",
         `
         height=${h},
-        width=${w},
-        top=${top},
+        width=${w}, 
+        top=${top}, 
         left=${left}
       `
       );
@@ -273,11 +290,12 @@ const comment = (content: Content = "") => {
   };
 };
 
-interface ConvertedUserInterface extends CommenterInterface {
+window.comment = comment;
+
+export interface ConvertedUserInterface extends CommenterInterface {
   verified?: boolean;
 }
 
-// @ts-ignore
 const auth = async (): Promise<{
   getMyCommenterProfile?: ConvertedUserInterface;
 }> => {
@@ -309,7 +327,6 @@ interface CommentsInterface {
   body: string;
 }
 
-// @ts-ignore
 const fetchComments = async (): Promise<{
   getAllComments: CommentsInterface[];
 }> => {
@@ -335,13 +352,12 @@ const fetchComments = async (): Promise<{
   }
 };
 
-interface CommentResponseInterface {
+export interface CommentResponseInterface {
   origin: string;
   commenter: CommenterInterface;
   body: string;
 }
 
-// @ts-ignore
 const send = async (
   comment: string
 ): Promise<{ comment?: CommentResponseInterface }> => {
@@ -368,7 +384,7 @@ const send = async (
   }
 };
 
-interface CommenterInterface {
+export interface CommenterInterface {
   platformId: string;
   provider: "twitter";
   username: string;
@@ -376,7 +392,6 @@ interface CommenterInterface {
   photo: string;
 }
 
-// @ts-ignore
 const fetchCommenters = async (): Promise<{
   getAllCommenters: CommenterInterface[];
 }> => {
