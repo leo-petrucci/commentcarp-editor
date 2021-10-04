@@ -12,9 +12,6 @@ export default defineConfig({
     polyfillDynamicImport: false,
     emptyOutDir: true,
     minify: "terser",
-    terserOptions: {
-      keep_fnames: true,
-    },
     rollupOptions: {
       input: {
         commentcarp: resolve(__dirname, "index.html"),
