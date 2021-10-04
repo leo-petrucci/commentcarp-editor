@@ -60,6 +60,30 @@
   width: 14px;
 }
 
+.commentcarp__editor {
+  @apply cc-prose dark:cc-prose-dark focus:cc-outline-none cc-max-w-none;
+}
+
+.commentcarp__error {
+  @apply cc-text-sm cc-text-center cc-text-red-600;
+}
+
+.commentcarp__actioncontainer {
+  @apply cc-flex cc-items-center cc-justify-end cc-py-2;
+}
+
+.commentcarp__datainfo {
+  @apply cc-relative cc-flex cc-items-center cc-justify-center;
+}
+
+.commentcarp__infoicon {
+  @apply cc-pr-2 cc-text-xs cc-text-right cc-text-gray-500 cc-cursor-pointer hover:cc-underline;
+}
+
+.commentcarp__postbutton {
+  @apply cc-flex cc-items-center cc-px-4 cc-py-2 cc-text-sm cc-font-medium cc-text-gray-700 dark:cc-text-gray-300 cc-transition-colors cc-border cc-border-gray-200 cc-rounded-md hover:cc-border-gray-700 dark:hover:cc-text-gray-700 hover:cc-bg-gray-50 disabled:cc-opacity-50 focus:cc-outline-none;
+}
+
 .commentcarp__button:hover {
   @apply cc-bg-gray-100 dark:cc-bg-gray-700;
 }
