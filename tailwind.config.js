@@ -24,56 +24,26 @@ module.exports = {
       colors: {
         orange: colors.orange,
       },
-      typography(theme) {
-        return {
-          dark: {
-            css: {
-              color: theme("colors.gray.300"),
-              "code::before": false,
-              "code::after": false,
-              "blockquote p:first-of-type::before": false,
-              "blockquote p:first-of-type::after": false,
-              "ul li p": false,
-              p: {
-                margin: ".5rem 0",
-              },
-              pre: {
-                margin: ".5rem 0",
-                borderColor: theme("colors.gray.700"),
-                borderWidth: 1,
-              },
-              ul: {
-                margin: ".5rem 0",
-              },
-              blockquote: {
-                margin: ".5rem 0",
-                color: theme("colors.gray.300"),
-                borderLeftColor: theme("colors.gray.700"),
-              },
-            },
+      DEFAULT: {
+        css: {
+          "code::before": false,
+          "code::after": false,
+          "blockquote p:first-of-type::before": false,
+          "blockquote p:first-of-type::after": false,
+          "ul li p": false,
+          p: {
+            margin: ".5rem 0",
           },
-          DEFAULT: {
-            css: {
-              "code::before": false,
-              "code::after": false,
-              "blockquote p:first-of-type::before": false,
-              "blockquote p:first-of-type::after": false,
-              "ul li p": false,
-              p: {
-                margin: ".5rem 0",
-              },
-              pre: {
-                margin: ".5rem 0",
-              },
-              ul: {
-                margin: ".5rem 0",
-              },
-              blockquote: {
-                margin: ".5rem 0",
-              },
-            },
+          pre: {
+            margin: ".5rem 0",
           },
-        };
+          ul: {
+            margin: ".5rem 0",
+          },
+          blockquote: {
+            margin: ".5rem 0",
+          },
+        },
       },
     },
   },

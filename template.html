@@ -259,10 +259,7 @@
           x-transition:enter-start="cc-opacity-0 cc-transform cc-scale-90"
           x-transition:enter-end="cc-opacity-100 cc-transform cc-scale-100 cc-relative"
         >
-          <div
-            class="cc-text-sm cc-text-center cc-text-gray-500"
-            x-show="comments.list.length === 0"
-          >
+          <div class="commentcarp__empty" x-show="comments.list.length === 0">
             There are no comments yet!
           </div>
           <div class="cc-prose" id="commentcarp__comments">
@@ -272,13 +269,13 @@
                 <!-- User Avatar -->
                 <a x-bind:href="getLink(item.commenter)" target="_blank">
                   <div
-                    class="cc-w-12 cc-h-12 cc-rounded-full"
+                    class="commentcarp__commentavatar"
                     x-bind:style="`background-image: url(${ item.commenter.photo })`"
                   ></div
                 ></a>
 
                 <!-- Comment Main -->
-                <div class="cc-flex cc-flex-col cc-flex-1 cc-ml-2">
+                <div class="commentcarp__commentmain">
                   <!-- Username -->
                   <div class="commentcarp__userlink">
                     <a
@@ -287,17 +284,17 @@
                       target="_blank"
                     >
                       <div
-                        class="cc-font-bold"
+                        class="commentcarp__displayname"
                         id="commentcarp__username"
                         x-text="item.commenter.displayName"
                       ></div>
-                      <div class="cc-flex cc-ml-1 cc-text-gray-500">
+                      <div class="commentcarp__username">
                         @
                         <div x-text="item.commenter.username"></div></div
                     ></a>
                   </div>
                   <!-- Comment Body -->
-                  <div x-html="item.body"></div>
+                  <div class="commentcarp__editor" x-html="item.body"></div>
                 </div>
               </div>
             </template>
