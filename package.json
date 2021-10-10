@@ -1,6 +1,6 @@
 {
-  "name": "vite-tailwind-starter",
-  "version": "0.0.0",
+  "name": "commentcarp-editor",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development vite",

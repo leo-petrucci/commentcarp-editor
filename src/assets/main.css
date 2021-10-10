@@ -16,10 +16,31 @@
   color: #ced4da;
   pointer-events: none;
   height: 0;
+  @apply cc-text-gray-200 dark:cc-text-white dark:cc-text-opacity-20;
+}
+
+.commentcarp__usercontainer {
+  @apply cc-flex cc-items-center cc-justify-end cc-px-2 cc-pt-2;
+}
+
+.commentcarp__useravatar {
+  @apply cc-w-6 cc-h-6 cc-mr-2 cc-bg-cover cc-rounded-full;
+}
+
+.commentcarp__displayname {
+  @apply cc-font-bold cc-text-gray-800 dark:cc-text-white dark:cc-text-opacity-80;
+}
+
+.commentcarp__username {
+  @apply cc-flex cc-ml-1 cc-text-gray-500 dark:cc-text-white dark:cc-text-opacity-50;
 }
 
 .commentcarp__buttoncontainer {
-  @apply cc-flex cc-pr-2 cc-mr-2 cc-border-r cc-border-gray-200 cc-border-solid;
+  @apply cc-flex cc-pr-2 cc-mr-2 cc-border-r cc-border-gray-200 dark:cc-border-white dark:cc-border-opacity-20 cc-border-solid;
+}
+
+.commentcarp__separator {
+  @apply cc-flex cc-py-2 cc-border-b cc-border-gray-200 dark:cc-border-white dark:cc-border-opacity-20 cc-border-solid;
 }
 
 .commentcarp__buttoncontainer button:first-of-type {
@@ -31,7 +52,15 @@
 }
 
 .commentcarp__button {
-  @apply cc-relative cc-flex cc-items-center cc-justify-center cc-w-8 cc-h-8 cc-text-sm cc-font-medium cc-leading-5 cc-text-gray-700 cc-transition cc-duration-150 cc-ease-in-out cc-bg-white cc-rounded;
+  @apply cc-relative cc-flex cc-items-center cc-justify-center cc-w-8 cc-h-8 cc-text-sm cc-font-medium cc-leading-5 cc-text-gray-700 dark:cc-text-white dark:cc-text-opacity-70 cc-transition cc-duration-150 cc-ease-in-out cc-rounded;
+}
+
+.commentcarp__button:hover {
+  @apply cc-bg-gray-100 dark:cc-bg-white dark:cc-bg-opacity-10;
+}
+
+.commentcarp__button:focus {
+  @apply cc-outline-none;
 }
 
 .commentcarp__button svg {
@@ -39,12 +68,40 @@
   width: 14px;
 }
 
-.commentcarp__button:hover {
-  @apply cc-bg-gray-100;
+.commentcarp__editor {
+  @apply cc-prose focus:cc-outline-none cc-max-w-none dark:cc-text-white;
 }
 
-.commentcarp__button:focus {
-  @apply cc-outline-none;
+.commentcarp__editor strong {
+  @apply dark:cc-text-white;
+}
+
+.commentcarp__editor pre {
+  @apply dark:cc-bg-white dark:cc-bg-opacity-20;
+}
+
+.commentcarp__editor blockquote {
+  @apply dark:cc-text-white;
+}
+
+.commentcarp__error {
+  @apply cc-text-sm cc-text-center cc-text-red-600;
+}
+
+.commentcarp__actioncontainer {
+  @apply cc-flex cc-items-center cc-justify-end cc-py-2;
+}
+
+.commentcarp__datainfo {
+  @apply cc-relative cc-flex cc-items-center cc-justify-center;
+}
+
+.commentcarp__infoicon {
+  @apply cc-pr-2 cc-text-xs cc-text-right cc-text-gray-500 dark:cc-text-white dark:cc-text-opacity-50 cc-cursor-pointer hover:cc-underline;
+}
+
+.commentcarp__postbutton {
+  @apply cc-flex cc-items-center cc-px-4 cc-py-2 cc-text-sm cc-font-medium cc-text-gray-700 dark:cc-text-white dark:cc-text-opacity-70 cc-transition-colors cc-border cc-border-gray-200 cc-rounded-md hover:cc-border-gray-700 dark:hover:cc-text-gray-700 hover:cc-bg-gray-50 disabled:cc-opacity-50 focus:cc-outline-none;
 }
 
 .commentcarp__userlink a {
@@ -53,6 +110,18 @@
 
 .commentcarp__userlink:hover #commentcarp__username {
   @apply cc-underline;
+}
+
+.commentcarp__commentavatar {
+  @apply cc-w-12 cc-h-12 cc-rounded-full;
+}
+
+.commentcarp__commentbody {
+  @apply cc-prose;
+}
+
+commentcarp__commentmain {
+  @apply cc-flex cc-flex-col cc-flex-1 cc-ml-2;
 }
 
 #commentcarp__editor p:first-of-type,
@@ -93,7 +162,7 @@
 }
 
 .commentcarp__skeleton {
-  @apply cc-relative cc-overflow-hidden cc-bg-gray-100 cc-rounded-md;
+  @apply cc-relative cc-overflow-hidden cc-bg-gray-100 dark:cc-bg-gray-700 cc-rounded-md;
 }
 
 .commentcarp__skeleton::before {
@@ -108,6 +177,10 @@
     transparent 100%
   );
   animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.commentcarp__empty {
+  @apply cc-text-sm cc-text-center cc-text-gray-500;
 }
 
 @keyframes load {
