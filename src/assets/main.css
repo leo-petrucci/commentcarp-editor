@@ -120,6 +120,10 @@
   @apply cc-prose;
 }
 
+.commentcarp__commentcontainer {
+  @apply cc-flex cc-mb-4 cc-space-x-2;
+}
+
 commentcarp__commentmain {
   @apply cc-flex cc-flex-col cc-flex-1 cc-ml-2;
 }
