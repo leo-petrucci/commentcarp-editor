@@ -84,6 +84,13 @@
   @apply dark:cc-text-white;
 }
 
+.commentcarp__editor p,
+.commentcarp__editor ul,
+.commentcarp__editor blockquote,
+.commentcarp__editor pre {
+  @apply cc-my-2;
+}
+
 .commentcarp__error {
   @apply cc-text-sm cc-text-center cc-text-red-600;
 }
