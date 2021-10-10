@@ -226,7 +226,7 @@
 
       <div class="cc-relative">
         <div
-          x-show="true"
+          x-show="comments.isLoading"
           x-transition:leave="cc-left-0 cc-top-0 cc-transition cc-ease-in cc-duration-200 cc-absolute cc-w-full"
           x-transition:leave-start="cc-opacity-100 cc-transform cc-scale-100"
           x-transition:leave-end="cc-opacity-0 cc-transform cc-scale-90"
@@ -254,7 +254,7 @@
 
         <!-- Comments List -->
         <div
-          x-show="false"
+          x-show="!comments.isLoading"
           x-transition:enter="cc-transition cc-ease-out cc-duration-200"
           x-transition:enter-start="cc-opacity-0 cc-transform cc-scale-90"
           x-transition:enter-end="cc-opacity-100 cc-transform cc-scale-100 cc-relative"
