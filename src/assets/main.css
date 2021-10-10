@@ -87,7 +87,8 @@
 .commentcarp__editor p,
 .commentcarp__editor ul,
 .commentcarp__editor blockquote,
-.commentcarp__editor pre {
+.commentcarp__editor pre,
+.commentcarp__editor > ul > li > *:last-child {
   @apply cc-my-2;
 }
 
