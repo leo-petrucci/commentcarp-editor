@@ -44,6 +44,7 @@ const init = async () => {
 
     const style = document.createElement("style");
     style.textContent = styles;
+    document.append(style);
 
     const template = document.createElement("template");
     template.innerHTML = shadowDom.trim();
