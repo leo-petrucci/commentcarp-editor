@@ -44,7 +44,6 @@ const init = async () => {
 
     const style = document.createElement("style");
     style.textContent = styles;
-    document.head.append(style);
 
     const template = document.createElement("template");
     template.innerHTML = shadowDom.trim();
@@ -55,11 +54,15 @@ const init = async () => {
   }
 };
 
-init();
+// @ts-ignore
+window.commentcarp = init;
 
-window.addEventListener("initCommentCarp", function () {
+// @ts-ignore
+script!.onload = () => {
   init();
-});
+};
+
+window.addEventListener("initCommentCarp", init);
 
 declare global {
   interface Window {
