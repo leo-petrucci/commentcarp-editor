@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Commentcarp Test</title>
+  </head>
+  <body class="cc-bg-white dark:cc-bg-gray-800">
+    <div class="cc-flex cc-justify-center">
+      <div id="commentcarp" class="cc-w-full cc-max-w-3xl"></div>
+    </div>
+    <script>
+      window.addEventListener("load", () => {
+        let script = document.createElement("script");
+        script.type = "module";
+        const dataName = document.createAttribute("data-name");
+        dataName.value = "commentcarp";
+        script.setAttributeNode(dataName);
+        const dataKey = document.createAttribute("data-key");
+        dataKey.value =
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmlnaW4iOiJodHRwczovL2xvY2FsaG9zdDo5OTk5IiwiaWF0IjoxNjMyNjU2NzEzfQ.AjnsqnC444Qs8pnwiZzprI5L9yxpCCS8GEdTnfXAXn0";
+        script.setAttributeNode(dataKey);
+        script.src = "/src/main.ts";
+        document.body.append(script);
+      });
+    </script>
+  </body>
+</html>

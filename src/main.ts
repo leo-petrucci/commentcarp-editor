@@ -57,10 +57,11 @@ const init = async () => {
 // @ts-ignore
 window.commentcarp = init;
 
-// @ts-ignore
-script!.onload = () => {
-  init();
-};
+if (script)
+  // @ts-ignore
+  script.onload = () => {
+    init();
+  };
 
 window.addEventListener("initCommentCarp", init);
 
