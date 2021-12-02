@@ -69,7 +69,7 @@
 }
 
 .commentcarp__editor {
-  @apply cc-prose focus:cc-outline-none cc-max-w-none dark:cc-text-white;
+  @apply cc-prose focus:cc-outline-none dark:cc-text-white;
 }
 
 .commentcarp__editor strong {
@@ -77,7 +77,7 @@
 }
 
 .commentcarp__editor pre {
-  @apply dark:cc-bg-white dark:cc-bg-opacity-20;
+  @apply dark:cc-bg-white dark:cc-bg-opacity-20 cc-mr-0 cc-whitespace-pre-wrap;
 }
 
 .commentcarp__editor blockquote {
@@ -113,7 +113,7 @@
 }
 
 .commentcarp__userlink a {
-  @apply cc-no-underline;
+  @apply cc-no-underline cc-mb-2;
 }
 
 .commentcarp__userlink:hover #commentcarp__username {
@@ -132,8 +132,8 @@
   @apply cc-flex cc-mb-4 cc-space-x-2;
 }
 
-commentcarp__commentmain {
-  @apply cc-flex cc-flex-col cc-flex-1 cc-ml-2;
+.commentcarp__commentmain {
+  @apply cc-flex cc-flex-col;
 }
 
 #commentcarp__editor p:first-of-type,

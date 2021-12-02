@@ -152,14 +152,14 @@ const handleGraphQL = async ({
 }): Promise<unknown> => {
   let parsedHeaders = headers;
 
-  parsedHeaders.append("Authorization", `Bearer ${getCookie("token")}`);
+  const token = getCookie("token");
+  if (token) parsedHeaders.append("Authorization", `Bearer ${token}`);
 
   const result = await fetch(`${endpoint!}/api${identifier || ""}`, {
     method: "POST",
     headers: parsedHeaders,
     body,
     redirect: "follow",
-    credentials: "include",
   }).then((response) => response.json());
 
   if (result.errors) {
