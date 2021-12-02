@@ -44,7 +44,9 @@ const init = async () => {
 
     const style = document.createElement("style");
     style.textContent = styles;
-    document.head.append(style);
+
+    // If we're developing the styles are appended automatically by vite
+    if (process.env.NODE_ENV === "production") document.head.append(style);
 
     const template = document.createElement("template");
     template.innerHTML = shadowDom.trim();
