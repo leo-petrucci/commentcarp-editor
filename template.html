@@ -1,4 +1,4 @@
-<div x-data="comment()" x-init="() => init($refs.element);">
+<div x-data="comment()" x-init="() => initEditor($refs.element);">
   <div id="app" class="cc-flex cc-flex-col cc-items-center">
     <div class="cc-flex cc-flex-col cc-justify-end cc-w-full">
       <!-- User's profile -->
@@ -180,11 +180,7 @@
             <div class="commentcarp__empty" x-show="comments.list.length === 0">
               There are no comments yet!
             </div>
-            <div
-              class="cc-prose cc-max-w-full"
-              id="commentcarp__comments"
-              x-init="console.log(comments)"
-            >
+            <div class="cc-prose cc-max-w-full" id="commentcarp__comments">
               <template x-for="(item, index) in comments.list" :key="index">
                 <!-- Comment Container -->
                 <div class="commentcarp__commentcontainer">
