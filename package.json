@@ -8,7 +8,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "@tailwindcss/typography": "^0.4.0",
+    "@tailwindcss/typography": "^0.5.4",
     "@tiptap/core": "^2.0.0-beta.86",
     "@tiptap/extension-blockquote": "^2.0.0-beta.6",
     "@tiptap/extension-bold": "^2.0.0-beta.6",
@@ -22,16 +22,17 @@
     "@tiptap/extension-paragraph": "^2.0.0-beta.7",
     "@tiptap/extension-placeholder": "^2.0.0-beta.8",
     "@tiptap/extension-text": "^2.0.0-beta.5",
-    "alpinejs": "^2.8.2",
+    "alpinejs": "^3.10.2",
     "axios": "^0.27.2",
     "html-template-string": "^1.2.6",
     "tippy.js": "^6.3.1"
   },
   "devDependencies": {
+    "@types/alpinejs": "^3.7.0",
     "@types/node": "^14.14.41",
-    "autoprefixer": "^10.2.5",
-    "postcss": "^8.2.12",
-    "tailwindcss": "^2.1.2",
+    "autoprefixer": "^10.4.7",
+    "postcss": "^8.4.14",
+    "tailwindcss": "^3.1.6",
     "typescript": "^4.2.4",
     "vite": "^2.2.3",
     "vite-plugin-singlefile": "^0.5.1"
