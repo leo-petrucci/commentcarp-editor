@@ -150,6 +150,7 @@
   @apply cc-m-0;
 }
 
+/* purgecss start ignore */
 .tippy_box {
   @apply cc-px-2 cc-py-1;
 }
@@ -177,6 +178,7 @@
 .tippy-box[data-theme~='commentcarp-mentions'] > .tippy-arrow {
   @apply !cc-text-white;
 }
+/* purgecss end ignore */
 
 .commentcarp__skeleton {
   @apply cc-relative cc-overflow-hidden cc-bg-gray-100 dark:cc-bg-white dark:cc-bg-opacity-30 cc-rounded-md;
