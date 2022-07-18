@@ -131,7 +131,6 @@ const comment = (content: Content = ''): Commentcarp => {
     },
 
     async init(element: Element) {
-      this.checkLogin();
       const { getAllCommenters } = await fetchCommenters();
 
       window.editor = new Editor({
