@@ -1,24 +1,24 @@
 // @ts-ignore
-import Alpine from "alpinejs";
+import Alpine from 'alpinejs';
 // @ts-ignore
-import html from "html-template-string";
-import { Content, Editor } from "@tiptap/core";
-import Document from "@tiptap/extension-document";
-import Paragraph from "@tiptap/extension-paragraph";
-import BulletList from "@tiptap/extension-bullet-list";
-import ListItem from "@tiptap/extension-list-item";
-import Text from "@tiptap/extension-text";
-import Bold from "@tiptap/extension-bold";
-import Italic from "@tiptap/extension-italic";
-import Code from "@tiptap/extension-code";
-import Mention from "@tiptap/extension-mention";
-import CodeBlock from "@tiptap/extension-code-block";
-import Blockquote from "@tiptap/extension-blockquote";
-import Placeholder from "@tiptap/extension-placeholder";
+import html from 'html-template-string';
+import { Content, Editor } from '@tiptap/core';
+import Document from '@tiptap/extension-document';
+import Paragraph from '@tiptap/extension-paragraph';
+import BulletList from '@tiptap/extension-bullet-list';
+import ListItem from '@tiptap/extension-list-item';
+import Text from '@tiptap/extension-text';
+import Bold from '@tiptap/extension-bold';
+import Italic from '@tiptap/extension-italic';
+import Code from '@tiptap/extension-code';
+import Mention from '@tiptap/extension-mention';
+import CodeBlock from '@tiptap/extension-code-block';
+import Blockquote from '@tiptap/extension-blockquote';
+import Placeholder from '@tiptap/extension-placeholder';
 // @ts-ignore
-import styles from "./assets/main.css";
-import tippy from "tippy.js";
-import { SuggestionProps } from "@tiptap/suggestion";
+import styles from './assets/main.css';
+import tippy from 'tippy.js';
+import { SuggestionProps } from '@tiptap/suggestion';
 import {
   auth,
   CommentsInterface,
@@ -26,33 +26,33 @@ import {
   fetchCommenters,
   fetchComments,
   send,
-} from "./data/data";
+} from './data/data';
 
 const script = document.querySelector('script[data-name="commentcarp"]');
 
 // @ts-ignore
-export const key = script?.attributes["data-key"].nodeValue;
+export const key = script?.attributes['data-key'].nodeValue;
 
 const init = async () => {
   const shadowDom = await fetch(
     // @ts-ignore
     `${import.meta.env.VITE_APP_URL}/template.html`
-  ).then((res) => res.text());
-  const commentcarpRoot = document.getElementById("commentcarp")!;
+  ).then(res => res.text());
+  const commentcarpRoot = document.getElementById('commentcarp')!;
   if (commentcarpRoot) {
-    commentcarpRoot.innerHTML = "";
+    commentcarpRoot.innerHTML = '';
 
-    const style = document.createElement("style");
+    const style = document.createElement('style');
     style.textContent = styles;
 
     // If we're developing the styles are appended automatically by vite
-    if (process.env.NODE_ENV === "production") document.head.append(style);
+    if (process.env.NODE_ENV === 'production') document.head.append(style);
 
-    const template = document.createElement("template");
+    const template = document.createElement('template');
     template.innerHTML = shadowDom.trim();
     commentcarpRoot.appendChild(template.content!);
-    const comp = commentcarpRoot.querySelector("[defer-x-data]")!;
-    comp.setAttribute("x-data", comp.getAttribute("defer-x-data")!);
+    const comp = commentcarpRoot.querySelector('[defer-x-data]')!;
+    comp.setAttribute('x-data', comp.getAttribute('defer-x-data')!);
     Alpine.initializeComponent(comp);
   }
 };
@@ -66,7 +66,7 @@ if (script)
     init();
   };
 
-window.addEventListener("initCommentCarp", init);
+window.addEventListener('initCommentCarp', init);
 
 declare global {
   interface Window {
@@ -90,7 +90,7 @@ declare global {
 
 export const endpoint = import.meta.env.VITE_API_URL;
 
-const comment = (content: Content = "") => {
+const comment = (content: Content = '') => {
   return {
     loading: true,
     loggedIn: undefined,
@@ -98,7 +98,7 @@ const comment = (content: Content = "") => {
 
     editor: null as null | Editor,
     content: content,
-    errorMessage: "",
+    errorMessage: '',
 
     comments: {
       isLoading: true,
@@ -122,63 +122,69 @@ const comment = (content: Content = "") => {
           Code,
           CodeBlock,
           Blockquote,
-          Placeholder.configure({ placeholder: "Write a comment!" }),
+          Placeholder.configure({ placeholder: 'Write a comment!' }),
           Mention.configure({
             HTMLAttributes: {
-              class: "mention",
+              class: 'mention',
             },
             suggestion: {
-              items: (query) => {
-                return getAllCommenters
-                  .map(({ username }) => username)
-                  .filter((item) =>
-                    item.toLowerCase().startsWith(query.toLowerCase())
+              items: ({ query }) => {
+                const suggestions = getAllCommenters
+                  .map(({ username, id }) => ({ username, id }))
+                  .filter(({ username }) =>
+                    username.toLowerCase().startsWith(query.toLowerCase())
                   )
                   .slice(0, 5);
+                return suggestions;
               },
               render: () => {
                 let popup: any;
 
-                const selectItem = (props: SuggestionProps, item: any) => {
+                const selectItem = (
+                  props: SuggestionProps,
+                  item: { username: string; id: string }
+                ) => {
                   if (item) {
-                    props.command({ id: item, mention: "idk" });
+                    props.command({ id: item.id, label: item.username });
                   }
                 };
 
                 const menu = (props: SuggestionProps) => {
-                  const div = document.createElement("div");
-                  const items = document.createElement("div");
-                  items.className = "items";
+                  const div = document.createElement('div');
+                  const items = document.createElement('div');
+                  items.className = 'items';
 
-                  props.items.forEach((suggestion) => {
-                    const button = document.createElement("button");
-                    button.innerText = suggestion;
-                    button.className = "item";
-                    button.addEventListener("click", function () {
-                      selectItem(props, suggestion);
-                    });
-                    items.appendChild(button);
-                  });
+                  props.items.forEach(
+                    (suggestion: { username: string; id: string }) => {
+                      const button = document.createElement('button');
+                      button.innerText = suggestion.username;
+                      button.className = 'item';
+                      button.addEventListener('click', function () {
+                        selectItem(props, suggestion);
+                      });
+                      items.appendChild(button);
+                    }
+                  );
 
                   div.appendChild(items);
                   return div.firstChild;
                 };
                 return {
-                  onStart: (props) => {
+                  onStart: props => {
                     // @ts-ignore
-                    popup = tippy("body", {
+                    popup = tippy('body', {
                       getReferenceClientRect: props.clientRect,
                       appendTo: () =>
-                        document.getElementById("commentcarp") as Element,
-                      content: menu(props),
+                        document.getElementById('commentcarp') as Element,
+                      content: () => {
+                        return menu(props);
+                      },
                       showOnCreate: true,
                       interactive: true,
                       allowHTML: true,
-                      trigger: "manual",
-                      placement: "bottom-start",
+                      trigger: 'manual',
+                      placement: 'bottom-start',
                     });
-
-                    console.log(popup[0]);
                   },
                   onUpdate(props) {
                     popup[0].setProps({
@@ -205,8 +211,8 @@ const comment = (content: Content = "") => {
     },
     addListener() {
       window.addEventListener(
-        "message",
-        (event) => {
+        'message',
+        event => {
           if (event.origin === endpoint) {
             const cookie = `token=${window.escape(
               event.data
@@ -233,7 +239,7 @@ const comment = (content: Content = "") => {
     },
     getLink(user: ConvertedUserInterface) {
       switch (user.provider) {
-        case "twitter":
+        case 'twitter':
           return `https://twitter.com/i/user/${user.platformId}`;
       }
     },
@@ -259,10 +265,10 @@ const comment = (content: Content = "") => {
           this.loading = false;
           await this.getComments();
           this.editor?.commands.clearContent();
-          this.content = "";
+          this.content = '';
         } catch (err: any) {
           this.loading = false;
-          this.errorMessage = err.toString().replace("Error:", "");
+          this.errorMessage = err.toString().replace('Error:', '');
           throw new Error(err);
         }
       } else {
@@ -293,7 +299,7 @@ const comment = (content: Content = "") => {
       const top = (height - h) / 2 / systemZoom + dualScreenTop;
       window.open(
         `${endpoint}/api/oauth/`,
-        "Twitter Login",
+        'Twitter Login',
         `
         height=${h},
         width=${w}, 
