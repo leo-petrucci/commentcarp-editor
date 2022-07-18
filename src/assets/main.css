@@ -151,7 +151,7 @@
 }
 
 /* purgecss start ignore */
-.tippy_box {
+.tippy-box {
   @apply cc-px-2 cc-py-1;
 }
 
