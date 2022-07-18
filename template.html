@@ -1,7 +1,4 @@
-<div
-  x-data="comment()"
-  x-init="() => init($refs.element); checkLogin(); addListener(); getComments()"
->
+<div x-data="comment()" x-init="() => init($refs.element);">
   <div id="app" class="cc-flex cc-flex-col cc-items-center">
     <div class="cc-flex cc-flex-col cc-justify-end cc-w-full">
       <!-- User's profile -->
@@ -157,102 +154,102 @@
           x-transition:leave-start="cc-opacity-100 cc-transform cc-scale-100"
           x-transition:leave-end="cc-opacity-0 cc-transform cc-scale-90"
         >
-          <template x-for="item in ['','','']">
-            <!-- Comment Container -->
-            <div class="commentcarp__commentcontainer">
-              <!-- User Avatar -->
-              <div
-                class="cc-w-12 cc-h-12 cc-rounded-full commentcarp__skeleton"
-              ></div>
+          <div class="commentcarp__commentcontainer">
+            <div
+              class="cc-w-12 cc-h-12 cc-rounded-full commentcarp__skeleton"
+            ></div>
 
-              <div class="cc-flex cc-flex-col cc-flex-1 cc-ml-2">
-                <div
-                  class="cc-w-20 cc-h-6 cc-mb-2 commentcarp__userlink commentcarp__skeleton"
-                ></div>
-                <div
-                  class="cc-w-full cc-h-6 cc-mb-2 commentcarp__skeleton"
-                ></div>
-                <div class="cc-w-full cc-h-6 commentcarp__skeleton"></div>
-              </div>
+            <div class="cc-flex cc-flex-col cc-flex-1 cc-ml-2">
+              <div
+                class="cc-w-20 cc-h-6 cc-mb-2 commentcarp__userlink commentcarp__skeleton"
+              ></div>
+              <div class="cc-w-full cc-h-6 cc-mb-2 commentcarp__skeleton"></div>
+              <div class="cc-w-full cc-h-6 commentcarp__skeleton"></div>
             </div>
-          </template>
+          </div>
         </div>
 
         <!-- Comments List -->
-        <div
-          x-show="!comments.isLoading"
-          x-transition:enter="cc-transition cc-ease-out cc-duration-200"
-          x-transition:enter-start="cc-opacity-0 cc-transform cc-scale-90"
-          x-transition:enter-end="cc-opacity-100 cc-transform cc-scale-100 cc-relative"
-        >
-          <div class="commentcarp__empty" x-show="comments.list.length === 0">
-            There are no comments yet!
-          </div>
-          <div class="cc-prose cc-max-w-full" id="commentcarp__comments">
-            <template x-for="(item, index) in comments.list" :key="index">
-              <!-- Comment Container -->
-              <div class="commentcarp__commentcontainer">
-                <!-- User Avatar -->
-                <a x-bind:href="getLink(item.commenter)" target="_blank">
-                  <div
-                    class="commentcarp__commentavatar"
-                    x-bind:style="`background-image: url(${ item.commenter.photo })`"
-                  ></div
-                ></a>
+        <template x-if="!comments.isLoading">
+          <div
+            x-show="!comments.isLoading"
+            x-transition:enter="cc-transition cc-ease-out cc-duration-200"
+            x-transition:enter-start="cc-opacity-0 cc-transform cc-scale-90"
+            x-transition:enter-end="cc-opacity-100 cc-transform cc-scale-100 cc-relative"
+          >
+            <div class="commentcarp__empty" x-show="comments.list.length === 0">
+              There are no comments yet!
+            </div>
+            <div
+              class="cc-prose cc-max-w-full"
+              id="commentcarp__comments"
+              x-init="console.log(comments)"
+            >
+              <template x-for="(item, index) in comments.list" :key="index">
+                <!-- Comment Container -->
+                <div class="commentcarp__commentcontainer">
+                  <!-- User Avatar -->
+                  <a x-bind:href="getLink(item.commenter)" target="_blank">
+                    <div
+                      class="commentcarp__commentavatar"
+                      x-bind:style="`background-image: url(${ item.commenter.photo })`"
+                    ></div
+                  ></a>
 
-                <!-- Comment Main -->
-                <div class="commentcarp__commentmain">
-                  <!-- Username -->
-                  <div class="commentcarp__userlink">
-                    <a
-                      class="cc-flex cc-items-center"
-                      x-bind:href="getLink(item.commenter)"
-                      target="_blank"
-                    >
-                      <div
-                        class="commentcarp__displayname"
-                        id="commentcarp__username"
-                        x-text="item.commenter.displayName"
-                      ></div>
-                      <div class="commentcarp__username">
-                        @
-                        <div x-text="item.commenter.username"></div></div
-                    ></a>
-                  </div>
-                  <!-- Comment Body -->
-                  <div class="commentcarp__editor" x-html="item.body"></div>
-                  <!-- Reply button -->
-                  <button
-                    class="commentcarp__replybutton"
-                    @click="reply({
+                  <!-- Comment Main -->
+                  <div class="commentcarp__commentmain">
+                    <!-- Username -->
+                    <div class="commentcarp__userlink">
+                      <a
+                        class="cc-flex cc-items-center"
+                        x-bind:href="getLink(item.commenter)"
+                        target="_blank"
+                      >
+                        <div
+                          class="commentcarp__displayname"
+                          id="commentcarp__username"
+                          x-text="item.commenter.displayName"
+                        ></div>
+                        <div class="commentcarp__username">
+                          @
+                          <div x-text="item.commenter.username"></div></div
+                      ></a>
+                    </div>
+                    <!-- Comment Body -->
+                    <div class="commentcarp__editor" x-html="item.body"></div>
+                    <!-- Reply button -->
+                    <button
+                      class="commentcarp__replybutton"
+                      @click="reply({
                       userId: item.commenter.id,
                       username: item.commenter.username,
                       replyto: item.id
                     })"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="cc-w-4 cc-h-4"
-                      fill="#000000"
-                      viewBox="0 0 256 256"
                     >
-                      <rect width="256" height="256" fill="none"></rect>
-                      <path
-                        d="M45.4,177A95.9,95.9,0,1,1,79,210.6h0L45.8,220a7.9,7.9,0,0,1-9.8-9.8L45.4,177Z"
-                        fill="none"
-                        stroke="#000000"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="16"
-                      ></path>
-                    </svg>
-                    <span>Reply</span>
-                  </button>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="cc-w-4 cc-h-4"
+                        fill="#000000"
+                        viewBox="0 0 256 256"
+                      >
+                        <rect width="256" height="256" fill="none"></rect>
+                        <path
+                          d="M45.4,177A95.9,95.9,0,1,1,79,210.6h0L45.8,220a7.9,7.9,0,0,1-9.8-9.8L45.4,177Z"
+                          fill="none"
+                          stroke="#000000"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="16"
+                        ></path>
+                      </svg>
+                      <span>Reply</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </template>
+              </template>
+            </div>
           </div>
-        </div>
+        </template>
       </div>
     </div>
   </div>
