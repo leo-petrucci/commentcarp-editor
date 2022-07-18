@@ -111,7 +111,14 @@ const comment = (content: Content = ''): Commentcarp => {
   return {
     loading: true,
     loggedIn: undefined,
-    user: null,
+    user: {
+      id: '',
+      platformId: '',
+      provider: 'twitter',
+      photo: '',
+      displayName: '',
+      username: '',
+    },
 
     editorLoaded: false,
     content: content,
@@ -124,6 +131,7 @@ const comment = (content: Content = ''): Commentcarp => {
     },
 
     async init(element: Element) {
+      this.checkLogin();
       const { getAllCommenters } = await fetchCommenters();
 
       document.getElementById('commentcarp__tiptapcontainer')!.innerHTML = '';
