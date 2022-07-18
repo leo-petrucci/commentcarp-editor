@@ -15,7 +15,7 @@ import Blockquote from '@tiptap/extension-blockquote';
 import Placeholder from '@tiptap/extension-placeholder';
 import styles from './assets/main.css';
 import tippy from 'tippy.js';
-import 'tippy.js/dist/tippy.css';
+// import 'tippy.js/dist/tippy.css';
 import { SuggestionProps } from '@tiptap/suggestion';
 import {
   auth,

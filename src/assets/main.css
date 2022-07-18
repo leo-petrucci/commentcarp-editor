@@ -163,10 +163,6 @@
   @apply cc-bg-white cc-rounded cc-text-gray-700 cc-text-sm cc-font-medium cc-shadow;
 }
 
-.tippy-box[data-theme~='commentcarp-mentions']:hover {
-  @apply cc-bg-gray-50 cc-transition-colors;
-}
-
 .tippy-box[data-theme~='commentcarp-mentions'] > .tippy-backdrop {
   @apply cc-bg-white;
 }
@@ -183,7 +179,7 @@
   > .tippy-content
   > .items
   > .item {
-  @apply cc-px-2 cc-py-1 cc-transition-colors;
+  @apply cc-px-2 cc-py-1 cc-transition-colors cc-flex-1;
 }
 
 .tippy-box[data-theme~='commentcarp-mentions']
