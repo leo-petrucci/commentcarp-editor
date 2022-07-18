@@ -10,7 +10,6 @@ import Text from '@tiptap/extension-text';
 import Bold from '@tiptap/extension-bold';
 import Italic from '@tiptap/extension-italic';
 import Code from '@tiptap/extension-code';
-import Mention from '@tiptap/extension-mention';
 import CodeBlock from '@tiptap/extension-code-block';
 import Blockquote from '@tiptap/extension-blockquote';
 import Placeholder from '@tiptap/extension-placeholder';
@@ -26,6 +25,7 @@ import {
   fetchComments,
   send,
 } from './data/data';
+import { CustomMention } from './data/customMention';
 
 const script = document.querySelector('script[data-name="commentcarp"]');
 
@@ -95,6 +95,11 @@ interface Commentcarp {
   checkLogin: () => void;
   buttons: any[];
   isButtonDisabled: () => boolean;
+  reply: (comment: {
+    userId: string;
+    username: string;
+    replyto: string;
+  }) => void;
 }
 
 export const endpoint = import.meta.env.VITE_API_URL;
@@ -135,7 +140,7 @@ const comment = (content: Content = ''): Commentcarp => {
           CodeBlock,
           Blockquote,
           Placeholder.configure({ placeholder: 'Write a comment!' }),
-          Mention.configure({
+          CustomMention.configure({
             HTMLAttributes: {
               class: 'mention',
             },
@@ -157,7 +162,10 @@ const comment = (content: Content = ''): Commentcarp => {
                   item: { username: string; id: string }
                 ) => {
                   if (item) {
-                    props.command({ id: item.id, label: item.username });
+                    props.command({
+                      id: item.id,
+                      label: item.username,
+                    });
                   }
                 };
 
@@ -450,6 +458,23 @@ const comment = (content: Content = ''): Commentcarp => {
         return false;
       }
       return true;
+    },
+    reply({
+      userId,
+      username,
+      replyto,
+    }: {
+      userId: string;
+      username: string;
+      replyto: string;
+    }) {
+      this.editor()
+        ?.chain()
+        .insertContent(
+          `<span data-type="mention" class="mention" data-id="${userId}" data-replyto="${replyto}" data-label="${username}" contenteditable="false">@${username}</span> `
+        )
+        .focus()
+        .run();
     },
   };
 };

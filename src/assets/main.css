@@ -133,7 +133,7 @@
 }
 
 .commentcarp__commentmain {
-  @apply cc-flex cc-flex-col cc-flex-1;
+  @apply cc-flex cc-flex-col cc-flex-1 cc-items-start;
 }
 
 #commentcarp__editor p:first-of-type,
@@ -208,4 +208,12 @@
 .commentcarp__mention,
 .mention {
   @apply cc-text-gray-900 cc-bg-gray-100 cc-rounded cc-px-1;
+}
+
+.commentcarp__replybutton {
+  @apply cc-flex cc-flex-row cc-items-center cc-space-x-1 cc-text-sm cc-flex-none cc-px-2 cc-py-1 cc-rounded cc-transition-colors cc-font-medium;
+}
+
+.commentcarp__replybutton:hover {
+  @apply cc-bg-gray-100;
 }
