@@ -150,6 +150,10 @@
   @apply cc-m-0;
 }
 
+.tippy_box {
+  @apply cc-px-2 cc-py-1;
+}
+
 .tippy-box[data-theme~='commentcarp-dark'] {
   @apply cc-bg-black cc-rounded cc-text-white cc-text-xs cc-font-medium;
 }
