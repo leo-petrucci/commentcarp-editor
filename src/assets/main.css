@@ -2,6 +2,142 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+/* Reset */
+
+.commentcarp__main *,
+.commentcarp__main::before,
+.commentcarp__main::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+}
+
+.commentcarp__main {
+  font-family: system-ui, -apple-system,
+    /* Firefox supports this but not yet `system-ui` */ 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+}
+
+.commentcarp__main hr {
+  height: 0; /* 1 */
+  color: inherit; /* 2 */
+}
+
+.commentcarp__main abbr[title] {
+  text-decoration: underline dotted;
+}
+
+.commentcarp__main b,
+.commentcarp__main strong {
+  font-weight: bolder;
+}
+
+.commentcarp__main code,
+.commentcarp__main kbd,
+.commentcarp__main samp,
+.commentcarp__main pre {
+  font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', Menlo,
+    monospace; /* 1 */
+  font-size: 1em; /* 2 */
+}
+
+.commentcarp__main small {
+  font-size: 80%;
+}
+
+.commentcarp__main sub,
+.commentcarp__main sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+.commentcarp__main sub {
+  bottom: -0.25em;
+}
+
+.commentcarp__main sup {
+  top: -0.5em;
+}
+
+.commentcarp__main table {
+  text-indent: 0; /* 1 */
+  border-color: inherit; /* 2 */
+}
+
+.commentcarp__main button,
+.commentcarp__main input,
+.commentcarp__main optgroup,
+.commentcarp__main select,
+.commentcarp__main textarea {
+  font-family: inherit; /* 1 */
+  font-size: 100%; /* 1 */
+  line-height: 1.15; /* 1 */
+  margin: 0; /* 2 */
+}
+
+.commentcarp__main button,
+.commentcarp__main select {
+  /* 1 */
+  text-transform: none;
+}
+
+.commentcarp__main button,
+.commentcarp__main [type='button'],
+.commentcarp__main [type='reset'],
+.commentcarp__main [type='submit'] {
+  -webkit-appearance: button;
+  background-color: transparent;
+  background-image: none;
+  cursor: pointer;
+}
+
+.commentcarp__main ::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+.commentcarp__main :-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+
+.commentcarp__main :-moz-ui-invalid {
+  box-shadow: none;
+}
+
+.commentcarp__main legend {
+  padding: 0;
+}
+
+.commentcarp__main progress {
+  vertical-align: baseline;
+}
+
+.commentcarp__main ::-webkit-inner-spin-button,
+.commentcarp__main ::-webkit-outer-spin-button {
+  height: auto;
+}
+
+.commentcarp__main [type='search'] {
+  -webkit-appearance: textfield; /* 1 */
+  outline-offset: -2px; /* 2 */
+}
+
+.commentcarp__main ::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+.commentcarp__main ::-webkit-file-upload-button {
+  -webkit-appearance: button; /* 1 */
+  font: inherit; /* 2 */
+}
+
+.commentcarp__main summary {
+  display: list-item;
+}
+
 #commentcarp__editor .ProseMirror {
   @apply cc-px-2 cc-py-4;
 }
