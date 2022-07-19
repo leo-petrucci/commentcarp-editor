@@ -61,7 +61,7 @@ if (script)
   };
 
 // @ts-ignore
-window.commentcarp = init;
+window.commentcarpeditor = init;
 
 window.addEventListener('initCommentCarp', init);
 
