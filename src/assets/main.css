@@ -151,12 +151,8 @@
 }
 
 /* purgecss start ignore */
-.tippy-box {
-  @apply cc-px-2 cc-py-1;
-}
-
 .tippy-box[data-theme~='commentcarp-dark'] {
-  @apply cc-bg-black cc-rounded cc-text-white cc-text-xs cc-font-medium;
+  @apply cc-bg-black cc-rounded cc-text-white cc-text-xs cc-font-medium cc-px-2 cc-py-1;
 }
 
 .tippy-box[data-theme~='commentcarp-dark'] > .tippy-backdrop {
@@ -178,6 +174,25 @@
 .tippy-box[data-theme~='commentcarp-mentions'] > .tippy-arrow {
   @apply !cc-text-white;
 }
+
+.tippy-box[data-theme~='commentcarp-mentions'] > .tippy-content > .items {
+  @apply cc-flex cc-flex-col cc-items-start;
+}
+
+.tippy-box[data-theme~='commentcarp-mentions']
+  > .tippy-content
+  > .items
+  > .item {
+  @apply cc-px-2 cc-py-1 cc-transition-colors;
+}
+
+.tippy-box[data-theme~='commentcarp-mentions']
+  > .tippy-content
+  > .items
+  > .item:hover {
+  @apply cc-bg-gray-50;
+}
+
 /* purgecss end ignore */
 
 .commentcarp__skeleton {
