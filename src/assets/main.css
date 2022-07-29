@@ -168,7 +168,7 @@
 }
 
 .commentcarp__username {
-  @apply cc-flex cc-ml-1 cc-text-gray-500 dark:cc-text-white dark:cc-text-opacity-50;
+  @apply cc-flex cc-ml-1 dark:cc-text-white cc-text-gray-600 dark:cc-text-opacity-50;
 }
 
 .commentcarp__buttoncontainer {
@@ -252,7 +252,11 @@
   @apply cc-no-underline;
 }
 
-.commentcarp__userlink:hover #commentcarp__username {
+.commentcarp__userlink .commentcarp__username {
+  @apply cc-font-normal;
+}
+
+.commentcarp__userlink a:hover #commentcarp__username {
   @apply cc-underline;
 }
 

@@ -199,21 +199,30 @@
                   <!-- Comment Main -->
                   <div class="commentcarp__commentmain">
                     <!-- Username -->
-                    <div class="commentcarp__userlink">
-                      <a
-                        class="cc-flex cc-items-center"
-                        x-bind:href="getLink(item.commenter)"
-                        target="_blank"
+                    <div class="cc-not-prose">
+                      <span
+                        class="cc-items-center commentcarp__userlink cc-flex"
                       >
-                        <div
-                          class="commentcarp__displayname"
-                          id="commentcarp__username"
-                          x-text="item.commenter.displayName"
-                        ></div>
-                        <div class="commentcarp__username">
-                          @
-                          <div x-text="item.commenter.username"></div></div
-                      ></a>
+                        <a
+                          class="cc-flex cc-items-center"
+                          x-bind:href="getLink(item.commenter)"
+                          target="_blank"
+                        >
+                          <span
+                            class="commentcarp__displayname"
+                            id="commentcarp__username"
+                            x-text="item.commenter.displayName"
+                          ></span>
+                          <span class="commentcarp__username">
+                            @
+                            <span x-text="item.commenter.username"></span></span
+                        ></a>
+                        <span class="cc-mx-2"> · </span
+                        ><span
+                          class="cc-text-sm cc-text-gray-600 dark:cc-text-white"
+                          x-text="item.createdAtReadable"
+                        ></span>
+                      </span>
                     </div>
                     <!-- Comment Body -->
                     <div class="commentcarp__editor" x-html="item.body"></div>

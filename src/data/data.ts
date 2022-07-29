@@ -36,7 +36,7 @@ export const fetchComments = async (): Promise<{
 }> => {
   const body = JSON.stringify({
     query:
-      'query ($origin: String!, $key: String!) {\r\n    getAllComments (origin: $origin, key: $key) {\r\n        id\r\n        origin\r\n        commenter\r\n        { id\r\n        platformId\r\n        provider\r\n        displayName\r\n        username\r\n        photo\r\n }       body\r\n    }\r\n}',
+      'query ($origin: String!, $key: String!) {\r\n    getAllComments (origin: $origin, key: $key) {\r\n        id\r\n        origin\r\n        createdAtReadable\r\n        commenter\r\n        { id\r\n        platformId\r\n        provider\r\n        displayName\r\n        username\r\n        photo\r\n }       body\r\n    }\r\n}',
     variables: { origin: window.location.href, key },
   });
   try {
