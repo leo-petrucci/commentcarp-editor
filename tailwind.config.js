@@ -3,6 +3,9 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  corePlugins: {
+    preflight: false,
+  },
   darkMode: 'class',
   prefix: 'cc-',
   content: ['./index.html', './template.html', './src/**/*.js'],
