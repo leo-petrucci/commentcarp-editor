@@ -175,6 +175,10 @@
   @apply cc-flex cc-flex-col cc-items-start;
 }
 
+.tippy-box[data-theme~='commentcarp-mentions'] > .tippy-content > .items {
+  @apply cc-flex cc-flex-col cc-items-start;
+}
+
 .tippy-box[data-theme~='commentcarp-mentions']
   > .tippy-content
   > .items
@@ -186,7 +190,7 @@
   > .tippy-content
   > .items
   > .item:hover {
-  @apply cc-bg-gray-50;
+  @apply cc-bg-gray-50 cc-w-full cc-text-left;
 }
 
 /* purgecss end ignore */
