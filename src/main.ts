@@ -129,8 +129,10 @@ const comment = (content: Content = ''): Commentcarp => {
       isError: false,
       list: [] as CommentsInterface[],
     },
-
     async init(element: Element) {
+      this.checkLogin();
+      this.addListener();
+      this.getComments();
       const { getAllCommenters } = await fetchCommenters();
 
       window.editor = new Editor({
@@ -407,8 +409,6 @@ const comment = (content: Content = ''): Commentcarp => {
     async post() {
       if (this.loggedIn) {
         this.loading = true;
-
-        console.log(this.content);
 
         try {
           await send(this.content as string);
