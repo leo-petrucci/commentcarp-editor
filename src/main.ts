@@ -1,4 +1,3 @@
-// @ts-ignore
 import Alpine from 'alpinejs';
 // @ts-ignore
 import html from 'html-template-string';
@@ -11,13 +10,12 @@ import Text from '@tiptap/extension-text';
 import Bold from '@tiptap/extension-bold';
 import Italic from '@tiptap/extension-italic';
 import Code from '@tiptap/extension-code';
-import Mention from '@tiptap/extension-mention';
 import CodeBlock from '@tiptap/extension-code-block';
 import Blockquote from '@tiptap/extension-blockquote';
 import Placeholder from '@tiptap/extension-placeholder';
-// @ts-ignore
 import styles from './assets/main.css';
 import tippy from 'tippy.js';
+import 'tippy.js/dist/tippy.css';
 import { SuggestionProps } from '@tiptap/suggestion';
 import {
   auth,
@@ -27,6 +25,7 @@ import {
   fetchComments,
   send,
 } from './data/data';
+import { CustomMention } from './data/customMention';
 
 const script = document.querySelector('script[data-name="commentcarp"]');
 
@@ -51,9 +50,7 @@ const init = async () => {
     const template = document.createElement('template');
     template.innerHTML = shadowDom.trim();
     commentcarpRoot.appendChild(template.content!);
-    const comp = commentcarpRoot.querySelector('[defer-x-data]')!;
-    comp.setAttribute('x-data', comp.getAttribute('defer-x-data')!);
-    Alpine.initializeComponent(comp);
+    Alpine.start();
   }
 };
 
@@ -70,46 +67,66 @@ window.addEventListener('initCommentCarp', init);
 
 declare global {
   interface Window {
-    comment: (content: Content) => {
-      editor: Editor | null;
-      loading: boolean;
-      loggedIn?: boolean;
-      user: ConvertedUserInterface | null;
-      comments: {
-        isError: boolean;
-        isLoading: boolean;
-        list: CommentsInterface[];
-      };
-      getComments: () => Promise<unknown>;
-      init: (element: Element) => void;
-      post: () => void;
-      checkLogin: () => void;
-    };
+    comment: (content: Content) => Commentcarp;
+    editor: Editor | null;
+    tippy: typeof tippy;
   }
+}
+
+interface Commentcarp {
+  editor: () => Editor | null;
+  content: Content;
+  editorLoaded: boolean;
+  loading: boolean;
+  loggedIn?: boolean;
+  errorMessage?: string;
+  addListener: () => any;
+  login: () => void;
+  user: ConvertedUserInterface | null;
+  comments: {
+    isError: boolean;
+    isLoading: boolean;
+    list: CommentsInterface[];
+  };
+  getLink: (user: ConvertedUserInterface) => string;
+  getComments: () => Promise<unknown>;
+  init: (element: Element) => void;
+  post: () => void;
+  checkLogin: () => void;
+  buttons: any[];
+  isButtonDisabled: () => boolean;
+  reply: (comment: {
+    userId: string;
+    username: string;
+    replyto: string;
+  }) => void;
 }
 
 export const endpoint = import.meta.env.VITE_API_URL;
 
-const comment = (content: Content = '') => {
+window.editor = null;
+window.tippy = tippy;
+
+const comment = (content: Content = ''): Commentcarp => {
   return {
     loading: true,
     loggedIn: undefined,
     user: null,
 
-    editor: null as null | Editor,
+    editorLoaded: false,
     content: content,
     errorMessage: '',
 
     comments: {
       isLoading: true,
       isError: false,
-      list: [],
+      list: [] as CommentsInterface[],
     },
 
     async init(element: Element) {
       const { getAllCommenters } = await fetchCommenters();
 
-      this.editor = new Editor({
+      window.editor = new Editor({
         element: element,
         extensions: [
           Document,
@@ -123,7 +140,7 @@ const comment = (content: Content = '') => {
           CodeBlock,
           Blockquote,
           Placeholder.configure({ placeholder: 'Write a comment!' }),
-          Mention.configure({
+          CustomMention.configure({
             HTMLAttributes: {
               class: 'mention',
             },
@@ -145,7 +162,10 @@ const comment = (content: Content = '') => {
                   item: { username: string; id: string }
                 ) => {
                   if (item) {
-                    props.command({ id: item.id, label: item.username });
+                    props.command({
+                      id: item.id,
+                      label: item.username,
+                    });
                   }
                 };
 
@@ -179,11 +199,13 @@ const comment = (content: Content = '') => {
                       content: () => {
                         return menu(props);
                       },
+                      theme: 'commentcarp-mentions',
                       showOnCreate: true,
                       interactive: true,
                       allowHTML: true,
+                      arrow: false,
                       trigger: 'manual',
-                      placement: 'bottom-start',
+                      placement: 'top-start',
                     });
                   },
                   onUpdate(props) {
@@ -207,7 +229,128 @@ const comment = (content: Content = '') => {
         onUpdate: ({ editor }) => {
           this.content = editor.getHTML();
         },
+        onTransaction: () => {
+          this.buttons.forEach(button => {
+            button.active = button.isActive() as boolean;
+          });
+        },
       });
+
+      this.editorLoaded = true;
+    },
+    buttons: [
+      {
+        active: false,
+        isActive: () => window.editor?.isActive('bold'),
+        name: 'Bold',
+        onClick: () => {
+          window.editor!.chain().toggleBold().focus().run();
+        },
+        icon: `<svg
+            viewBox="0 0 24 24"
+            id="icon--bold"
+            height="14"
+            width="14"
+            fill="currentColor"
+          >
+            <path
+              d="M17.194 10.962A6.271 6.271 0 0012.844.248H4.3a1.25 1.25 0 000 2.5h1.013a.25.25 0 01.25.25V21a.25.25 0 01-.25.25H4.3a1.25 1.25 0 100 2.5h9.963a6.742 6.742 0 002.93-12.786zm-4.35-8.214a3.762 3.762 0 010 7.523H8.313a.25.25 0 01-.25-.25V3a.25.25 0 01.25-.25zm1.42 18.5H8.313a.25.25 0 01-.25-.25v-7.977a.25.25 0 01.25-.25h5.951a4.239 4.239 0 010 8.477z"
+            ></path>
+          </svg>`,
+        init: (element: Element) => {
+          tippy(element, {
+            content: 'Bold',
+            arrow: true,
+            theme: 'commentcarp-dark',
+          });
+        },
+      },
+      {
+        active: false,
+        isActive: () => window.editor?.isActive('italic'),
+        name: 'Italic',
+        onClick: () => {
+          window.editor!.chain().toggleItalic().focus().run();
+        },
+        icon: `<svg viewBox="0 0 24 24" id="icon--italic" fill="currentColor">
+          <path
+            d="M22.5.248h-7.637a1.25 1.25 0 000 2.5h1.086a.25.25 0 01.211.384L4.78 21.017a.5.5 0 01-.422.231H1.5a1.25 1.25 0 000 2.5h7.637a1.25 1.25 0 000-2.5H8.051a.25.25 0 01-.211-.384L19.22 2.98a.5.5 0 01.422-.232H22.5a1.25 1.25 0 000-2.5z"
+          ></path>
+        </svg>`,
+        init: (element: Element) => {
+          tippy(element, {
+            content: 'Italic',
+            arrow: true,
+            theme: 'commentcarp-dark',
+          });
+        },
+      },
+      {
+        active: false,
+        isActive: () => window.editor?.isActive('bulletList'),
+        name: 'List',
+        onClick: () => {
+          window.editor!.chain().toggleBulletList().focus().run();
+        },
+        icon: `<svg viewBox="0 0 24 24" id="icon--ul" fill="currentColor">
+          <circle cx="2.5" cy="3.998" r="2.5"></circle>
+          <path d="M8.5 5H23a1 1 0 000-2H8.5a1 1 0 000 2z"></path>
+          <circle cx="2.5" cy="11.998" r="2.5"></circle>
+          <path d="M23 11H8.5a1 1 0 000 2H23a1 1 0 000-2z"></path>
+          <circle cx="2.5" cy="19.998" r="2.5"></circle>
+          <path d="M23 19H8.5a1 1 0 000 2H23a1 1 0 000-2z"></path>
+        </svg>`,
+        init: (element: Element) => {
+          tippy(element, {
+            content: 'List',
+            arrow: true,
+            theme: 'commentcarp-dark',
+          });
+        },
+      },
+      {
+        active: false,
+        isActive: () => window.editor?.isActive('code'),
+        name: 'Inline code',
+        onClick: () => {
+          window.editor!.chain().toggleCode().focus().run();
+        },
+        icon: `<svg viewBox="0 0 24 24" id="icon--code" fill="currentColor">
+          <path
+            d="M9.147 21.552a1.244 1.244 0 01-.895-.378L.84 13.561a2.257 2.257 0 010-3.125l7.412-7.613a1.25 1.25 0 011.791 1.744l-6.9 7.083a.5.5 0 000 .7l6.9 7.082a1.25 1.25 0 01-.9 2.122zm5.707 0a1.25 1.25 0 01-.9-2.122l6.9-7.083a.5.5 0 000-.7l-6.9-7.082a1.25 1.25 0 011.791-1.744l7.411 7.612a2.257 2.257 0 010 3.125l-7.412 7.614a1.244 1.244 0 01-.89.38zm6.514-9.373z"
+          ></path>
+        </svg>`,
+        init: (element: Element) => {
+          tippy(element, {
+            content: 'Inline code',
+            arrow: true,
+            theme: 'commentcarp-dark',
+          });
+        },
+      },
+      {
+        active: false,
+        isActive: () => window.editor?.isActive('codeBlock'),
+        name: 'Code block',
+        onClick: () => {
+          window.editor!.chain().toggleCodeBlock().focus().run();
+        },
+        icon: `<svg viewBox="0 0 24 24" id="icon--code" fill="currentColor">
+          <path
+            d="M9.147 21.552a1.244 1.244 0 01-.895-.378L.84 13.561a2.257 2.257 0 010-3.125l7.412-7.613a1.25 1.25 0 011.791 1.744l-6.9 7.083a.5.5 0 000 .7l6.9 7.082a1.25 1.25 0 01-.9 2.122zm5.707 0a1.25 1.25 0 01-.9-2.122l6.9-7.083a.5.5 0 000-.7l-6.9-7.082a1.25 1.25 0 011.791-1.744l7.411 7.612a2.257 2.257 0 010 3.125l-7.412 7.614a1.244 1.244 0 01-.89.38zm6.514-9.373z"
+          ></path>
+        </svg>`,
+        init: (element: Element) => {
+          tippy(element, {
+            content: 'Code block',
+            arrow: true,
+            theme: 'commentcarp-dark',
+          });
+        },
+      },
+    ],
+    editor: () => {
+      return window.editor;
     },
     addListener() {
       window.addEventListener(
@@ -227,13 +370,9 @@ const comment = (content: Content = '') => {
     async getComments() {
       try {
         const { getAllComments } = await fetchComments();
-        // @ts-ignore
         this.comments.isLoading = false;
-        // @ts-ignore
         this.comments.list = getAllComments;
-        // @ts-ignore
       } catch (err) {
-        // @ts-ignore
         this.comments.isLoading = false;
       }
     },
@@ -246,25 +385,25 @@ const comment = (content: Content = '') => {
     async checkLogin() {
       const user = await auth();
       if (user.getMyCommenterProfile) {
-        // @ts-ignore
         this.user = user.getMyCommenterProfile;
         this.loading = false;
-        // @ts-ignore
         this.loggedIn = true;
       } else {
         this.loading = false;
-        // @ts-ignore
         this.loggedIn = false;
       }
     },
     async post() {
       if (this.loggedIn) {
         this.loading = true;
+
+        console.log(this.content);
+
         try {
           await send(this.content as string);
           this.loading = false;
           await this.getComments();
-          this.editor?.commands.clearContent();
+          window.editor?.commands.clearContent();
           this.content = '';
         } catch (err: any) {
           this.loading = false;
@@ -307,6 +446,35 @@ const comment = (content: Content = '') => {
         left=${left}
       `
       );
+    },
+    isButtonDisabled() {
+      if (!this.loading) {
+        if (this.loggedIn) {
+          if (this.content === '' || this.editor()?.isEmpty) {
+            return true;
+          }
+          return false;
+        }
+        return false;
+      }
+      return true;
+    },
+    reply({
+      userId,
+      username,
+      replyto,
+    }: {
+      userId: string;
+      username: string;
+      replyto: string;
+    }) {
+      this.editor()
+        ?.chain()
+        .insertContent(
+          `<span data-type="mention" class="mention" data-id="${userId}" data-replyto="${replyto}" data-label="${username}" contenteditable="false">@${username}</span> `
+        )
+        .focus()
+        .run();
     },
   };
 };
