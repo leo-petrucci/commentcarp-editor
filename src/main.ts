@@ -132,10 +132,13 @@ const comment = (content: Content = ''): Commentcarp => {
 
     async init(element: Element) {
       this.checkLogin();
-      document.getElementById('commentcarp__tiptapcontainer')!.innerHTML = '';
       const { getAllCommenters } = await fetchCommenters();
 
       window.editor = new Editor({
+        onBeforeCreate: () => {
+          document.getElementById('commentcarp__tiptapcontainer')!.innerHTML =
+            '';
+        },
         element: element,
         extensions: [
           Document,
