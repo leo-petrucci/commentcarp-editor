@@ -6,6 +6,7 @@ module.exports = {
   darkMode: 'class',
   prefix: 'cc-',
   content: ['./index.html', './template.html', './src/**/*.js'],
+  safelist: ['tippy-*'],
   theme: {
     extend: {
       fontWeight: ['hover', 'focus'],
