@@ -372,9 +372,9 @@
 }
 
 .commentcarp__replybutton {
-  @apply cc-flex cc-flex-row cc-items-center cc-space-x-1 cc-text-sm cc-flex-none cc-px-2 cc-py-1 cc-rounded cc-transition-colors cc-font-medium;
+  @apply cc-text-gray-800 dark:cc-text-white dark:cc-text-opacity-80 cc-flex cc-flex-row cc-items-center cc-space-x-1 cc-text-sm cc-flex-none cc-px-2 cc-py-1 cc-rounded cc-transition-colors cc-font-medium;
 }
 
 .commentcarp__replybutton:hover {
-  @apply cc-bg-gray-100;
+  @apply cc-bg-gray-100 dark:cc-bg-white dark:cc-bg-opacity-10;
 }
