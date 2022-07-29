@@ -113,7 +113,7 @@
 }
 
 .commentcarp__userlink a {
-  @apply cc-no-underline cc-mb-2;
+  @apply cc-no-underline;
 }
 
 .commentcarp__userlink:hover #commentcarp__username {
