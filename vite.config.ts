@@ -1,6 +1,6 @@
-const { resolve } = require("path");
-import { viteSingleFile } from "vite-plugin-singlefile";
-import { defineConfig } from "vite";
+const { resolve } = require('path');
+import { viteSingleFile } from 'vite-plugin-singlefile';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [viteSingleFile()],
@@ -11,15 +11,18 @@ export default defineConfig({
     brotliSize: true,
     polyfillDynamicImport: false,
     emptyOutDir: true,
-    minify: "terser",
+    minify: 'terser',
+    terserOptions: {
+      keep_fnames: true,
+    },
     rollupOptions: {
       input: {
-        commentcarp: resolve(__dirname, "index.html"),
-        template: resolve(__dirname, "template.html"),
+        commentcarp: resolve(__dirname, 'index.html'),
+        template: resolve(__dirname, 'template.html'),
       },
       output: {
-        entryFileNames: "assets/commentcarp.js",
-        manualChunks: () => "commentcarp.js",
+        entryFileNames: 'assets/commentcarp.js',
+        manualChunks: () => 'commentcarp.js',
       },
     },
   },
