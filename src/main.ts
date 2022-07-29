@@ -15,7 +15,6 @@ import Blockquote from '@tiptap/extension-blockquote';
 import Placeholder from '@tiptap/extension-placeholder';
 import styles from './assets/main.css';
 import tippy from 'tippy.js';
-// import 'tippy.js/dist/tippy.css';
 import { SuggestionProps } from '@tiptap/suggestion';
 import {
   auth,
@@ -38,6 +37,7 @@ const init = async () => {
     `${import.meta.env.VITE_APP_URL}/template.html`
   ).then(res => res.text());
   const commentcarpRoot = document.getElementById('commentcarp')!;
+
   if (commentcarpRoot) {
     commentcarpRoot.innerHTML = '';
 
@@ -50,18 +50,18 @@ const init = async () => {
     const template = document.createElement('template');
     template.innerHTML = shadowDom.trim();
     commentcarpRoot.appendChild(template.content!);
-    Alpine.start();
+    Alpine.initTree(commentcarpRoot);
   }
 };
 
-// @ts-ignore
-window.commentcarp = init;
-
 if (script)
-  // @ts-ignore
+  //@ts-ignore
   script.onload = () => {
     init();
   };
+
+// @ts-ignore
+window.commentcarp = init;
 
 window.addEventListener('initCommentCarp', init);
 
@@ -90,7 +90,7 @@ interface Commentcarp {
   };
   getLink: (user: ConvertedUserInterface) => string;
   getComments: () => Promise<unknown>;
-  init: (element: Element) => void;
+  initEditor: (element: Element) => void;
   post: () => void;
   checkLogin: () => void;
   buttons: any[];
@@ -129,17 +129,15 @@ const comment = (content: Content = ''): Commentcarp => {
       isError: false,
       list: [] as CommentsInterface[],
     },
-    async init(element: Element) {
+    async initEditor(element: Element) {
       this.checkLogin();
       this.addListener();
       this.getComments();
       const { getAllCommenters } = await fetchCommenters();
 
+      window.editor?.destroy();
+
       window.editor = new Editor({
-        onBeforeCreate: () => {
-          document.getElementById('commentcarp__tiptapcontainer')!.innerHTML =
-            '';
-        },
         element: element,
         extensions: [
           Document,
