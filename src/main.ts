@@ -126,115 +126,116 @@ const comment = (content: Content = ''): Commentcarp => {
     async init(element: Element) {
       const { getAllCommenters } = await fetchCommenters();
 
-      window.editor = new Editor({
-        element: element,
-        extensions: [
-          Document,
-          Paragraph,
-          Text,
-          Bold,
-          Italic,
-          BulletList,
-          ListItem,
-          Code,
-          CodeBlock,
-          Blockquote,
-          Placeholder.configure({ placeholder: 'Write a comment!' }),
-          CustomMention.configure({
-            HTMLAttributes: {
-              class: 'mention',
-            },
-            suggestion: {
-              items: ({ query }) => {
-                const suggestions = getAllCommenters
-                  .map(({ username, id }) => ({ username, id }))
-                  .filter(({ username }) =>
-                    username.toLowerCase().startsWith(query.toLowerCase())
-                  )
-                  .slice(0, 5);
-                return suggestions;
+      if (!window.editor)
+        window.editor = new Editor({
+          element: element,
+          extensions: [
+            Document,
+            Paragraph,
+            Text,
+            Bold,
+            Italic,
+            BulletList,
+            ListItem,
+            Code,
+            CodeBlock,
+            Blockquote,
+            Placeholder.configure({ placeholder: 'Write a comment!' }),
+            CustomMention.configure({
+              HTMLAttributes: {
+                class: 'mention',
               },
-              render: () => {
-                let popup: any;
+              suggestion: {
+                items: ({ query }) => {
+                  const suggestions = getAllCommenters
+                    .map(({ username, id }) => ({ username, id }))
+                    .filter(({ username }) =>
+                      username.toLowerCase().startsWith(query.toLowerCase())
+                    )
+                    .slice(0, 5);
+                  return suggestions;
+                },
+                render: () => {
+                  let popup: any;
 
-                const selectItem = (
-                  props: SuggestionProps,
-                  item: { username: string; id: string }
-                ) => {
-                  if (item) {
-                    props.command({
-                      id: item.id,
-                      label: item.username,
-                    });
-                  }
-                };
-
-                const menu = (props: SuggestionProps) => {
-                  const div = document.createElement('div');
-                  const items = document.createElement('div');
-                  items.className = 'items';
-
-                  props.items.forEach(
-                    (suggestion: { username: string; id: string }) => {
-                      const button = document.createElement('button');
-                      button.innerText = suggestion.username;
-                      button.className = 'item';
-                      button.addEventListener('click', function () {
-                        selectItem(props, suggestion);
+                  const selectItem = (
+                    props: SuggestionProps,
+                    item: { username: string; id: string }
+                  ) => {
+                    if (item) {
+                      props.command({
+                        id: item.id,
+                        label: item.username,
                       });
-                      items.appendChild(button);
                     }
-                  );
+                  };
 
-                  div.appendChild(items);
-                  return div.firstChild;
-                };
-                return {
-                  onStart: props => {
-                    // @ts-ignore
-                    popup = tippy('body', {
-                      getReferenceClientRect: props.clientRect,
-                      appendTo: () =>
-                        document.getElementById('commentcarp') as Element,
-                      content: () => {
-                        return menu(props);
-                      },
-                      theme: 'commentcarp-mentions',
-                      showOnCreate: true,
-                      interactive: true,
-                      allowHTML: true,
-                      arrow: false,
-                      trigger: 'manual',
-                      placement: 'top-start',
-                    });
-                  },
-                  onUpdate(props) {
-                    popup[0].setProps({
-                      getReferenceClientRect: props.clientRect,
-                      content: menu(props),
-                    });
-                  },
-                  onKeyDown() {
-                    return false;
-                  },
-                  onExit() {
-                    popup[0].destroy();
-                  },
-                };
+                  const menu = (props: SuggestionProps) => {
+                    const div = document.createElement('div');
+                    const items = document.createElement('div');
+                    items.className = 'items';
+
+                    props.items.forEach(
+                      (suggestion: { username: string; id: string }) => {
+                        const button = document.createElement('button');
+                        button.innerText = suggestion.username;
+                        button.className = 'item';
+                        button.addEventListener('click', function () {
+                          selectItem(props, suggestion);
+                        });
+                        items.appendChild(button);
+                      }
+                    );
+
+                    div.appendChild(items);
+                    return div.firstChild;
+                  };
+                  return {
+                    onStart: props => {
+                      // @ts-ignore
+                      popup = tippy('body', {
+                        getReferenceClientRect: props.clientRect,
+                        appendTo: () =>
+                          document.getElementById('commentcarp') as Element,
+                        content: () => {
+                          return menu(props);
+                        },
+                        theme: 'commentcarp-mentions',
+                        showOnCreate: true,
+                        interactive: true,
+                        allowHTML: true,
+                        arrow: false,
+                        trigger: 'manual',
+                        placement: 'top-start',
+                      });
+                    },
+                    onUpdate(props) {
+                      popup[0].setProps({
+                        getReferenceClientRect: props.clientRect,
+                        content: menu(props),
+                      });
+                    },
+                    onKeyDown() {
+                      return false;
+                    },
+                    onExit() {
+                      popup[0].destroy();
+                    },
+                  };
+                },
               },
-            },
-          }),
-        ],
-        content: this.content,
-        onUpdate: ({ editor }) => {
-          this.content = editor.getHTML();
-        },
-        onTransaction: () => {
-          this.buttons.forEach(button => {
-            button.active = button.isActive() as boolean;
-          });
-        },
-      });
+            }),
+          ],
+          content: this.content,
+          onUpdate: ({ editor }) => {
+            this.content = editor.getHTML();
+          },
+          onTransaction: () => {
+            this.buttons.forEach(button => {
+              button.active = button.isActive() as boolean;
+            });
+          },
+        });
 
       this.editorLoaded = true;
     },
