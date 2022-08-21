@@ -3,6 +3,19 @@
   x-init="() => initEditor($refs.element);"
   class="commentcarp__main"
 >
+  <template x-if="window.location.origin.includes('localhost:')">
+    <div
+      class="cc-bg-yellow-100 cc-space-y-2 cc-px-2 cc-py-1 cc-text-sm cc-rounded cc-text-yellow-800 cc-font-medium cc-mb-2"
+    >
+      <div>
+        You are running Commentcarp on localhost, so we've set your editor into
+        development mode. In this mode we don't check for the validity of your
+        key and all requests will succeed. Comments associated with localhost
+        domains are regularly purged.
+      </div>
+      <div>This message will not appear on any non-localhost domains.</div>
+    </div>
+  </template>
   <div id="app" class="cc-flex cc-flex-col cc-items-center">
     <div class="cc-flex cc-flex-col cc-justify-end cc-w-full">
       <!-- User's profile -->
